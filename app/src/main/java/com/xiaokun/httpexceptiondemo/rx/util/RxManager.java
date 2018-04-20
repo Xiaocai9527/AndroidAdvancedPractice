@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo.rx;
+package com.xiaokun.httpexceptiondemo.rx.util;
 
 import java.util.HashMap;
 import java.util.Map;

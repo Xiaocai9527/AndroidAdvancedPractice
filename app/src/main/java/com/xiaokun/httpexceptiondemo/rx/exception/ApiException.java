@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo.rx;
+package com.xiaokun.httpexceptiondemo.rx.exception;
 
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializer;
@@ -19,13 +19,13 @@ import javax.net.ssl.SSLHandshakeException;
 
 import retrofit2.HttpException;
 
-import static com.xiaokun.httpexceptiondemo.rx.ApiException.ERROR.CAST_ERROR;
-import static com.xiaokun.httpexceptiondemo.rx.ApiException.ERROR.ILLEGAL_STATE_ERROR;
-import static com.xiaokun.httpexceptiondemo.rx.ApiException.ERROR.NULL_POINTER_EXCEPTION;
-import static com.xiaokun.httpexceptiondemo.rx.ApiException.ERROR.PARSE_ERROR;
-import static com.xiaokun.httpexceptiondemo.rx.ApiException.ERROR.SSL_ERROR;
-import static com.xiaokun.httpexceptiondemo.rx.ApiException.ERROR.TIMEOUT_ERROR;
-import static com.xiaokun.httpexceptiondemo.rx.ApiException.ERROR.UNKNOWN;
+import static com.xiaokun.httpexceptiondemo.rx.exception.ApiException.ERROR.CAST_ERROR;
+import static com.xiaokun.httpexceptiondemo.rx.exception.ApiException.ERROR.ILLEGAL_STATE_ERROR;
+import static com.xiaokun.httpexceptiondemo.rx.exception.ApiException.ERROR.NULL_POINTER_EXCEPTION;
+import static com.xiaokun.httpexceptiondemo.rx.exception.ApiException.ERROR.PARSE_ERROR;
+import static com.xiaokun.httpexceptiondemo.rx.exception.ApiException.ERROR.SSL_ERROR;
+import static com.xiaokun.httpexceptiondemo.rx.exception.ApiException.ERROR.TIMEOUT_ERROR;
+import static com.xiaokun.httpexceptiondemo.rx.exception.ApiException.ERROR.UNKNOWN;
 
 
 /**

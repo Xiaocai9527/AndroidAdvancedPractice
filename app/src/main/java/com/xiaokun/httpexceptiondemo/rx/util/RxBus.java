@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo.rx;
+package com.xiaokun.httpexceptiondemo.rx.util;
 
 import android.support.annotation.NonNull;
 

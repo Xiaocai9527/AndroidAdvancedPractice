@@ -5,6 +5,8 @@ import android.content.Intent;
 import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.Constants;
 import com.xiaokun.httpexceptiondemo.LoginActivity;
+import com.xiaokun.httpexceptiondemo.rx.exception.ApiException;
+import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;

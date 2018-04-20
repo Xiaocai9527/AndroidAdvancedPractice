@@ -10,12 +10,20 @@ import android.widget.Toast;
 import com.xiaokun.httpexceptiondemo.network.ApiService;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
+import com.xiaokun.httpexceptiondemo.network.TestBody;
+import com.xiaokun.httpexceptiondemo.network.TestEntity;
 import com.xiaokun.httpexceptiondemo.rx.BaseObserver;
-import com.xiaokun.httpexceptiondemo.rx.HttpResultFunc;
-import com.xiaokun.httpexceptiondemo.rx.RxManager;
-import com.xiaokun.httpexceptiondemo.rx.RxSchedulers;
+import com.xiaokun.httpexceptiondemo.rx.download.DownLoadListener;
+import com.xiaokun.httpexceptiondemo.rx.download.DownLoadObserver;
+import com.xiaokun.httpexceptiondemo.rx.download.DownloadTask;
+import com.xiaokun.httpexceptiondemo.rx.transform.HttpResultFunc;
+import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
+import com.xiaokun.httpexceptiondemo.rx.transform.RxSchedulers;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import okhttp3.ResponseBody;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
@@ -28,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton3;
     private Button mButton4;
     private Button mButton5;
+    private Button mButton6;
     private TextView mTextView;
 
     @Override
@@ -49,9 +58,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton3 = (Button) findViewById(R.id.button3);
         mButton4 = (Button) findViewById(R.id.button4);
         mButton5 = (Button) findViewById(R.id.button5);
+        mButton6 = (Button) findViewById(R.id.button6);
         mTextView = (TextView) findViewById(R.id.textView);
 
-        initListener(mButton, mButton2, mButton3, mButton4, mButton5);
+        initListener(mButton, mButton2, mButton3, mButton4, mButton5, mButton6);
     }
 
     private void initListener(View... views)
@@ -69,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             case R.id.button:
                 testSuccess();
+//                test();
                 break;
             case R.id.button2:
                 testFailed();
@@ -85,9 +96,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button5:
                 testToken();
                 break;
+            case R.id.button6:
+                downloadFile();
+                break;
             default:
                 break;
         }
+    }
+
+    private void test()
+    {
+        TestBody testBody = new TestBody();
+        testBody.setMobile("13297945028");
+        testBody.setPassWord("123456");
+        Observable<TestEntity> test = apiService.getTest(testBody).compose(RxSchedulers.<TestEntity>io_main());
+        test.subscribe(new Observer<TestEntity>()
+        {
+            @Override
+            public void onSubscribe(Disposable d)
+            {
+
+            }
+
+            @Override
+            public void onNext(TestEntity value)
+            {
+
+            }
+
+            @Override
+            public void onError(Throwable e)
+            {
+
+            }
+
+            @Override
+            public void onComplete()
+            {
+
+            }
+        });
     }
 
     private void testSuccess()
@@ -185,6 +233,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
+    //测试下载文件哦
+    private void downloadFile()
+    {
+        String url = "http://imtt.dd.qq.com/16891/8EE1D586937A31F6E0B14DA48F8D362E.apk?fsname=com.dewmobile.kuaiya_5.4.2(CN)_216.apk&csr=1bbd";
+        Observable<ResponseBody> observable = apiService.downLoadFile(url)
+                .compose(RxSchedulers.<ResponseBody>io_main());
+        observable.subscribe(new DownLoadObserver()
+        {
+            @Override
+            public void onNext(ResponseBody responseBody)
+            {
+                DownloadTask downloadTask = new DownloadTask(loadListener, "httpTest.apk");
+                downloadTask.execute(responseBody);
+            }
+
+            @Override
+            public void onError(Throwable e)
+            {
+                Toast.makeText(MainActivity.this, "下载失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    DownLoadListener loadListener = new DownLoadListener()
+    {
+        @Override
+        public void onProgress(int progress)
+        {
+            mButton6.setText("下载进度：" + progress);
+        }
+
+        @Override
+        public void onSuccess()
+        {
+            mButton6.setText("下载已完成");
+        }
+
+        @Override
+        public void onFailed()
+        {
+            mButton6.setText("下载失败");
+        }
+
+        @Override
+        public void onPaused()
+        {
+            mButton6.setText("暂停");
+        }
+
+        @Override
+        public void onCanceled()
+        {
+            mButton6.setText("取消下载");
+        }
+    };
 
     @Override
     protected void onDestroy()
