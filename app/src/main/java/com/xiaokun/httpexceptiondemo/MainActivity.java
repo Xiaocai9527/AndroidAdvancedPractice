@@ -7,18 +7,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.xiaokun.httpexceptiondemo.network.ApiService;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
+import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
 import com.xiaokun.httpexceptiondemo.rx.BaseObserver;
 import com.xiaokun.httpexceptiondemo.rx.HttpResultFunc;
 import com.xiaokun.httpexceptiondemo.rx.RxManager;
 import com.xiaokun.httpexceptiondemo.rx.RxSchedulers;
 
 import io.reactivex.Observable;
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
@@ -30,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton2;
     private Button mButton3;
     private Button mButton4;
+    private Button mButton5;
     private TextView mTextView;
 
     @Override
@@ -40,15 +38,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initView();
         rxManager = new RxManager();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ApiService.baseUrl)
-                //这里的client当然可以自己配置
-                .client(new OkHttpClient())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        apiService = retrofit.create(ApiService.class);
+        apiService = RetrofitHelper.createService(ApiService.class);
     }
 
     private void initView()
@@ -57,9 +48,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton2 = (Button) findViewById(R.id.button2);
         mButton3 = (Button) findViewById(R.id.button3);
         mButton4 = (Button) findViewById(R.id.button4);
+        mButton5 = (Button) findViewById(R.id.button5);
         mTextView = (TextView) findViewById(R.id.textView);
 
-        initListener(mButton, mButton2, mButton3, mButton4);
+        initListener(mButton, mButton2, mButton3, mButton4, mButton5);
     }
 
     private void initListener(View... views)
@@ -89,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button4:
                 testNoLogin();
+                break;
+            case R.id.button5:
+                testToken();
                 break;
             default:
                 break;
@@ -162,6 +157,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onNext(ResEntity1.DataBean dataBean)
             {
                 mTextView.setText(dataBean.getRes());
+            }
+        });
+    }
+
+    //测试过期token的接口
+    private void testToken()
+    {
+        apiService = RetrofitHelper.createService(ApiService.class, RetrofitHelper.getRetrofit2());
+        Observable<ResEntity1.DataBean> compose = apiService.getExpiredHttp()
+                .map(new HttpResultFunc<ResEntity1.DataBean>())
+                .compose(RxSchedulers.<ResEntity1.DataBean>io_main());
+
+        compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
+        {
+            @Override
+            protected void onErrorMsg(String msg)
+            {
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                mTextView.setText(msg + "\n 刷新得到的新token: " + App.getSp().getString("token", ""));
+            }
+
+            @Override
+            public void onNext(ResEntity1.DataBean dataBean)
+            {
+
             }
         });
     }

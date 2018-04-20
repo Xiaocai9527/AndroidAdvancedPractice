@@ -183,11 +183,11 @@ public class ApiException extends Exception
          * 非法数据异常
          */
         public static final int ILLEGAL_STATE_ERROR = 1006;
-
-
     }
 
-
+    /**
+     * 服务端异常
+     */
     public static class ServerException extends RuntimeException
     {
         private int errorCode;
@@ -208,6 +208,5 @@ public class ApiException extends Exception
         {
             return this.errorMsg;
         }
-
     }
 }

@@ -1,5 +1,7 @@
 package com.xiaokun.httpexceptiondemo;
 
+import java.io.File;
+
 /**
  * <pre>
  *     作者   : 肖坤
@@ -15,4 +17,13 @@ public class Constants
 
     //未登录
     public static final int HTTP_NO_LOGIN = 2;
+
+    //token过期了
+    public static final int EXPIRED_TOKEN = 4;
+
+    //================= PATH ====================
+    public static final String PATH_DATA = App.getAppContext().getCacheDir().getAbsolutePath() + File.separator + "data";
+    public static final String PATH_CACHE = PATH_DATA + File.separator + "NetCache";
+
+
 }

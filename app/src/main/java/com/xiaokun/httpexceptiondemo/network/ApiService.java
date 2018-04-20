@@ -1,6 +1,7 @@
 package com.xiaokun.httpexceptiondemo.network;
 
 import io.reactivex.Observable;
+import retrofit2.Call;
 import retrofit2.http.GET;
 
 /**
@@ -26,4 +27,14 @@ public interface ApiService
     //测试未登录
     @GET("tools/mockapi/440/yx04192")
     Observable<BaseResponse<ResEntity1.DataBean>> getHttpData3();
+
+    //获取token过期的http
+    @GET("tools/mockapi/440/token_expired")
+    Observable<BaseResponse<ResEntity1.DataBean>> getExpiredHttp();
+
+    //获取新token
+    @GET("tools/mockapi/440/yx04193")
+    Call<BaseResponse<ResEntity1.DataBean>> getNewToken();
+
+
 }
