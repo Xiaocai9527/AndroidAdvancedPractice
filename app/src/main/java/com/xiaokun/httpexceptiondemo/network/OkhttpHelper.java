@@ -41,7 +41,7 @@ public class OkhttpHelper
     private static int READ_TIME = 20;
     private static int WRITE_TIME = 20;
 
-    public static OkHttpClient initOkHttp1()
+    public static OkHttpClient initOkHttp1(boolean isCache)
     {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
@@ -58,10 +58,15 @@ public class OkhttpHelper
         File cacheFile = new File(Constants.PATH_CACHE);
         //最大50M，缓存太大领导有意见！为何你App占这么多内存？
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 50);
+        if (isCache)
+        {
+            builder.addInterceptor(appCacheInterceptor)
+                    .cache(cache);
+        }
         //这里用到okhttp的拦截器知识
-        builder.addInterceptor(appCacheInterceptor)
+        builder
+//                .addInterceptor(downloadInterceptor)
 //                .addNetworkInterceptor(netCacheInterceptor)
-                .cache(cache)
                 //下面3个超时,不设置默认就是10s
                 .connectTimeout(CONNECT_TIME, TimeUnit.SECONDS)
                 .readTimeout(READ_TIME, TimeUnit.SECONDS)
@@ -138,7 +143,7 @@ public class OkhttpHelper
             if (isTokenExpired(response))
             {
                 //同步请求方式,获取新token
-                ApiService service = RetrofitHelper.createService(ApiService.class);
+                ApiService service = RetrofitHelper.createService(ApiService.class, false);
                 Call<BaseResponse<ResEntity1.DataBean>> call = service.getNewToken();
                 retrofit2.Response<BaseResponse<ResEntity1.DataBean>> tokenRes = call.execute();
                 String newToken = tokenRes.body().getData().getRes();
@@ -178,6 +183,24 @@ public class OkhttpHelper
                 // 重试
                 response = chain.proceed(request);
             }
+            return response;
+        }
+    };
+
+    //下载文件拦截器
+    static Interceptor downloadInterceptor = new Interceptor()
+    {
+        @Override
+        public Response intercept(Chain chain) throws IOException
+        {
+            long downloadedLength = App.getSp().getLong("download_apk", 0);
+            Request request = chain.request();
+//            Response proceed = chain.proceed(request);
+//            App.getSp().edit().putLong("content_length", proceed.body().contentLength()).commit();
+            request = request.newBuilder()
+                    .header("RANGE", "bytes=" + downloadedLength + "-")
+                    .build();
+            Response response = chain.proceed(request);
             return response;
         }
     };

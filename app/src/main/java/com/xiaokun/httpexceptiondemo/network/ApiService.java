@@ -3,9 +3,7 @@ package com.xiaokun.httpexceptiondemo.network;
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
@@ -50,7 +48,7 @@ public interface ApiService
     @GET
     Observable<ResponseBody> downLoadFile(@Url String fileUrl);
 
-    @POST("/userLogin")
-    Observable<TestEntity> getTest(@Body TestBody testBody);
-
+    @Streaming
+    @GET("tools/test.apk")
+    Observable<ResponseBody> downLoadFile();
 }

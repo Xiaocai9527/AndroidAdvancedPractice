@@ -24,13 +24,13 @@ public class RetrofitHelper
 
     private static Retrofit retrofit2;
 
-    public static Retrofit getRetrofit1()
+    public static Retrofit getRetrofit1(boolean isCache)
     {
         //设置gson解析不严格模式,防止一些解析错误,比如double数据出现NaN时
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
-        OkHttpClient client = OkhttpHelper.initOkHttp1();
+        OkHttpClient client = OkhttpHelper.initOkHttp1(isCache);
         if (retrofit1 == null)
         {
             retrofit1 = new Retrofit.Builder()
@@ -62,9 +62,9 @@ public class RetrofitHelper
         return retrofit2;
     }
 
-    public static <S> S createService(Class<S> serviceClass)
+    public static <S> S createService(Class<S> serviceClass, boolean isCache)
     {
-        return createService(serviceClass, getRetrofit1());
+        return createService(serviceClass, getRetrofit1(isCache));
     }
 
     public static <S> S createService(Class<S> serviceClass, Retrofit retrofit)

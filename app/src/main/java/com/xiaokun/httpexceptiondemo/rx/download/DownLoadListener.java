@@ -16,7 +16,7 @@ public interface DownLoadListener
 
     void onFailed();
 
-    void onPaused();
+    void onPaused(long downloadedLength);
 
     void onCanceled();
 }

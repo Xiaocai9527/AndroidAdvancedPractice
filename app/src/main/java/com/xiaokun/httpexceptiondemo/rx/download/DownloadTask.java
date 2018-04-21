@@ -35,6 +35,9 @@ public class DownloadTask extends AsyncTask<ResponseBody, Integer, Integer>
     private DownLoadListener listener;
     private String mFileName;
 
+    private File file = null;
+    private long downloadedLength;
+
     /**
      * @param listener
      * @param fileName 文件名,注意文件默认下载路径放在系统的DownLoad文件夹下
@@ -55,6 +58,11 @@ public class DownloadTask extends AsyncTask<ResponseBody, Integer, Integer>
     public void cancelDownload()
     {
         isCanceled = true;
+        //记得删掉文件，切记切记
+        if (file.exists())
+        {
+            file.delete();
+        }
     }
 
     @Override
@@ -63,9 +71,9 @@ public class DownloadTask extends AsyncTask<ResponseBody, Integer, Integer>
         ResponseBody responseBody = responseBodies[0];
         InputStream inputStream = responseBody.byteStream();
         RandomAccessFile saveFile = null;
-        File file = null;
+
         //记录下载的文件长度
-        long downloadedLength = 0;
+        downloadedLength = 0;
         String fileName = mFileName;
         String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
         file = new File(directory + File.separator + fileName);
@@ -164,7 +172,11 @@ public class DownloadTask extends AsyncTask<ResponseBody, Integer, Integer>
                 listener.onFailed();
                 break;
             case TYPE_PAUSE:
-                listener.onPaused();
+                if (file.exists())
+                {
+                    downloadedLength = file.length();
+                }
+                listener.onPaused(downloadedLength);
                 break;
             case TYPE_CANCELED:
                 listener.onCanceled();
