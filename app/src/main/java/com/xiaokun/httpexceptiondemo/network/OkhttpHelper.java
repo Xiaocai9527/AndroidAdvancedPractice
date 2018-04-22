@@ -8,6 +8,7 @@ import com.xiaokun.httpexceptiondemo.Constants;
 import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
 import com.xiaokun.httpexceptiondemo.rx.download.DownloadManager;
 import com.xiaokun.httpexceptiondemo.rx.download.ProgressResponseBody;
+import com.xiaokun.httpexceptiondemo.rx.exception.ApiException;
 import com.xiaokun.httpexceptiondemo.util.SystemUtils;
 
 import java.io.File;
@@ -173,7 +174,23 @@ public class OkhttpHelper
                 ApiService service = RetrofitHelper.createService(ApiService.class, false);
                 Call<BaseResponse<ResEntity1.DataBean>> call = service.getNewToken();
                 retrofit2.Response<BaseResponse<ResEntity1.DataBean>> tokenRes = call.execute();
-                String newToken = tokenRes.body().getData().getRes();
+                String newToken = "";
+                //这里做下补充处理，这就很舒服了。
+                if (tokenRes != null && tokenRes.isSuccessful())
+                {
+                    BaseResponse<ResEntity1.DataBean> body = tokenRes.body();
+                    int code = body.getCode();
+                    if (code == Constants.HTTP_SUCCESS)
+                    {
+                        newToken = body.getData().getRes();
+                    } else
+                    {
+                        throw new ApiException.ServerException(Constants.HTTP_NO_LOGIN, body.getMessage());
+                    }
+                } else
+                {
+                    throw new ApiException.ServerException(Constants.HTTP_NO_LOGIN, "未登录");
+                }
                 //然后把这个新token存到sp中
                 App.getSp().edit().putString("token", newToken).commit();
                 Request newRequest = chain.request()
