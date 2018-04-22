@@ -231,7 +231,7 @@ request = request.newBuilder()
         .build();
 ```
 
-如何动态修改它呢，没错还是用到Interceptor拦截器：
+这个属性的作用就是可以更改请求域，比如说我想从第500个字节处开始下载。那么如何动态修改它呢，没错还是用到Interceptor拦截器：
 
 ```
 //下载文件拦截器
