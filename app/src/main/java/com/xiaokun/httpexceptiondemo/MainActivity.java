@@ -13,13 +13,14 @@ import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
 import com.xiaokun.httpexceptiondemo.rx.BaseObserver;
 import com.xiaokun.httpexceptiondemo.rx.download.DownLoadListener;
 import com.xiaokun.httpexceptiondemo.rx.download.DownLoadObserver;
-import com.xiaokun.httpexceptiondemo.rx.download.DownloadTask;
-import com.xiaokun.httpexceptiondemo.rx.exception.ApiException;
+import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
+import com.xiaokun.httpexceptiondemo.rx.download.DownloadManager;
 import com.xiaokun.httpexceptiondemo.rx.transform.HttpResultFunc;
 import com.xiaokun.httpexceptiondemo.rx.transform.RxSchedulers;
 import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
@@ -39,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton8;
     private Button mButton9;
     private TextView mTextView;
-    private DownloadTask downloadTask;
+    private DownloadEntity downloadEntity;
+    private String fileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         initView();
+        DownloadManager.initDownManager(this);
         rxManager = new RxManager();
-
         apiService = RetrofitHelper.createService(ApiService.class, false);
     }
 
@@ -107,10 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button7:
                 //暂停下载
-                if (downloadTask != null)
-                {
-                    downloadTask.pauseDownload();
-                }
+                DownloadManager.pauseDownload(disposable, fileName);
                 break;
             case R.id.button8:
                 //继续下载
@@ -118,10 +117,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button9:
                 //取消下载
-                if (downloadTask != null)
-                {
-                    downloadTask.cancelDownload();
-                }
+                DownloadManager.cancelDownload(disposable, fileName);
+                mTextView.setText("下载已取消");
                 break;
             default:
                 break;
@@ -224,28 +221,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    String url = "http://imtt.dd.qq.com/16891/8EE1D586937A31F6E0B14DA48F8D362E.apk?fsname=com.dewmobile.kuaiya_5.4.2(CN)_216.apk&csr=1bbd";
+    Disposable disposable;
+
     //测试下载文件哦
     private void downloadFile()
     {
-        String url = "http://imtt.dd.qq.com/16891/8EE1D586937A31F6E0B14DA48F8D362E.apk?fsname=com.dewmobile.kuaiya_5.4.2(CN)_216.apk&csr=1bbd";
-        apiService = RetrofitHelper.createService(ApiService.class, false);
+        fileName = "httpTest.apk";
+        downloadEntity = new DownloadEntity(loadListener, fileName);
+        ApiService apiService = RetrofitHelper.createService(ApiService.class,
+                RetrofitHelper.getDownloadRetrofit(downloadEntity));
 
         Observable<ResponseBody> observable = apiService.downLoadFile(url)
                 .subscribeOn(Schedulers.io());
-
         observable.subscribe(new DownLoadObserver()
         {
             @Override
-            public void onNext(ResponseBody responseBody)
+            public void onSubscribe(Disposable d)
             {
-                downloadTask = new DownloadTask(loadListener, "httpTest.apk");
-                downloadTask.execute(responseBody);
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                Toast.makeText(MainActivity.this, ApiException.handlerException(e).getMsg(), Toast.LENGTH_SHORT).show();
+                disposable = d;
             }
         });
     }
@@ -253,36 +247,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     DownLoadListener loadListener = new DownLoadListener()
     {
         @Override
-        public void onProgress(int progress)
+        public void onProgress(final int progress, boolean downSuc, boolean downFailed)
         {
-            mTextView.setText("下载进度：" + progress + "%");
-        }
+            if (downFailed)
+            {
+                mTextView.setText("下载失败");
+            } else
+            {
+                if (!downSuc)
+                {
+                    mTextView.setText("下载进度：" + progress + "%");
+                } else
+                {
+                    mTextView.setText("下载已完成");
+                }
+            }
 
-        @Override
-        public void onSuccess()
-        {
-            mTextView.setText("下载已完成");
-            App.getSp().edit().putLong("download_apk", 0).commit();
-        }
-
-        @Override
-        public void onFailed()
-        {
-            mTextView.setText("下载失败");
-        }
-
-        @Override
-        public void onPaused(long downloadedLength)
-        {
-            mTextView.setText("下载暂停");
-            App.getSp().edit().putLong("download_apk", downloadedLength).commit();
-        }
-
-        @Override
-        public void onCanceled()
-        {
-            mTextView.setText("取消下载");
-            App.getSp().edit().putLong("download_apk", 0).commit();
         }
     };
 

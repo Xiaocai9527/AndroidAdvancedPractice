@@ -16,20 +16,24 @@ public abstract class DownLoadObserver implements Observer<ResponseBody>
 {
 
     @Override
-    public void onSubscribe(Disposable d)
-    {
+    public abstract void onSubscribe(Disposable d);
 
+    @Override
+    public void onNext(ResponseBody responseBody)
+    {
+        //这里不用做什么
     }
 
-    public abstract void onNext(ResponseBody responseBody);
-
-
-    public abstract void onError(Throwable e);
+    @Override
+    public void onError(Throwable e)
+    {
+        //这里不用做什么
+    }
 
     @Override
     public void onComplete()
     {
-
+        //这里不用做什么
     }
 
 }

@@ -10,13 +10,5 @@ package com.xiaokun.httpexceptiondemo.rx.download;
  */
 public interface DownLoadListener
 {
-    void onProgress(int progress);
-
-    void onSuccess();
-
-    void onFailed();
-
-    void onPaused(long downloadedLength);
-
-    void onCanceled();
+    void onProgress(int progress, boolean downSuc, boolean downFailed);
 }

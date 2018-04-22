@@ -26,4 +26,6 @@ public class Constants
     public static final String PATH_CACHE = PATH_DATA + File.separator + "NetCache";
 
 
+    public static final int PAUSE_DOWNLOAD = 5;
+    public static final int CANCEL_DOWNLOAD = 6;
 }

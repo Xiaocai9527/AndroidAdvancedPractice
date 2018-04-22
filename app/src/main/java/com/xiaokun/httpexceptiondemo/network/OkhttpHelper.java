@@ -5,6 +5,9 @@ import com.google.gson.Gson;
 import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.BuildConfig;
 import com.xiaokun.httpexceptiondemo.Constants;
+import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
+import com.xiaokun.httpexceptiondemo.rx.download.DownloadManager;
+import com.xiaokun.httpexceptiondemo.rx.download.ProgressResponseBody;
 import com.xiaokun.httpexceptiondemo.util.SystemUtils;
 
 import java.io.File;
@@ -63,14 +66,11 @@ public class OkhttpHelper
             builder.addInterceptor(appCacheInterceptor)
                     .cache(cache);
         }
-        //这里用到okhttp的拦截器知识
-        builder
-//                .addInterceptor(downloadInterceptor)
-//                .addNetworkInterceptor(netCacheInterceptor)
-                //下面3个超时,不设置默认就是10s
-                .connectTimeout(CONNECT_TIME, TimeUnit.SECONDS)
+        //这里用到okhttp的拦截器知识  //下面3个超时,不设置默认就是10s
+        builder.connectTimeout(CONNECT_TIME, TimeUnit.SECONDS)
                 .readTimeout(READ_TIME, TimeUnit.SECONDS)
                 .writeTimeout(WRITE_TIME, TimeUnit.SECONDS)
+//               .addNetworkInterceptor(netCacheInterceptor)
                 //失败重试
                 .retryOnConnectionFailure(true)
                 .build();
@@ -106,6 +106,33 @@ public class OkhttpHelper
                 //token刷新拦截器
                 .addInterceptor(tokenInterceptor)
                 .cache(cache)
+                //下面3个超时,不设置默认就是10s
+                .connectTimeout(CONNECT_TIME, TimeUnit.SECONDS)
+                .readTimeout(READ_TIME, TimeUnit.SECONDS)
+                .writeTimeout(WRITE_TIME, TimeUnit.SECONDS)
+                //失败重试
+                .retryOnConnectionFailure(true)
+                .build();
+        return builder.build();
+    }
+
+    private static DownloadEntity downloadEntity;
+
+    public static OkHttpClient initDownloadClient(DownloadEntity entity)
+    {
+        downloadEntity = entity;
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        if (BuildConfig.DEBUG)
+        {
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(BODY);
+            //打印拦截器
+            builder.addInterceptor(loggingInterceptor);
+            //调试拦截器
+            builder.addInterceptor(new StethoInterceptor());
+        }
+        builder
+                .addInterceptor(downloadInterceptor)
                 //下面3个超时,不设置默认就是10s
                 .connectTimeout(CONNECT_TIME, TimeUnit.SECONDS)
                 .readTimeout(READ_TIME, TimeUnit.SECONDS)
@@ -187,20 +214,26 @@ public class OkhttpHelper
         }
     };
 
+    private static final String TAG = "OkhttpHelper";
+
     //下载文件拦截器
     static Interceptor downloadInterceptor = new Interceptor()
     {
         @Override
         public Response intercept(Chain chain) throws IOException
         {
-            long downloadedLength = App.getSp().getLong("download_apk", 0);
             Request request = chain.request();
-//            Response proceed = chain.proceed(request);
-//            App.getSp().edit().putLong("content_length", proceed.body().contentLength()).commit();
+            long downloadedLength = DownloadManager.dSp.getLong(downloadEntity.getFileName(), 0);
+
+            Response proceed = chain.proceed(request);
+            DownloadManager.dSp.edit().putLong(downloadEntity.getFileName() + "content_length", proceed.body().contentLength()).commit();
             request = request.newBuilder()
                     .header("RANGE", "bytes=" + downloadedLength + "-")
                     .build();
             Response response = chain.proceed(request);
+            response = response.newBuilder()
+                    .body(new ProgressResponseBody(response.body(), downloadEntity))
+                    .build();
             return response;
         }
     };
