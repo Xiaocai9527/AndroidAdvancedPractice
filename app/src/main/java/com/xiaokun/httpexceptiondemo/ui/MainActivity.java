@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo;
+package com.xiaokun.httpexceptiondemo.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xiaokun.httpexceptiondemo.App;
+import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.network.ApiService;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         initView();
+
         DownloadManager.initDownManager(this);
         rxManager = new RxManager();
         apiService = RetrofitHelper.createService(ApiService.class, false);
