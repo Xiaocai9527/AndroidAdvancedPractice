@@ -1,14 +1,17 @@
 package com.xiaokun.httpexceptiondemo.ui;
 
 import com.xiaokun.httpexceptiondemo.network.ApiService;
+import com.xiaokun.httpexceptiondemo.network.OkhttpHelper;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
+import com.xiaokun.httpexceptiondemo.network.interceptors.TokenInterceptor;
 import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
 import com.xiaokun.httpexceptiondemo.rx.transform.HttpResultFunc;
 import com.xiaokun.httpexceptiondemo.rx.transform.RxSchedulers;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 
 /**
@@ -50,6 +53,9 @@ public class MainModel
     //获取"tools/mockapi/440/token_expired"接口数据
     public Observable<ResEntity1.DataBean> getExpiredHttp()
     {
+        OkHttpClient okhttpClient = OkhttpHelper.getOkhttpClient(false, new TokenInterceptor());
+        ApiService apiService = RetrofitHelper.createService(ApiService.class, RetrofitHelper.getRetrofit(okhttpClient,
+                ApiService.baseUrl));
         return apiService.getExpiredHttp()
                 .map(new HttpResultFunc<ResEntity1.DataBean>())
                 .compose(RxSchedulers.<ResEntity1.DataBean>io_main());

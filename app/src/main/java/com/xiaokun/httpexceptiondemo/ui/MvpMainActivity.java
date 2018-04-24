@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 import com.xiaokun.httpexceptiondemo.rx.download.DownLoadListener;
@@ -110,7 +111,7 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.button7:
                 //暂停下载
-                mainPresenter.pauseDownload(disposable,fileName);
+                mainPresenter.pauseDownload(disposable, fileName);
                 break;
             case R.id.button8:
                 //继续下载
@@ -175,7 +176,7 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void getExpiredFailed(String errorMsg)
     {
-        mTextView.setText(errorMsg);
+        mTextView.setText(errorMsg + "\n刷新得到的新token: " + App.getSp().getString("token", ""));
     }
 
     @Override

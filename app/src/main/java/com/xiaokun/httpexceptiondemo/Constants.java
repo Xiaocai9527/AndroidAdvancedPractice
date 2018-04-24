@@ -28,4 +28,7 @@ public class Constants
 
     public static final int PAUSE_DOWNLOAD = 5;
     public static final int CANCEL_DOWNLOAD = 6;
+
+    //cookie
+    public static final String COOKIES = "cookies";
 }

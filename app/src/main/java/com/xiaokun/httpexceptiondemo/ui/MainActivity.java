@@ -10,8 +10,12 @@ import android.widget.Toast;
 import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.network.ApiService;
+import com.xiaokun.httpexceptiondemo.network.OkhttpHelper;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
+import com.xiaokun.httpexceptiondemo.network.interceptors.AppCacheInterceptor;
+import com.xiaokun.httpexceptiondemo.network.interceptors.HeaderInterceptor;
+import com.xiaokun.httpexceptiondemo.network.interceptors.TokenInterceptor;
 import com.xiaokun.httpexceptiondemo.rx.BaseObserver;
 import com.xiaokun.httpexceptiondemo.rx.download.DownLoadListener;
 import com.xiaokun.httpexceptiondemo.rx.download.DownLoadObserver;
@@ -24,6 +28,7 @@ import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
@@ -137,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
         {
             @Override
-            protected void onErrorMsg(String msg)
+            public void onErrorMsg(String msg)
             {
             }
 
@@ -160,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
         {
             @Override
-            protected void onErrorMsg(String msg)
+            public void onErrorMsg(String msg)
             {
                 //输出 E/MainActivity: errorMsg:错误码：6
                 //    服务器出错
@@ -185,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
         {
             @Override
-            protected void onErrorMsg(String msg)
+            public void onErrorMsg(String msg)
             {
                 Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                 mTextView.setText(msg);
@@ -202,7 +207,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //测试过期token的接口
     private void testToken()
     {
-        apiService = RetrofitHelper.createService(ApiService.class, RetrofitHelper.getRetrofit2());
+        OkHttpClient okhttpClient = OkhttpHelper.getOkhttpClient(false, new HeaderInterceptor(), new AppCacheInterceptor(),
+                new TokenInterceptor());
+        ApiService apiService = RetrofitHelper.createService(ApiService.class,
+                RetrofitHelper.getRetrofit(okhttpClient, ApiService.baseUrl));
+//        ApiService apiService = RetrofitHelper.createService(ApiService.class, RetrofitHelper.getRetrofit2());
         Observable<ResEntity1.DataBean> compose = apiService.getExpiredHttp()
                 .map(new HttpResultFunc<ResEntity1.DataBean>())
                 .compose(RxSchedulers.<ResEntity1.DataBean>io_main());
@@ -210,10 +219,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
         {
             @Override
-            protected void onErrorMsg(String msg)
+            public void onErrorMsg(String msg)
             {
                 Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                mTextView.setText(msg + "\n 刷新得到的新token: " + App.getSp().getString("token", ""));
+                mTextView.setText(msg + "\n刷新得到的新token: " + App.getSp().getString("token", ""));
             }
 
             @Override

@@ -42,7 +42,7 @@ public class MainPresenter
         mainModel.getHttpData1().subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
         {
             @Override
-            protected void onErrorMsg(String msg)
+            public void onErrorMsg(String msg)
             {
                 getView().getHttp1Failed(msg);
             }
@@ -60,7 +60,7 @@ public class MainPresenter
         mainModel.getHttpData2().subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
         {
             @Override
-            protected void onErrorMsg(String msg)
+            public void onErrorMsg(String msg)
             {
                 getView().getHttp2Failed(msg);
             }
@@ -78,7 +78,7 @@ public class MainPresenter
         mainModel.getHttpData3().subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
         {
             @Override
-            protected void onErrorMsg(String msg)
+            public void onErrorMsg(String msg)
             {
                 getView().getHttp3Failed(msg);
             }
@@ -96,7 +96,7 @@ public class MainPresenter
         mainModel.getExpiredHttp().subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
         {
             @Override
-            protected void onErrorMsg(String msg)
+            public void onErrorMsg(String msg)
             {
                 getView().getExpiredFailed(msg);
             }

@@ -68,7 +68,7 @@ public abstract class BaseObserver<T> implements Observer<T>
      *
      * @param msg
      */
-    protected abstract void onErrorMsg(String msg);
+    public abstract void onErrorMsg(String msg);
 
     @Override
     public abstract void onNext(T t);

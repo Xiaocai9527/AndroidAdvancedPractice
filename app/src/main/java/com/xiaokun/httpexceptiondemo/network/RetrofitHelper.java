@@ -25,68 +25,60 @@ public class RetrofitHelper
 
     private static Retrofit retrofit2;
 
-    private static Retrofit downloadRetrofit;
+    private static Retrofit.Builder builder;
 
-    public static Retrofit getRetrofit1(boolean isCache)
+    private static Retrofit.Builder getDefaultRetrofitBuilder()
     {
-        //设置gson解析不严格模式,防止一些解析错误,比如double数据出现NaN时
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-        OkHttpClient client = OkhttpHelper.initOkHttp1(isCache);
-        if (retrofit1 == null)
+        if (builder == null)
         {
-            retrofit1 = new Retrofit.Builder()
-                    .client(client)
-                    .baseUrl(ApiService.baseUrl)
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            //设置gson解析不严格模式,防止一些解析错误,比如double数据出现NaN时
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+            builder = new Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
         }
-        return retrofit1;
+        return builder;
     }
 
-    public static Retrofit getRetrofit2()
+    //更灵活的获取retrofit方式
+    public static Retrofit getRetrofit(OkHttpClient client, String baseUrl)
     {
-        //设置gson解析不严格模式,防止一些解析错误,比如double数据出现NaN时
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-        OkHttpClient client = OkhttpHelper.initOkHttp2();
         if (retrofit2 == null)
         {
-            retrofit2 = new Retrofit.Builder()
+            retrofit2 = getDefaultRetrofitBuilder()
                     .client(client)
-                    .baseUrl(ApiService.baseUrl)
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .baseUrl(baseUrl)
                     .build();
         }
         return retrofit2;
     }
 
+    public static Retrofit getRetrofit1(boolean isCache)
+    {
+        if (retrofit1 == null)
+        {
+            OkHttpClient client = OkhttpHelper.getDefaultClient(isCache);
+            Retrofit.Builder builder = getDefaultRetrofitBuilder();
+            retrofit1 = builder.client(client)
+                    .baseUrl(ApiService.baseUrl)
+                    .build();
+        }
+        return retrofit1;
+    }
+
     /**
-     * 专门下载的retrofit
+     * 专门下载的retrofit,最好不要重用以防出错误。
      *
      * @return
      */
     public static Retrofit getDownloadRetrofit(DownloadEntity entity)
     {
-        //设置gson解析不严格模式,防止一些解析错误,比如double数据出现NaN时
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
         OkHttpClient client = OkhttpHelper.initDownloadClient(entity);
-        if (downloadRetrofit == null)
-        {
-            downloadRetrofit = new Retrofit.Builder()
-                    .client(client)
-                    .baseUrl(ApiService.baseUrl)
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
-        }
-        return downloadRetrofit;
+        Retrofit.Builder builder = getDefaultRetrofitBuilder();
+        return builder.baseUrl(ApiService.baseUrl)
+                .client(client).build();
     }
 
     public static <S> S createService(Class<S> serviceClass, boolean isCache)
