@@ -14,7 +14,7 @@ public class WanLoginEntityRes
 {
 
     /**
-     * data : {"collectIds":[1349,1675,1701,1702,2228,1496,2411,2187,2439],"email":"","icon":"","id":440,"password":"xk939291","type":0,"username":"13886149842"}
+     * data : {"collectIds":[1349,1675,1701,1702,2228,1496,2411,2187,2439],"email":"","icon":"","id":440,"password":"abc123456789","type":0,"username":"123456"}
      * errorCode : 0
      * errorMsg :
      */
@@ -60,9 +60,9 @@ public class WanLoginEntityRes
          * email :
          * icon :
          * id : 440
-         * password : xk939291
+         * password : abc123456789
          * type : 0
-         * username : 13886149842
+         * username : 123456
          */
 
         private String email;

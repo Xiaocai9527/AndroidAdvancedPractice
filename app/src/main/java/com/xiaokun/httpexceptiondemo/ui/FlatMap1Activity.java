@@ -163,7 +163,7 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
                 e.onNext(bitmap);
                 e.onComplete();
             }
-        }).subscribeOn(Schedulers.io()).flatMap(new Function<Bitmap, ObservableSource<Uri>>()
+        }).flatMap(new Function<Bitmap, ObservableSource<Uri>>()
         {
 
             @Override

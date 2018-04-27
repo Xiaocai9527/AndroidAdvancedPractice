@@ -8,3 +8,5 @@
 
 <a href="https://blog.csdn.net/qq_34184412/article/details/80050498">[App架构设计实战一：初步引入MVP](https://blog.csdn.net/qq_34184412/article/details/80050498)</a>
 
+<a href="https://blog.csdn.net/qq_34184412/article/details/80105942">[App网络请求实战四：rxjava操作符flatMap使用以及rxjava源码解析](https://blog.csdn.net/qq_34184412/article/details/80105942)</a>
+
