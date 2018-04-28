@@ -10,3 +10,5 @@
 
 <a href="https://blog.csdn.net/qq_34184412/article/details/80105942">[App网络请求实战四：rxjava操作符flatMap使用以及rxjava源码解析](https://blog.csdn.net/qq_34184412/article/details/80105942)</a>
 
+<a href="https://blog.csdn.net/qq_34184412/article/details/80137129">[App实战：动态申请权限以及为所欲为之终极扩展](https://blog.csdn.net/qq_34184412/article/details/80137129)</a>
+

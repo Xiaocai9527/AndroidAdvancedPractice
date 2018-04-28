@@ -31,4 +31,13 @@ public class Constants
 
     //cookie
     public static final String COOKIES = "cookies";
+
+
+    //存储权限
+    public static final int WRITE_REQUEST_CODE = 1001;
+    /**
+     * 申请权限 sp 的key
+     */
+    public static final String REQUEST_CODE_PERMISSION = "request_code_permission";
+
 }
