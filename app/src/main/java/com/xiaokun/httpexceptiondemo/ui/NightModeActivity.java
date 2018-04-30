@@ -53,7 +53,6 @@ public class NightModeActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
         initTheme();
-        setTheme(R.style.DayTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_night_mode);
         rxManager = new RxManager();
