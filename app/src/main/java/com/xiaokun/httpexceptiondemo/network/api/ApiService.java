@@ -1,5 +1,10 @@
-package com.xiaokun.httpexceptiondemo.network;
+package com.xiaokun.httpexceptiondemo.network.api;
 
+import com.xiaokun.httpexceptiondemo.network.BaseResponse;
+import com.xiaokun.httpexceptiondemo.network.LoginEntity;
+import com.xiaokun.httpexceptiondemo.network.RegisterEntity;
+import com.xiaokun.httpexceptiondemo.network.ResEntity1;
+import com.xiaokun.httpexceptiondemo.network.meizi.CategoryResEntity;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanBaseResponseEntity;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanLoginEntityRes;
 
@@ -10,6 +15,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
@@ -25,7 +31,7 @@ public interface ApiService
 {
     String baseUrl = "http://www.wanandroid.com/";
 
-    String baseUrl2 = "http://180.101.250.185:19030/";
+    String baseUrl2 = "http://gank.io/";
 
     //测试服务端返回成功
     @GET("tools/mockapi/440/yx0419")
@@ -68,5 +74,9 @@ public interface ApiService
     @FormUrlEncoded
     Observable<WanBaseResponseEntity<WanLoginEntityRes.DataBean>> login(@Field("username") String username,
                                                                         @Field("password") String password);
+
+    @GET("api/data/{category}/{count}/{page}")
+    Observable<CategoryResEntity> getCategoryData(@Path("category") String category,
+                                                  @Path("count") int count, @Path("page") int page);
 }
 

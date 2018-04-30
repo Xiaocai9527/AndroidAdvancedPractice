@@ -29,6 +29,8 @@
         <activity android:name=".ui.MvpMainActivity"/>
         <activity android:name=".ui.FlatMap1Activity"/>
         <activity android:name=".ui.FlatMap2Activity"/>
+        <activity android:name=".ui.NightModeActivity"
+            android:theme="@style/NoBarTheme"/>
     </application>
 
 </manifest>

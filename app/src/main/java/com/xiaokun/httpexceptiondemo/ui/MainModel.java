@@ -1,6 +1,6 @@
 package com.xiaokun.httpexceptiondemo.ui;
 
-import com.xiaokun.httpexceptiondemo.network.ApiService;
+import com.xiaokun.httpexceptiondemo.network.api.ApiService;
 import com.xiaokun.httpexceptiondemo.network.OkhttpHelper;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;

@@ -25,6 +25,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton11;
     private Button mButton12;
     private Button mButton14;
+    private Button mButton15;
     private Context mContext;
 
     @Override
@@ -43,7 +44,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mButton11 = (Button) findViewById(R.id.button11);
         mButton12 = (Button) findViewById(R.id.button12);
         mButton14 = (Button) findViewById(R.id.button14);
-        initListener(mButton10, mButton11, mButton12, mButton14);
+        mButton15 = (Button) findViewById(R.id.button15);
+        initListener(mButton10, mButton11, mButton12, mButton14, mButton15);
     }
 
     private void initListener(View... views)
@@ -70,6 +72,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button14:
                 startActivity(new Intent(mContext, FlatMap2Activity.class));
+                break;
+            case R.id.button15:
+                startActivity(new Intent(mContext, NightModeActivity.class));
                 break;
             default:
                 break;

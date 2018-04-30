@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xiaokun.httpexceptiondemo.R;
-import com.xiaokun.httpexceptiondemo.network.ApiService;
+import com.xiaokun.httpexceptiondemo.network.api.ApiService;
 import com.xiaokun.httpexceptiondemo.network.BaseResponse;
 import com.xiaokun.httpexceptiondemo.network.LoginEntity;
 import com.xiaokun.httpexceptiondemo.network.OkhttpHelper;

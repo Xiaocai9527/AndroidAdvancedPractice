@@ -3,4 +3,19 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="day_root_view_bg">#F0F7EF</color>
+    <color name="day_card_view_bg">#F0F7EF</color>
+    <color name="day_one_text_bg">#353535</color>
+    <color name="day_two_text_bg">#9e9e9e</color>
+    <color name="day_toolbar_bg">#3F51B5</color>
+
+    <color name="night_root_view_bg">#3b3838</color>
+    <color name="night_card_view_bg">#3b3838</color>
+    <color name="night_one_text_bg">#BEBBBB</color>
+    <color name="night_two_text_bg">#9e9e9e</color>
+    <color name="night_toolbar_bg">#3b3838</color>
+
+    <color name="white">#ffffff</color>
+
 </resources>

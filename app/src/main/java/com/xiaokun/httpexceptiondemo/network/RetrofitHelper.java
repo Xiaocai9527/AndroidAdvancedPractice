@@ -3,6 +3,7 @@ package com.xiaokun.httpexceptiondemo.network;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.xiaokun.httpexceptiondemo.network.api.ApiService;
 import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
 
 import okhttp3.OkHttpClient;

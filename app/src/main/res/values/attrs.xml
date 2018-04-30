@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="root_view_bg" format="reference|color"/>
+    <attr name="cardview_bg" format="reference|color"/>
+    <attr name="toolbar_bg" format="reference|color"/>
+    <attr name="one_text_bg" format="reference|color"/>
+    <attr name="two_text_bg" format="reference|color"/>
+
+</resources>

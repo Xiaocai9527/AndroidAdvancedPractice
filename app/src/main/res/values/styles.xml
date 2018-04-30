@@ -8,4 +8,36 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="NoBarTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="DayTheme" parent="NoBarTheme">
+        <item name="root_view_bg">@color/day_root_view_bg</item>
+        <item name="cardview_bg">@color/day_card_view_bg</item>
+        <item name="one_text_bg">@color/day_one_text_bg</item>
+        <item name="two_text_bg">@color/day_two_text_bg</item>
+        <item name="toolbar_bg">@color/day_toolbar_bg</item>
+    </style>
+
+    <style name="NightTheme" parent="NoBarTheme">
+        <item name="root_view_bg">@color/night_root_view_bg</item>
+        <item name="cardview_bg">@color/night_card_view_bg</item>
+        <item name="one_text_bg">@color/night_one_text_bg</item>
+        <item name="two_text_bg">@color/night_two_text_bg</item>
+        <item name="toolbar_bg">@color/night_toolbar_bg</item>
+    </style>
+
+    <style name="text_drawable">
+        <item name="android:textColor">?attr/two_text_bg</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+
 </resources>

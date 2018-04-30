@@ -3,7 +3,7 @@ package com.xiaokun.httpexceptiondemo.network.interceptors;
 import com.google.gson.Gson;
 import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.Constants;
-import com.xiaokun.httpexceptiondemo.network.ApiService;
+import com.xiaokun.httpexceptiondemo.network.api.ApiService;
 import com.xiaokun.httpexceptiondemo.network.BaseResponse;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;

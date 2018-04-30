@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/night_cv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    card_view:cardCornerRadius="3dp"
+    card_view:cardElevation="2dp"
+    card_view:cardPreventCornerOverlap="true"
+    card_view:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:id="@+id/night_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/cardview_bg"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/category_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="hhahah"
+            android:textColor="?attr/one_text_bg"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/category_author"
+            style="@style/text_drawable"
+            android:layout_below="@+id/category_desc"
+            android:layout_marginTop="15dp"
+            android:drawableLeft="@mipmap/account"
+            android:text="肖坤"
+            android:textColor="?attr/two_text_bg"/>
+
+        <TextView
+            android:id="@+id/category_date"
+            style="@style/text_drawable"
+            android:layout_alignBaseline="@+id/category_author"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@mipmap/account"
+            android:text="2017-17-17"
+            android:textColor="?attr/two_text_bg"/>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
