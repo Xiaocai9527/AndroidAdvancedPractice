@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo.ui;
+package com.xiaokun.httpexceptiondemo.ui.mvp;
 
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 
@@ -12,7 +12,7 @@ import io.reactivex.disposables.Disposable;
  *     版本   : 1.0
  * </pre>
  */
-public interface MainView
+public interface MainView extends BaseView
 {
     void getHttp1Suc(ResEntity1.DataBean dataBean);
 

@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo.ui;
+package com.xiaokun.httpexceptiondemo.ui.mvp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,10 +9,13 @@ import android.widget.TextView;
 import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
+import com.xiaokun.httpexceptiondemo.network.entity.UniversalResEntity;
 import com.xiaokun.httpexceptiondemo.rx.download.DownLoadListener;
 import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
 import com.xiaokun.httpexceptiondemo.rx.download.DownloadManager;
 import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
+
+import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
@@ -24,7 +27,7 @@ import io.reactivex.disposables.Disposable;
  *     版本   : 1.0
  * </pre>
  */
-public class MvpMainActivity extends AppCompatActivity implements View.OnClickListener, MainView
+public class MvpMainActivity extends AppCompatActivity implements View.OnClickListener, MainView, UniversalView
 {
     private static final String TAG = "MainActivity";
 
@@ -41,6 +44,8 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
     private Button mButton7;
     private Button mButton8;
     private Button mButton9;
+    private Button mButton16;
+    private Button mButton17;
     private TextView mTextView;
     private DownloadEntity downloadEntity;
     private String fileName;
@@ -70,10 +75,12 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
         mButton7 = (Button) findViewById(R.id.button7);
         mButton8 = (Button) findViewById(R.id.button8);
         mButton9 = (Button) findViewById(R.id.button9);
+        mButton16 = (Button) findViewById(R.id.button16);
+        mButton17 = (Button) findViewById(R.id.button17);
         mTextView = (TextView) findViewById(R.id.textView);
 
         initListener(mButton, mButton2, mButton3, mButton4, mButton5, mButton6
-                , mButton7, mButton8, mButton9);
+                , mButton7, mButton8, mButton9, mButton16, mButton17);
     }
 
     private void initListener(View... views)
@@ -96,7 +103,8 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
                 mainPresenter.getHttp2();
                 break;
             case R.id.button3:
-                mainPresenter.getHttp2();
+//                mainPresenter.getHttp2();
+                mainPresenter.getGankData();
                 break;
             case R.id.button4:
                 mainPresenter.getHttp3();
@@ -125,6 +133,12 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
                 //取消下载
                 mainPresenter.cancelDownload(disposable, fileName);
                 mTextView.setText("下载已取消");
+                break;
+            case R.id.button16:
+                UniversalActivity.startUniversalActivity(this, 1);
+                break;
+            case R.id.button17:
+                UniversalActivity.startUniversalActivity(this, 2);
                 break;
             default:
                 break;
@@ -211,5 +225,17 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
     {
         super.onDestroy();
         mainPresenter.detachView();
+    }
+
+    @Override
+    public void getUniversalSuc(List<UniversalResEntity> entity)
+    {
+        String text1 = entity.get(0).getText1();
+    }
+
+    @Override
+    public void getUniversalFailed(String errorMsg)
+    {
+
     }
 }

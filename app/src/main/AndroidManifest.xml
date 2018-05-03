@@ -26,11 +26,13 @@
 
         <activity android:name=".LoginActivity"/>
         <activity android:name=".ui.MainActivity"/>
-        <activity android:name=".ui.MvpMainActivity"/>
+        <activity android:name=".ui.mvp.MvpMainActivity"/>
         <activity android:name=".ui.FlatMap1Activity"/>
         <activity android:name=".ui.FlatMap2Activity"/>
-        <activity android:name=".ui.NightModeActivity"
+        <activity
+            android:name=".ui.NightModeActivity"
             android:theme="@style/NoBarTheme"/>
+        <activity android:name=".ui.mvp.UniversalActivity"/>
     </application>
 
 </manifest>

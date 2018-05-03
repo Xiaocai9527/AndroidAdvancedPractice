@@ -1,13 +1,17 @@
-package com.xiaokun.httpexceptiondemo.ui;
+package com.xiaokun.httpexceptiondemo.ui.mvp;
 
-import com.xiaokun.httpexceptiondemo.network.api.ApiService;
 import com.xiaokun.httpexceptiondemo.network.OkhttpHelper;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
+import com.xiaokun.httpexceptiondemo.network.api.ApiService;
+import com.xiaokun.httpexceptiondemo.network.entity.GankResEntity;
+import com.xiaokun.httpexceptiondemo.network.entity.XmNeswResEntity;
 import com.xiaokun.httpexceptiondemo.network.interceptors.TokenInterceptor;
 import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
 import com.xiaokun.httpexceptiondemo.rx.transform.HttpResultFunc;
 import com.xiaokun.httpexceptiondemo.rx.transform.RxSchedulers;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
@@ -69,5 +73,20 @@ public class MainModel
         return apiService.downLoadFile(url).subscribeOn(Schedulers.io());
     }
 
+    //获取gank
+    public Observable<List<GankResEntity.DataBean>> getGankData()
+    {
+        return apiService.getGankData()
+                .map(new HttpResultFunc<List<GankResEntity.DataBean>>())
+                .compose(RxSchedulers.<List<GankResEntity.DataBean>>io_main());
+    }
+
+    //获取小米新闻
+    public Observable<List<XmNeswResEntity.DataBean>> getXmData()
+    {
+        return apiService.getXmNews()
+                .map(new HttpResultFunc<List<XmNeswResEntity.DataBean>>())
+                .compose(RxSchedulers.<List<XmNeswResEntity.DataBean>>io_main());
+    }
 }
 

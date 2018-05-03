@@ -4,9 +4,13 @@ import com.xiaokun.httpexceptiondemo.network.BaseResponse;
 import com.xiaokun.httpexceptiondemo.network.LoginEntity;
 import com.xiaokun.httpexceptiondemo.network.RegisterEntity;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
+import com.xiaokun.httpexceptiondemo.network.entity.GankResEntity;
+import com.xiaokun.httpexceptiondemo.network.entity.XmNeswResEntity;
 import com.xiaokun.httpexceptiondemo.network.meizi.CategoryResEntity;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanBaseResponseEntity;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanLoginEntityRes;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
@@ -78,5 +82,12 @@ public interface ApiService
     @GET("api/data/{category}/{count}/{page}")
     Observable<CategoryResEntity> getCategoryData(@Path("category") String category,
                                                   @Path("count") int count, @Path("page") int page);
+
+    //gson并不能解析一个接口，所以必须采用明确的实体类
+    @GET("tools/mockapi/440/fake_gank")
+    Observable<BaseResponse<List<GankResEntity.DataBean>>> getGankData();
+
+    @GET("tools/mockapi/440/fake_xiaomi")
+    Observable<BaseResponse<List<XmNeswResEntity.DataBean>>> getXmNews();
 }
 

@@ -1,6 +1,9 @@
-package com.xiaokun.httpexceptiondemo.ui;
+package com.xiaokun.httpexceptiondemo.ui.mvp;
 
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
+import com.xiaokun.httpexceptiondemo.network.entity.GankResEntity;
+import com.xiaokun.httpexceptiondemo.network.entity.UniversalResEntity;
+import com.xiaokun.httpexceptiondemo.network.entity.XmNeswResEntity;
 import com.xiaokun.httpexceptiondemo.rx.BaseObserver;
 import com.xiaokun.httpexceptiondemo.rx.download.DownLoadObserver;
 import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
@@ -8,6 +11,8 @@ import com.xiaokun.httpexceptiondemo.rx.download.DownloadManager;
 import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
@@ -21,18 +26,18 @@ import io.reactivex.disposables.Disposable;
  */
 public class MainPresenter
 {
-    private WeakReference<MainView> viewWeakRef;
+    private WeakReference<BaseView> viewWeakRef;
     private RxManager rxManager;
     private MainModel mainModel;
 
-    public MainPresenter(MainView view, RxManager rxManager)
+    public MainPresenter(BaseView view, RxManager rxManager)
     {
-        this.viewWeakRef = new WeakReference<MainView>(view);
+        this.viewWeakRef = new WeakReference<BaseView>(view);
         this.rxManager = rxManager;
         mainModel = new MainModel();
     }
 
-    public MainView getView()
+    public BaseView getView()
     {
         return viewWeakRef.get();
     }
@@ -44,13 +49,13 @@ public class MainPresenter
             @Override
             public void onErrorMsg(String msg)
             {
-                getView().getHttp1Failed(msg);
+                ((MainView) getView()).getHttp1Failed(msg);
             }
 
             @Override
             public void onNext(ResEntity1.DataBean dataBean)
             {
-                getView().getHttp1Suc(dataBean);
+                ((MainView) getView()).getHttp1Suc(dataBean);
             }
         });
     }
@@ -62,13 +67,13 @@ public class MainPresenter
             @Override
             public void onErrorMsg(String msg)
             {
-                getView().getHttp2Failed(msg);
+                ((MainView) getView()).getHttp2Failed(msg);
             }
 
             @Override
             public void onNext(ResEntity1.DataBean dataBean)
             {
-                getView().getHttp2Suc(dataBean);
+                ((MainView) getView()).getHttp2Suc(dataBean);
             }
         });
     }
@@ -80,13 +85,13 @@ public class MainPresenter
             @Override
             public void onErrorMsg(String msg)
             {
-                getView().getHttp3Failed(msg);
+                ((MainView) getView()).getHttp3Failed(msg);
             }
 
             @Override
             public void onNext(ResEntity1.DataBean dataBean)
             {
-                getView().getHttp3Suc(dataBean);
+                ((MainView) getView()).getHttp3Suc(dataBean);
             }
         });
     }
@@ -98,13 +103,13 @@ public class MainPresenter
             @Override
             public void onErrorMsg(String msg)
             {
-                getView().getExpiredFailed(msg);
+                ((MainView) getView()).getExpiredFailed(msg);
             }
 
             @Override
             public void onNext(ResEntity1.DataBean dataBean)
             {
-                getView().getExpiredSuc(dataBean);
+                ((MainView) getView()).getExpiredSuc(dataBean);
             }
         });
     }
@@ -117,9 +122,63 @@ public class MainPresenter
             @Override
             public void onSubscribe(Disposable d)
             {
-                getView().downloadDisposable(d);
+                ((MainView) getView()).downloadDisposable(d);
             }
         });
+    }
+
+    public void getGankData()
+    {
+        if (getView() instanceof UniversalView)
+        {
+            BaseObserver<List<GankResEntity.DataBean>> observer = new BaseObserver<List<GankResEntity.DataBean>>(rxManager)
+            {
+                @Override
+                public void onErrorMsg(String msg)
+                {
+                    ((UniversalView) getView()).getUniversalFailed(msg);
+                }
+
+                @Override
+                public void onNext(List<GankResEntity.DataBean> dataBeans)
+                {
+                    List<UniversalResEntity> universalResEntities = new ArrayList<>();
+                    for (GankResEntity.DataBean dataBean : dataBeans)
+                    {
+                        universalResEntities.add(dataBean);
+                    }
+                    ((UniversalView) getView()).getUniversalSuc(universalResEntities);
+                }
+            };
+            mainModel.getGankData().subscribe(observer);
+        }
+    }
+
+    public void getXmNewsData()
+    {
+        if (getView() instanceof UniversalView)
+        {
+            BaseObserver<List<XmNeswResEntity.DataBean>> observer = new BaseObserver<List<XmNeswResEntity.DataBean>>(rxManager)
+            {
+                @Override
+                public void onErrorMsg(String msg)
+                {
+                    ((UniversalView) getView()).getUniversalFailed(msg);
+                }
+
+                @Override
+                public void onNext(List<XmNeswResEntity.DataBean> dataBeans)
+                {
+                    List<UniversalResEntity> universalResEntities = new ArrayList<>();
+                    for (XmNeswResEntity.DataBean dataBean : dataBeans)
+                    {
+                        universalResEntities.add(dataBean);
+                    }
+                    ((UniversalView) getView()).getUniversalSuc(universalResEntities);
+                }
+            };
+            mainModel.getXmData().subscribe(observer);
+        }
     }
 
     //暂停下载
