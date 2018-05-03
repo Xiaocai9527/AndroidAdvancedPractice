@@ -12,3 +12,5 @@
 
 <a href="https://blog.csdn.net/qq_34184412/article/details/80137129">[App实战：动态申请权限以及为所欲为之终极扩展](https://blog.csdn.net/qq_34184412/article/details/80137129)</a>
 
+<a href="https://blog.csdn.net/qq_34184412/article/details/80184003">[App架构设计实战二：基于MVP模式的相似UI界面复用问题解决方案](https://blog.csdn.net/qq_34184412/article/details/80184003)</a>
+
