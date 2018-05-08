@@ -34,6 +34,7 @@ public class App extends Application
         {
             Stetho.initializeWithDefaults(this);
         }
+//        DiskCache.openCache(this);
     }
 
     public static Context getAppContext()
