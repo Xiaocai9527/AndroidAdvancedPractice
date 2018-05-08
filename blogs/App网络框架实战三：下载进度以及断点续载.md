@@ -347,7 +347,7 @@ public class DownloadManager
 }
 ```
 
-注意哦，我在取消下载的时候删除了写入的文件，没毛病。
+注意哦，我在取消下载的时候删除了写入的文件，没毛病，老铁。
 
 github链接：<a href="https://github.com/xiaokun19931126/HttpExceptionDemo">Demo</a>
 

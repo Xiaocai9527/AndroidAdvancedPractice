@@ -2,6 +2,7 @@ package com.xiaokun.httpexceptiondemo.ui.mvp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,8 +17,11 @@ import com.xiaokun.httpexceptiondemo.rx.download.DownloadManager;
 import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * <pre>
@@ -104,7 +108,27 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.button3:
 //                mainPresenter.getHttp2();
-                mainPresenter.getGankData();
+//                mainPresenter.getGankData();
+
+                Observable.just(1)
+                        .subscribe(new Consumer<Integer>()
+                        {
+                            @Override
+                            public void accept(Integer integer) throws Exception
+                            {
+                                Log.d(TAG, "onNext: " + Thread.currentThread());
+                            }
+                        });
+
+                Observable.timer(2, TimeUnit.SECONDS)
+                        .subscribe(new Consumer<Long>()
+                        {
+                            @Override
+                            public void accept(Long aLong) throws Exception
+                            {
+                                Log.d(TAG, "onNext: " + Thread.currentThread());
+                            }
+                        });
                 break;
             case R.id.button4:
                 mainPresenter.getHttp3();
