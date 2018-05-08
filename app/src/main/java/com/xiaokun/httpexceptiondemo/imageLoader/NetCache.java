@@ -66,10 +66,16 @@ public class NetCache
             {
                 //展示并缓存至本地和内存中
                 imageView.setImageBitmap(bitmap);
-//                localCache.setBitmapToLocal(url, bitmap);
-                diskCache.putBitmapToDisk(bitmap, url);
+                if (localCache != null)
+                {
+                    localCache.setBitmapToLocal(url, bitmap);
+                }
+                if (diskCache != null)
+                {
+                    diskCache.putBitmapToDisk(bitmap, url);
+                }
                 memoryCache.putBitmapToMemory(url, bitmap);
-                Log.d("xiaocai", "从硬盘中获取图片");
+                Log.d("xiaocai", "从网络中获取图片");
             }
         }
 

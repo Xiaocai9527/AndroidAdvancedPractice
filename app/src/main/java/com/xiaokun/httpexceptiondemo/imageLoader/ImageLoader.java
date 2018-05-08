@@ -41,6 +41,7 @@ public class ImageLoader
         {
             imageView.setImageBitmap(bitmap);
             Log.d("xiaocai", "从内存中获取图片");
+            return;
         }
         bitmap = diskCache.getBitmapFromDisk(url);
         if (bitmap != null)
@@ -48,6 +49,7 @@ public class ImageLoader
             imageView.setImageBitmap(bitmap);
             Log.d("xiaocai", "从硬盘中获取图片");
             memoryCache.putBitmapToMemory(url, bitmap);
+            return;
         }
         netCache.getBitmapFromNet(imageView, url);
     }

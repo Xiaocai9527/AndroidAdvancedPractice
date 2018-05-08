@@ -38,10 +38,10 @@ public class DiskCache
                 if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||
                         !Environment.isExternalStorageRemovable())
                 {
-                    diskLruCache = DiskLruCache.open(context.getExternalCacheDir(), 0, 1, 10 * M);
+                    diskLruCache = DiskLruCache.open(context.getExternalCacheDir(), 1, 1, 10 * M);
                 } else
                 {
-                    diskLruCache = DiskLruCache.open(context.getCacheDir(), 0, 1, 10 * M);
+                    diskLruCache = DiskLruCache.open(context.getCacheDir(), 1, 1, 10 * M);
                 }
                 return diskLruCache;
             } catch (IOException e)
