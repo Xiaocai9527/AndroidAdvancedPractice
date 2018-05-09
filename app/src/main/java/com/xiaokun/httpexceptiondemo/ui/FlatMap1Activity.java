@@ -22,7 +22,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.Constants;
 import com.xiaokun.httpexceptiondemo.R;
-import com.xiaokun.httpexceptiondemo.imageLoader.ImageLoader;
+import com.xiaokun.httpexceptiondemo.artimgloader.ArtImageLoader;
 import com.xiaokun.httpexceptiondemo.util.PermissionUtil;
 
 import java.io.File;
@@ -79,7 +79,8 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
         requestOptions.placeholder(R.mipmap.ic_launcher);
 
 //        Glide.with(this).load(imgUrl).apply(requestOptions).into(mImageView);
-        new ImageLoader(this).displayImg(mImageView, imgUrl);
+//        ImageLoader.init(this).displayImg(mImageView, imgUrl);
+        ArtImageLoader.init(this).displayImg(imgUrl, mImageView);
     }
 
     private void initListener(View... views)

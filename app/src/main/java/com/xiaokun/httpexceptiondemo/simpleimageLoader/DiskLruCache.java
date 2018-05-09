@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo.imageLoader;
+package com.xiaokun.httpexceptiondemo.simpleimageLoader;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;

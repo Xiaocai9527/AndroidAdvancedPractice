@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo.imageLoader;
+package com.xiaokun.httpexceptiondemo.simpleimageLoader;
 
 import android.graphics.Bitmap;
 import android.util.LruCache;
@@ -18,10 +18,10 @@ public class MemoryCache
     public MemoryCache()
     {
         //获得jvm虚拟机能用到的最大内存值
-        long maxMemory = Runtime.getRuntime().maxMemory();
+        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         //取最大内存的8分之一作为图片内存缓存的临界值
-        long maxSize = maxMemory / 8;
-        mMemoryCache = new LruCache<String, Bitmap>((int) maxSize)
+        int maxSize = maxMemory / 8;
+        mMemoryCache = new LruCache<String, Bitmap>(maxSize)
         {
             @Override
             protected int sizeOf(String key, Bitmap value)

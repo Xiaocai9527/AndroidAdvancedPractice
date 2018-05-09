@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo.imageLoader;
+package com.xiaokun.httpexceptiondemo.simpleimageLoader;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

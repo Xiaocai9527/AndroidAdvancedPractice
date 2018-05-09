@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo.imageLoader;
+package com.xiaokun.httpexceptiondemo.simpleimageLoader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,10 +18,17 @@ public class ImageLoader
     private DiskCache diskCache;
     private MemoryCache memoryCache;
     private NetCache netCache;
+    private Context mContext;
 
-    public ImageLoader(Context context)
+    public static ImageLoader init(Context context)
     {
-        DiskCache.openCache(context);
+        return new ImageLoader(context);
+    }
+
+    private ImageLoader(Context context)
+    {
+        mContext = context.getApplicationContext();
+        DiskCache.openCache(mContext);
         diskCache = new DiskCache();
         memoryCache = new MemoryCache();
         netCache = new NetCache(memoryCache, diskCache);
@@ -41,6 +48,7 @@ public class ImageLoader
         {
             imageView.setImageBitmap(bitmap);
             Log.d("xiaocai", "从内存中获取图片");
+            return;
         }
         bitmap = diskCache.getBitmapFromDisk(url);
         if (bitmap != null)
@@ -48,6 +56,7 @@ public class ImageLoader
             imageView.setImageBitmap(bitmap);
             Log.d("xiaocai", "从硬盘中获取图片");
             memoryCache.putBitmapToMemory(url, bitmap);
+            return;
         }
         netCache.getBitmapFromNet(imageView, url);
     }

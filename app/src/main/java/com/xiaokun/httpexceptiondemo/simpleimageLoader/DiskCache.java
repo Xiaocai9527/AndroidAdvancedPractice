@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo.imageLoader;
+package com.xiaokun.httpexceptiondemo.simpleimageLoader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -38,12 +38,11 @@ public class DiskCache
                 if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||
                         !Environment.isExternalStorageRemovable())
                 {
-                    diskLruCache = DiskLruCache.open(context.getExternalCacheDir(), 0, 1, 10 * M);
+                    diskLruCache = DiskLruCache.open(context.getExternalCacheDir(), 1, 1, 10 * M);
                 } else
                 {
-                    diskLruCache = DiskLruCache.open(context.getCacheDir(), 0, 1, 10 * M);
+                    diskLruCache = DiskLruCache.open(context.getCacheDir(), 1, 1, 10 * M);
                 }
-                return diskLruCache;
             } catch (IOException e)
             {
                 e.printStackTrace();
@@ -58,7 +57,7 @@ public class DiskCache
      * @param bitmap
      * @param url
      */
-    public static void putBitmapToDisk(Bitmap bitmap, String url)
+    public void putBitmapToDisk(Bitmap bitmap, String url)
     {
         if (diskLruCache == null)
         {
