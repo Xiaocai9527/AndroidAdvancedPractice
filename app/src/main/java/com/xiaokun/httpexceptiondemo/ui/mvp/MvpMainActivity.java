@@ -1,6 +1,8 @@
 package com.xiaokun.httpexceptiondemo.ui.mvp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,13 +17,18 @@ import com.xiaokun.httpexceptiondemo.rx.download.DownLoadListener;
 import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
 import com.xiaokun.httpexceptiondemo.rx.download.DownloadManager;
 import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
+import com.xiaokun.httpexceptiondemo.ui.viewpager.ViewPagerActivity;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * <pre>
@@ -50,6 +57,7 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
     private Button mButton9;
     private Button mButton16;
     private Button mButton17;
+    private Button mButton18;
     private TextView mTextView;
     private DownloadEntity downloadEntity;
     private String fileName;
@@ -81,10 +89,11 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
         mButton9 = (Button) findViewById(R.id.button9);
         mButton16 = (Button) findViewById(R.id.button16);
         mButton17 = (Button) findViewById(R.id.button17);
+        mButton18 = (Button) findViewById(R.id.button18);
         mTextView = (TextView) findViewById(R.id.textView);
 
         initListener(mButton, mButton2, mButton3, mButton4, mButton5, mButton6
-                , mButton7, mButton8, mButton9, mButton16, mButton17);
+                , mButton7, mButton8, mButton9, mButton16, mButton17, mButton18);
     }
 
     private void initListener(View... views)
@@ -109,7 +118,8 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.button3:
 //                mainPresenter.getHttp2();
 //                mainPresenter.getGankData();
-
+                Intent intent = new Intent(this, ViewPagerActivity.class);
+                startActivity(intent);
                 Observable.just(1)
                         .subscribe(new Consumer<Integer>()
                         {
@@ -163,6 +173,16 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.button17:
                 UniversalActivity.startUniversalActivity(this, 2);
+                break;
+            case R.id.button18:
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(),
+                        "http_exception");
+                String fileName = "meizi.jpg";
+                File imgFile = new File(file, fileName);
+                RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), imgFile);
+                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", imgFile.getName(), requestBody);
+                RequestBody fileName1 = RequestBody.create(MediaType.parse("text/plain"), imgFile.getName());
+                mainPresenter.upload(fileToUpload, fileName1);
                 break;
             default:
                 break;

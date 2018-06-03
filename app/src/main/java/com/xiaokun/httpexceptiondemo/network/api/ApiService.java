@@ -5,6 +5,8 @@ import com.xiaokun.httpexceptiondemo.network.LoginEntity;
 import com.xiaokun.httpexceptiondemo.network.RegisterEntity;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 import com.xiaokun.httpexceptiondemo.network.entity.GankResEntity;
+import com.xiaokun.httpexceptiondemo.network.entity.ListResEntity;
+import com.xiaokun.httpexceptiondemo.network.entity.ServerResponse;
 import com.xiaokun.httpexceptiondemo.network.entity.XmNeswResEntity;
 import com.xiaokun.httpexceptiondemo.network.meizi.CategoryResEntity;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanBaseResponseEntity;
@@ -13,12 +15,16 @@ import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanLoginEntityRes;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
@@ -36,6 +42,8 @@ public interface ApiService
     String baseUrl = "http://www.wanandroid.com/";
 
     String baseUrl2 = "http://gank.io/";
+
+    String baseUrl3 = "http://mushtaq.16mb.com/";
 
     //测试服务端返回成功
     @GET("tools/mockapi/440/yx0419")
@@ -89,5 +97,13 @@ public interface ApiService
 
     @GET("tools/mockapi/440/fake_xiaomi")
     Observable<BaseResponse<List<XmNeswResEntity.DataBean>>> getXmNews();
+
+    @Multipart
+    @POST("retrofit_example/upload_image.php")
+    Observable<ServerResponse> uploadFile(@Part MultipartBody.Part file, @Part("file") RequestBody name);
+
+    @GET("api/data/{category}/{count}/{page}")
+    Observable<ListResEntity> loadListData(@Path("category") String category,
+                                           @Path("count") int count, @Path("page") int page);
 }
 

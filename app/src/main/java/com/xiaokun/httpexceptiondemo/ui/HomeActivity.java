@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.xiaokun.httpexceptiondemo.R;
+import com.xiaokun.httpexceptiondemo.ui.big_mvp.BigMvpActivity;
 import com.xiaokun.httpexceptiondemo.ui.mvp.MvpMainActivity;
 
 /**
@@ -27,6 +28,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton12;
     private Button mButton14;
     private Button mButton15;
+    private Button mButton19;
     private Context mContext;
 
     @Override
@@ -46,7 +48,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mButton12 = (Button) findViewById(R.id.button12);
         mButton14 = (Button) findViewById(R.id.button14);
         mButton15 = (Button) findViewById(R.id.button15);
-        initListener(mButton10, mButton11, mButton12, mButton14, mButton15);
+        mButton19 = (Button) findViewById(R.id.button19);
+
+        initListener(mButton10, mButton11, mButton12, mButton14, mButton15, mButton19);
     }
 
     private void initListener(View... views)
@@ -76,6 +80,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button15:
                 startActivity(new Intent(mContext, NightModeActivity.class));
+                break;
+            case R.id.button19:
+                startActivity(new Intent(mContext, BigMvpActivity.class));
                 break;
             default:
                 break;

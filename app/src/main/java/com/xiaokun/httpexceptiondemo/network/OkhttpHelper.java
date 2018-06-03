@@ -1,6 +1,8 @@
 package com.xiaokun.httpexceptiondemo.network;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.readystatesoftware.chuck.ChuckInterceptor;
+import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.BuildConfig;
 import com.xiaokun.httpexceptiondemo.Constants;
 import com.xiaokun.httpexceptiondemo.network.interceptors.AppCacheInterceptor;
@@ -42,11 +44,13 @@ public class OkhttpHelper
         if (BuildConfig.DEBUG)
         {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            ChuckInterceptor chuckInterceptor = new ChuckInterceptor(App.getAppContext());
             loggingInterceptor.setLevel(BODY);
             //打印拦截器
             builder.addInterceptor(loggingInterceptor);
             //调试拦截器
             builder.addInterceptor(new StethoInterceptor());
+            builder.addInterceptor(chuckInterceptor);
         }
         File cacheFile = new File(Constants.PATH_CACHE);
         //最大50M，缓存太大领导有意见！为何你App占这么多内存？

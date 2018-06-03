@@ -33,6 +33,10 @@
             android:name=".ui.NightModeActivity"
             android:theme="@style/NoBarTheme"/>
         <activity android:name=".ui.mvp.UniversalActivity"/>
+        <activity android:name=".ui.viewpager.ViewPagerActivity"/>
+        <activity
+            android:name=".ui.big_mvp.BigMvpActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

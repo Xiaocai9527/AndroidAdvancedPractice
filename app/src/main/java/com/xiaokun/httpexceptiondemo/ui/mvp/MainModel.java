@@ -5,6 +5,7 @@ import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
 import com.xiaokun.httpexceptiondemo.network.api.ApiService;
 import com.xiaokun.httpexceptiondemo.network.entity.GankResEntity;
+import com.xiaokun.httpexceptiondemo.network.entity.ServerResponse;
 import com.xiaokun.httpexceptiondemo.network.entity.XmNeswResEntity;
 import com.xiaokun.httpexceptiondemo.network.interceptors.TokenInterceptor;
 import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
@@ -15,7 +16,9 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
 /**
@@ -87,6 +90,14 @@ public class MainModel
         return apiService.getXmNews()
                 .map(new HttpResultFunc<List<XmNeswResEntity.DataBean>>())
                 .compose(RxSchedulers.<List<XmNeswResEntity.DataBean>>io_main());
+    }
+
+    //上传图片
+    public Observable<ServerResponse> upload(MultipartBody.Part file, RequestBody name)
+    {
+        apiService = RetrofitHelper.getRetrofit(OkhttpHelper.getDefaultClient(false), ApiService.baseUrl3).create(ApiService.class);
+        return apiService.uploadFile(file, name)
+                .compose(RxSchedulers.<ServerResponse>io_main());
     }
 }
 

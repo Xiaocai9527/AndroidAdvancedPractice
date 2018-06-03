@@ -104,7 +104,6 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-
     private void testFlatMap()
     {
         Observable.create(new ObservableOnSubscribe<Integer>()

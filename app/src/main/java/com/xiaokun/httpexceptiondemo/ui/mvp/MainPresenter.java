@@ -2,6 +2,7 @@ package com.xiaokun.httpexceptiondemo.ui.mvp;
 
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 import com.xiaokun.httpexceptiondemo.network.entity.GankResEntity;
+import com.xiaokun.httpexceptiondemo.network.entity.ServerResponse;
 import com.xiaokun.httpexceptiondemo.network.entity.UniversalResEntity;
 import com.xiaokun.httpexceptiondemo.network.entity.XmNeswResEntity;
 import com.xiaokun.httpexceptiondemo.rx.BaseObserver;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * <pre>
@@ -179,6 +182,24 @@ public class MainPresenter
             };
             mainModel.getXmData().subscribe(observer);
         }
+    }
+
+    public void upload(MultipartBody.Part file, RequestBody name)
+    {
+        mainModel.upload(file, name).subscribe(new BaseObserver<ServerResponse>(rxManager)
+        {
+            @Override
+            public void onErrorMsg(String msg)
+            {
+
+            }
+
+            @Override
+            public void onNext(ServerResponse serverResponse)
+            {
+
+            }
+        });
     }
 
     //暂停下载

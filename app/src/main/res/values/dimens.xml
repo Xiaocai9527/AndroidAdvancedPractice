@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="dimen_2dp">2dp</dimen>
+    <dimen name="dimen_0dp">0dp</dimen>
 </resources>
