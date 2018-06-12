@@ -87,7 +87,6 @@ public class RxBus
 
         Subject<T> subject = PublishSubject.create();
         subjectList.add(subject);
-        // LogUtil.log("register" + tag + " size:" + subjectList.size());
         return subject;
     }
 

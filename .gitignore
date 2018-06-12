@@ -1,6 +1,7 @@
 *.iml
 .gradle
 /local.properties
+.idea
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
@@ -44,7 +45,6 @@ proguard/
 captures/
 
 # IntelliJ
-*.iml
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/gradle.xml
@@ -58,7 +58,6 @@ captures/
 #*.jks
 
 # External native build folder generated in Android Studio 2.2 and later
-.externalNativeBuild
 
 # Google Services (e.g. APIs or Firebase)
 google-services.json
@@ -76,3 +75,4 @@ fastlane/test_output
 fastlane/readme.md
 
 .idea/modules/
+.idea/
