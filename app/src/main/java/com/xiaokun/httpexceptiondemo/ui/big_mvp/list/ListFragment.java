@@ -16,8 +16,10 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.xiaokun.httpexceptiondemo.Constants;
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.network.entity.ListResEntity;
+import com.xiaokun.httpexceptiondemo.rx.util.RxBus;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.BigMvpActivity;
 import com.xiaokun.httpexceptiondemo.util.Preconditions;
 
@@ -63,7 +65,8 @@ public class ListFragment extends Fragment implements ListContract.View
         @Override
         public void onItemClick(String url)
         {
-            ((BigMvpActivity) getActivity()).showWebview(url);
+//            ((BigMvpActivity) getActivity()).showWebview(url);
+            RxBus.getInstance().post(Constants.SHOW_WEBVIEW, url);
         }
     };
 
@@ -82,7 +85,8 @@ public class ListFragment extends Fragment implements ListContract.View
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
+            savedInstanceState)
     {
         View contentView = inflater.inflate(R.layout.fragment_list, container, false);
         mListRv = contentView.findViewById(R.id.list_rv);
@@ -101,7 +105,8 @@ public class ListFragment extends Fragment implements ListContract.View
     {
         mListPb.setVisibility(View.GONE);
         mListRv.setVisibility(View.VISIBLE);
-        ((BigMvpActivity) getActivity()).showWebview(entity.get(0).getUrl());
+        RxBus.getInstance().post(Constants.SHOW_WEBVIEW, entity.get(0).getUrl());
+//        ((BigMvpActivity) getActivity()).showWebview(entity.get(0).getUrl());
         mListAdapter.setNewData(entity);
     }
 

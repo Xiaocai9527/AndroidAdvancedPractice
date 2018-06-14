@@ -6,6 +6,7 @@ import android.view.View;
 
 /**
  * Created by xiaokun on 2017/9/12.
+ * 引自https://github.com/hehonghui/Colorful 何辉红大神！
  */
 
 public abstract class ViewSetter
@@ -62,6 +63,7 @@ public abstract class ViewSetter
      */
     protected int getColor(Theme newTheme)
     {
+        //返回重新指定后的资源id
         TypedValue typedValue = new TypedValue();
         newTheme.resolveAttribute(mAttrResId, typedValue, true);
         return typedValue.data;

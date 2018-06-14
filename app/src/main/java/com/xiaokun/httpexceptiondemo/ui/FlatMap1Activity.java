@@ -23,10 +23,12 @@ import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.Constants;
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.artimgloader.ArtImageLoader;
+import com.xiaokun.httpexceptiondemo.rx.exception.ApiException;
 import com.xiaokun.httpexceptiondemo.util.PermissionUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -48,7 +50,8 @@ import pub.devrel.easypermissions.EasyPermissions;
  *     版本   : 1.0
  * </pre>
  */
-public class FlatMap1Activity extends AppCompatActivity implements View.OnClickListener, EasyPermissions.PermissionCallbacks
+public class FlatMap1Activity extends AppCompatActivity implements View.OnClickListener, EasyPermissions
+        .PermissionCallbacks
 {
 
     private static final String TAG = "FlatMap1Activity";
@@ -173,13 +176,25 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
                 e.onNext(bitmap);
                 e.onComplete();
             }
+        }).doOnNext(new Consumer<Bitmap>()
+        {
+            @Override
+            public void accept(Bitmap bitmap) throws Exception
+            {
+                //可以在这里进行判断是否走flatMap转换
+                if (bitmap == null)
+                {
+                    throw ApiException.handlerException(new NullPointerException());
+                }
+            }
         }).flatMap(new Function<Bitmap, ObservableSource<Uri>>()
         {
 
             @Override
             public ObservableSource<Uri> apply(Bitmap bitmap) throws Exception
             {
-                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(),
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment
+                        .DIRECTORY_DOWNLOADS).getPath(),
                         "http_exception");
                 if (!file.exists())
                 {

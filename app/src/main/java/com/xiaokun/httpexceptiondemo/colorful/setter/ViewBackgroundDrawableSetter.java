@@ -8,6 +8,7 @@ import android.view.View;
 
 /**
  * Created by 肖坤 on 2017/9/12.
+ * 引自https://github.com/hehonghui/Colorful 何辉红大神！
  * 公司：依迅北斗
  * 邮箱：838494268@qq.com
  */

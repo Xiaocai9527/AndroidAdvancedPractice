@@ -6,12 +6,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
+import com.xiaokun.httpexceptiondemo.Constants;
 import com.xiaokun.httpexceptiondemo.R;
+import com.xiaokun.httpexceptiondemo.rx.util.RxBus;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.detail.DetailFragment;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.detail.DetailPresenter;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.list.ListFragment;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.list.ListPresenter;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.task.TasksRepository;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by 肖坤 on 2018/6/3.
@@ -29,6 +34,7 @@ public class BigMvpActivity extends AppCompatActivity
     private TasksRepository mTasksRepository;
     private DetailPresenter mDetailPresenter;
     private ListFragment mListFragment;
+    private Observable<String> mObservableWebview;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -51,6 +57,18 @@ public class BigMvpActivity extends AppCompatActivity
 
         mTasksRepository = TasksRepository.getInstance();
         mListPresenter = new ListPresenter(mTasksRepository, mListFragment);
+
+        //利用RxJava来实现组件间的通信
+        //主要原理是暴露出一个Observable,利用同一个Observable,上游和下游事件串联
+        mObservableWebview = RxBus.getInstance().register(Constants.SHOW_WEBVIEW);
+        mObservableWebview.subscribe(new Consumer<String>()
+        {
+            @Override
+            public void accept(String url) throws Exception
+            {
+                mDetailPresenter.loadWebview(url);
+            }
+        });
     }
 
     private void showDetailFg(String url)
@@ -73,6 +91,7 @@ public class BigMvpActivity extends AppCompatActivity
         ft.add(R.id.list_fl, mListFragment).show(mListFragment).commit();
     }
 
+    //Activity和Fragment的通信方式
     public void showWebview(String url)
     {
         mDetailPresenter.loadWebview(url);

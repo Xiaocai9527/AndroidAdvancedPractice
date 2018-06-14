@@ -156,7 +156,8 @@ public class NightModeActivity extends AppCompatActivity
         ApiService service = RetrofitHelper.createService(ApiService.class, RetrofitHelper.
                 getRetrofit(client, ApiService.baseUrl2));
         service.getCategoryData("Android", 20, 1)
-                .compose(RxSchedulers.<CategoryResEntity>io_main()).subscribe(new BaseObserver<CategoryResEntity>(rxManager)
+                .compose(RxSchedulers.<CategoryResEntity>io_main()).subscribe(new BaseObserver<CategoryResEntity>
+                (rxManager)
         {
             @Override
             public void onErrorMsg(String msg)
@@ -189,7 +190,8 @@ public class NightModeActivity extends AppCompatActivity
         {
             final View tmpView = new View(this);
             tmpView.setBackgroundDrawable(new BitmapDrawable(getResources(), localBitmap));
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
+                    .LayoutParams.MATCH_PARENT);
             ((ViewGroup) rootView).addView(tmpView, params);
             tmpView.animate().alpha(0).setDuration(400).setListener(new Animator.AnimatorListener()
             {

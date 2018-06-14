@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.xiaokun.httpexceptiondemo">
+    package="com.xiaokun.httpexceptiondemo">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
@@ -18,25 +18,27 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.HomeActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".ui.MainActivity"/>
-        <activity android:name=".ui.mvp.MvpMainActivity"/>
-        <activity android:name=".ui.FlatMap1Activity"/>
-        <activity android:name=".ui.FlatMap2Activity"/>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.mvp.MvpMainActivity" />
+        <activity android:name=".ui.FlatMap1Activity" />
+        <activity android:name=".ui.FlatMap2Activity" />
         <activity
             android:name=".ui.NightModeActivity"
-            android:theme="@style/NoBarTheme"/>
-        <activity android:name=".ui.mvp.UniversalActivity"/>
-        <activity android:name=".ui.viewpager.ViewPagerActivity"/>
+            android:theme="@style/NoBarTheme" />
+        <activity android:name=".ui.mvp.UniversalActivity" />
+        <activity android:name=".ui.viewpager.ViewPagerActivity" />
+        <activity android:name=".ui.ScrollviewActivity" />
         <activity
             android:name=".ui.big_mvp.BigMvpActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape"
+            android:theme="@style/NoBarTheme" />
     </application>
 
 </manifest>

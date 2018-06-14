@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 /**
  * Created by xiaokun on 2017/9/12.
+ * 引自https://github.com/hehonghui/Colorful 何辉红大神！
  */
 
 public class TextColorSetter extends ViewSetter

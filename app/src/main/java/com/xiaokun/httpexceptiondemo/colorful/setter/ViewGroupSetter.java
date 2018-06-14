@@ -15,6 +15,7 @@ import java.util.Set;
 
 /**
  * Created by 肖坤 on 2017/9/12.
+ * 引自https://github.com/hehonghui/Colorful 何辉红大神！
  * 依迅北斗
  * 838494268@qq.com
  */
@@ -83,7 +84,6 @@ public class ViewGroupSetter extends ViewSetter
     @Override
     public void setValue(Theme newTheme, int themeId)
     {
-        Log.e("color123", "setValue(ViewGroupSetter.java:86)");
         mView.setBackgroundColor(getColor(newTheme));
         // 清空AbsListView的元素
         clearListViewRecyclerBin(mView);
@@ -100,7 +100,6 @@ public class ViewGroupSetter extends ViewSetter
     private View findViewById(View rootView, int viewId)
     {
         View targetView = rootView.findViewById(viewId);
-        Log.d("", "### viewgroup find view : " + targetView);
         return targetView;
     }
 
@@ -111,10 +110,10 @@ public class ViewGroupSetter extends ViewSetter
      * @param newTheme
      * @param themeId
      */
-    private void changeChildenAttrs(ViewGroup viewGroup, Theme newTheme,
-                                    int themeId)
+    private void changeChildenAttrs(ViewGroup viewGroup, Theme newTheme, int themeId)
     {
         int childCount = viewGroup.getChildCount();
+        //递归用法
         for (int i = 0; i < childCount; i++)
         {
             View childView = viewGroup.getChildAt(i);
@@ -130,14 +129,11 @@ public class ViewGroupSetter extends ViewSetter
                 // 每次都要从ViewGroup中查找数据
                 setter.mView = findViewById(viewGroup, setter.mViewId);
 
-                Log.e("", "### childView : " + childView + ", id = "
-                        + childView.getId());
-                Log.e("", "### setter view : " + setter.mView + ", id = "
-                        + setter.getViewId());
+                //因为viewgroup中的所有的id都添加进来了,而且每一个id都是独一无二的，
+                // 所以会有一个判断，当childView的id和setter中的id相等时，才会修改属性
                 if (childView.getId() == setter.getViewId())
                 {
                     setter.setValue(newTheme, themeId);
-                    Log.e("", "@@@ 修改新的属性: " + childView);
                 }
             }
         }

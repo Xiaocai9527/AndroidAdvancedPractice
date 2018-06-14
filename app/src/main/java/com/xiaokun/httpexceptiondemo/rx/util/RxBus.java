@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
+import rx.schedulers.Schedulers;
 
 /**
  * <pre>
@@ -31,7 +33,6 @@ public class RxBus
      */
     @SuppressWarnings("rawtypes")
     private ConcurrentHashMap<Object, List<Subject>> subjectMapper = new ConcurrentHashMap<>();
-
 
     public static synchronized RxBus getInstance()
     {
@@ -66,7 +67,6 @@ public class RxBus
                 });
         return getInstance();
     }
-
 
     /**
      * 注册事件源
@@ -163,7 +163,6 @@ public class RxBus
             }
         }
     }
-
 
     /**
      * 判断集合是否为空

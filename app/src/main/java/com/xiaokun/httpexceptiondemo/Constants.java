@@ -22,7 +22,8 @@ public class Constants
     public static final int EXPIRED_TOKEN = 4;
 
     //================= PATH ====================
-    public static final String PATH_DATA = App.getAppContext().getCacheDir().getAbsolutePath() + File.separator + "data";
+    public static final String PATH_DATA = App.getAppContext().getCacheDir().getAbsolutePath() + File.separator +
+            "data";
     public static final String PATH_CACHE = PATH_DATA + File.separator + "NetCache";
 
 
@@ -39,5 +40,7 @@ public class Constants
      * 申请权限 sp 的key
      */
     public static final String REQUEST_CODE_PERMISSION = "request_code_permission";
+
+    public static final String SHOW_WEBVIEW = "show_webview";
 
 }
