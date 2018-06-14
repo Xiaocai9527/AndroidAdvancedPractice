@@ -14,3 +14,5 @@
 
 <a href="https://blog.csdn.net/qq_34184412/article/details/80184003">[App架构设计实战二：基于MVP模式的相似UI界面复用问题解决方案](https://blog.csdn.net/qq_34184412/article/details/80184003)</a>
 
+<a href="https://blog.csdn.net/qq_34184412/article/details/80696871">[App实战：夜间模式实现方法一](https://blog.csdn.net/qq_34184412/article/details/80696871)</a>
+
