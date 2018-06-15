@@ -105,7 +105,6 @@ public class PermissionHelper
         public Builder permissionListener(PermissionListener perssionListener)
         {
             this.mPermissionListener = perssionListener;
-            this.mPermissionFragment = PermissionFragment.newInstance(mPermissionListener);
             return this;
         }
 
@@ -134,7 +133,12 @@ public class PermissionHelper
         public PermissionHelper build()
         {
             FragmentManager fragmentManager = mContext.getSupportFragmentManager();
-            ActivityUtils.addNoUiFgToActivity(fragmentManager, mPermissionFragment, TAG);
+            mPermissionFragment = (PermissionFragment) fragmentManager.findFragmentByTag(TAG);
+            if (mPermissionFragment == null)
+            {
+                mPermissionFragment = PermissionFragment.newInstance(mPermissionListener);
+                ActivityUtils.addNoUiFgToActivity(fragmentManager, mPermissionFragment, TAG);
+            }
             return new PermissionHelper(this);
         }
 
