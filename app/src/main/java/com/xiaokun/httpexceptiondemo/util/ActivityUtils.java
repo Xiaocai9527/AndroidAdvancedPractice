@@ -44,6 +44,24 @@ public class ActivityUtils
         transaction.commit();
     }
 
+    public static void addNoUiFgToActivity(@NonNull FragmentManager fragmentManager, @NonNull Fragment fragment,
+                                           String tag)
+    {
+        checkNotNull(fragmentManager);
+        checkNotNull(fragment);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(fragment, tag);
+        transaction.commit();
+    }
+
+    public static void removeNoUiFgFromeActivity(@NonNull FragmentManager fragmentManager, String tag)
+    {
+        checkNotNull(fragmentManager);
+        Fragment fragmentByTag = fragmentManager.findFragmentByTag(tag);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.remove(fragmentByTag);
+    }
+
     public static void showFragment(FragmentManager fragmentManager, Fragment fragment)
     {
         FragmentTransaction transaction = fragmentManager.beginTransaction();

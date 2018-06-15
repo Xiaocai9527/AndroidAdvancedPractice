@@ -36,7 +36,8 @@ public class PermissionUtil
         final ImageView img2 = (ImageView) dialog.findViewById(R.id.img_per2);
         message.setText(Html.fromHtml("应用缺少必要的" +
                 "<font color=\"#3a62ac\">" + pers + "</font>" +
-                "权限。<br>点击<font color=\"#3a62ac\">设置按钮</font>后，按如下图所示操作，<font color=\"#3a62ac\">勾选未授权的选项</font>后按返回键回退到应用。"));
+                "权限。<br>点击<font color=\"#3a62ac\">设置按钮</font>后，按如下图所示操作，<font " +
+                "color=\"#3a62ac\">勾选未授权的选项</font>后按返回键回退到应用。"));
 //        message.setText("应用缺少必要的" + pers + "权限。\n点击设置按钮后按如下图所示操作，勾选未授权的选项后按返回键回退到应用。");
         AlertDialog.Builder builder = dialogBuilder(activity, 0, dialog);
         Drawable drawable = activity.getResources().getDrawable(R.drawable.permission1);
@@ -95,6 +96,7 @@ public class PermissionUtil
     {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.parse("package:" + activity.getPackageName()));
+//        App.getAppContext().startActivity(intent);
         activity.startActivityForResult(intent, App.getSp().getInt(Constants.REQUEST_CODE_PERMISSION, 0));
     }
 

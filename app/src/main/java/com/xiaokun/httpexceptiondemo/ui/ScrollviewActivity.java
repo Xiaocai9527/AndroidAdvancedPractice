@@ -1,14 +1,19 @@
 package com.xiaokun.httpexceptiondemo.ui;
 
-import android.animation.ValueAnimator;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
+import android.widget.FrameLayout;
 
 import com.xiaokun.httpexceptiondemo.R;
-import com.xiaokun.httpexceptiondemo.widget.ScrollTestView;
+import com.xiaokun.httpexceptiondemo.util.ActivityUtils;
+
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 
 /**
  * <pre>
@@ -21,6 +26,8 @@ import com.xiaokun.httpexceptiondemo.widget.ScrollTestView;
 public class ScrollviewActivity extends AppCompatActivity
 {
 
+    private FrameLayout mContentView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -28,33 +35,30 @@ public class ScrollviewActivity extends AppCompatActivity
         setContentView(R.layout.activity_scrollview);
 
         initView();
+
+        Fragment webFragment = getSupportFragmentManager().findFragmentById(R.id.content_view);
+        if (webFragment == null)
+        {
+            webFragment = WebFragment.newInstance("https://developer.android.com/guide/components/fragments");
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), webFragment, R.id.content_view);
+        }
+
+        final Fragment finalWebFragment = webFragment;
+        FragmentActivity activity = finalWebFragment.getActivity();
+        Observable.timer(50, TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>()
+        {
+            @Override
+            public void accept(Long aLong) throws Exception
+            {
+                FragmentActivity activity = finalWebFragment.getActivity();
+
+                String s = activity.getClass().toString();
+            }
+        });
     }
 
     private void initView()
     {
-        final int startX = 0;
-        final int deltaX = 100;
-
-        ValueAnimator animator = ValueAnimator.ofInt(0, 1).setDuration(1000);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-        {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation)
-            {
-                float fraction = animation.getAnimatedFraction();
-            }
-        });
-
-        Handler handler = new Handler(getMainLooper());
-
-        handler.postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Toast.makeText(ScrollviewActivity.this, "开始滑动", Toast.LENGTH_SHORT).show();
-//                mScrollViewT.smoothScrollTo(300, 0);
-            }
-        }, 2000);
+        mContentView = (FrameLayout) findViewById(R.id.content_view);
     }
 }
