@@ -1,28 +1,13 @@
 package com.xiaokun.httpexceptiondemo.util;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.util.AndroidException;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 
-import com.xiaokun.httpexceptiondemo.App;
-import com.xiaokun.httpexceptiondemo.R;
-
-import java.io.Serializable;
-import java.math.MathContext;
-import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -136,7 +121,8 @@ public class PermissionHelper
             mPermissionFragment = (PermissionFragment) fragmentManager.findFragmentByTag(TAG);
             if (mPermissionFragment == null)
             {
-                mPermissionFragment = PermissionFragment.newInstance(mPermissionListener);
+                mPermissionFragment = PermissionFragment.newInstance();
+                mPermissionFragment.setPermissionListener(mPermissionListener);
                 ActivityUtils.addNoUiFgToActivity(fragmentManager, mPermissionFragment, TAG);
             }
             return new PermissionHelper(this);
@@ -144,7 +130,7 @@ public class PermissionHelper
 
     }
 
-    public abstract static class PermissionListener implements EasyPermissions.PermissionCallbacks, Serializable
+    public abstract static class PermissionListener implements EasyPermissions.PermissionCallbacks
     {
 
         @Override
@@ -167,10 +153,10 @@ public class PermissionHelper
 
         PermissionListener mPermissionCallbacks;
 
-        public static PermissionFragment newInstance(PermissionListener permissionListener)
+        public static PermissionFragment newInstance()
         {
             Bundle args = new Bundle();
-            args.putSerializable(KEY_PERMISSION_LISTENER, permissionListener);
+//            args.putSerializable(KEY_PERMISSION_LISTENER, permissionListener);
             PermissionFragment fragment = new PermissionFragment();
             fragment.setArguments(args);
             return fragment;
@@ -180,9 +166,14 @@ public class PermissionHelper
         public void onCreate(@Nullable Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            setRetainInstance(true);
-            Bundle arguments = getArguments();
-            mPermissionCallbacks = (PermissionListener) arguments.getSerializable(KEY_PERMISSION_LISTENER);
+//            setRetainInstance(true);
+//            Bundle arguments = getArguments();
+//            mPermissionCallbacks = (PermissionListener) arguments.getSerializable(KEY_PERMISSION_LISTENER);
+        }
+
+        public void setPermissionListener(PermissionListener permissionListener)
+        {
+            this.mPermissionCallbacks = permissionListener;
         }
 
         @Override

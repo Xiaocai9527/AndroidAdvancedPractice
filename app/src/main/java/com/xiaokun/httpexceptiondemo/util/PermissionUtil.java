@@ -96,7 +96,6 @@ public class PermissionUtil
     {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.parse("package:" + activity.getPackageName()));
-//        App.getAppContext().startActivity(intent);
         activity.startActivityForResult(intent, App.getSp().getInt(Constants.REQUEST_CODE_PERMISSION, 0));
     }
 

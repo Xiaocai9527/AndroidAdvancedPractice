@@ -8,12 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -30,15 +25,11 @@ import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.artimgloader.ArtImageLoader;
 import com.xiaokun.httpexceptiondemo.rx.exception.ApiException;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.BigMvpActivity;
-import com.xiaokun.httpexceptiondemo.util.ActivityUtils;
 import com.xiaokun.httpexceptiondemo.util.PermissionHelper;
 import com.xiaokun.httpexceptiondemo.util.PermissionUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
-import java.time.temporal.ValueRange;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -49,8 +40,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * <pre>
@@ -112,13 +101,7 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
         switch (view.getId())
         {
             case R.id.button13:
-
                 requestPer();
-//                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                intent.setData(Uri.parse("package:" + mContext.getPackageName()));
-//                ((Activity) mContext).startActivityForResult(intent, App.getSp().getInt(Constants
-//                        .REQUEST_CODE_PERMISSION, 0));
-//                writePer();
                 break;
             case R.id.button14:
                 Intent intent = new Intent(this, BigMvpActivity.class);
@@ -156,11 +139,6 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
                 })
                 .build()
                 .request();
-
-//        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//        intent.setData(Uri.parse("package:" + App.getAppContext().getPackageName()));
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        App.getAppContext().startActivity(intent);
     }
 
     private void testFlatMap()
@@ -295,84 +273,19 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
                 });
     }
 
-    //注意本方法返回类型必须是void, 而且是无参数,非必须的
-//    @AfterPermissionGranted(Constants.WRITE_REQUEST_CODE)
-//    private void writePer()
-//    {
-//        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-//        if (EasyPermissions.hasPermissions(this, perms))
-//        {
-//            saveImgToPhone();
-//        } else
-//        {
-//            EasyPermissions.requestPermissions(this, "保存图片需要文件存储",
-//                    Constants.WRITE_REQUEST_CODE, perms);
-//        }
-//    }
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode)
         {
             case Constants.WRITE_REQUEST_CODE:
-                //说白了就是用EasyPermissions来接管Activity中的此方法
-                EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+                //页面返回后再次执行此方法
+                requestPer();
                 break;
             default:
-
                 break;
         }
     }
-
-//    @Override
-//    public void onPermissionsGranted(int requestCode, List<String> perms)
-//    {
-//        switch (requestCode)
-//        {
-//            case Constants.WRITE_REQUEST_CODE:
-//                //这里如果调用saveImgToPhone，writePer中还会执行一次
-//                //如果说此次动态申请的权限全部成功，没有一个拒绝，那么会执行writePer方法
-////                saveImgToPhone();
-//                break;
-//            default:
-//
-//                break;
-//        }
-//    }
-//
-//    @Override
-//    public void onPermissionsDenied(int requestCode, List<String> perms)
-//    {
-//        switch (requestCode)
-//        {
-//            case Constants.WRITE_REQUEST_CODE:
-//                Toast.makeText(FlatMap1Activity.this, "缺少文件存储，图片保存失败", Toast.LENGTH_SHORT).show();
-//                //在拒绝的这个地方来进行终极处理, 这里防止有人点击了不再提醒的选项
-//                App.getSp().edit().putInt(Constants.REQUEST_CODE_PERMISSION, Constants.WRITE_REQUEST_CODE).commit();
-//                PermissionUtil.showMissingPermissionDialog(this, "存储");
-//                break;
-//            default:
-//
-//                break;
-//        }
-//    }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-//    {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        switch (requestCode)
-//        {
-//            case Constants.WRITE_REQUEST_CODE:
-//                //页面返回后再次执行此方法
-////                writePer();
-//                requestPer();
-//                break;
-//            default:
-//                break;
-//        }
-//    }
 
 }
