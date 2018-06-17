@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <application
         android:name=".App"
@@ -35,6 +36,7 @@
         <activity android:name=".ui.mvp.UniversalActivity" />
         <activity android:name=".ui.viewpager.ViewPagerActivity" />
         <activity android:name=".ui.ScrollviewActivity" />
+        <activity android:name=".ui.PermissionTestActivity" />
         <activity
             android:name=".ui.big_mvp.BigMvpActivity"
             android:screenOrientation="landscape"

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/record_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="录音权限"/>
+
+    <Button
+        android:id="@+id/store_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="储存权限"
+        app:layout_constraintLeft_toRightOf="@id/record_btn"/>
+
+    <Button
+        android:id="@+id/location_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="定位权限"
+        app:layout_constraintLeft_toRightOf="@+id/store_btn"/>
+
+    <Button
+        android:id="@+id/camera_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="相机权限"
+        app:layout_constraintLeft_toRightOf="@+id/location_btn"/>
+
+</android.support.constraint.ConstraintLayout>

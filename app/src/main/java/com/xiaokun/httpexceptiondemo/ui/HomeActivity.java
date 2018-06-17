@@ -30,6 +30,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton15;
     private Button mButton19;
     private Button mButton20;
+    private Button mButton21;
     private Context mContext;
 
     @Override
@@ -51,8 +52,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mButton15 = (Button) findViewById(R.id.button15);
         mButton19 = (Button) findViewById(R.id.button19);
         mButton20 = (Button) findViewById(R.id.button20);
+        mButton21 = (Button) findViewById(R.id.button21);
 
-        initListener(mButton10, mButton11, mButton12, mButton14, mButton15, mButton19, mButton20);
+        initListener(mButton10, mButton11, mButton12, mButton14,
+                mButton15, mButton19, mButton20, mButton21);
     }
 
     private void initListener(View... views)
@@ -88,6 +91,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button20:
                 startActivity(new Intent(mContext, ScrollviewActivity.class));
+                break;
+            case R.id.button21:
+                startActivity(new Intent(mContext, PermissionTestActivity.class));
                 break;
             default:
                 break;

@@ -132,31 +132,21 @@ public class PermissionHelper
 
     public abstract static class PermissionListener implements EasyPermissions.PermissionCallbacks
     {
-
         @Override
         public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
                 grantResults)
         {
-        }
-
-        @Override
-        public void onPermissionsDenied(int requestCode, List<String> perms)
-        {
-
         }
     }
 
     public static class PermissionFragment extends Fragment implements EasyPermissions.PermissionCallbacks
     {
 
-        private static final String KEY_PERMISSION_LISTENER = "PERMISSION_LISTENER";
-
         PermissionListener mPermissionCallbacks;
 
         public static PermissionFragment newInstance()
         {
             Bundle args = new Bundle();
-//            args.putSerializable(KEY_PERMISSION_LISTENER, permissionListener);
             PermissionFragment fragment = new PermissionFragment();
             fragment.setArguments(args);
             return fragment;
@@ -166,9 +156,6 @@ public class PermissionHelper
         public void onCreate(@Nullable Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-//            setRetainInstance(true);
-//            Bundle arguments = getArguments();
-//            mPermissionCallbacks = (PermissionListener) arguments.getSerializable(KEY_PERMISSION_LISTENER);
         }
 
         public void setPermissionListener(PermissionListener permissionListener)
