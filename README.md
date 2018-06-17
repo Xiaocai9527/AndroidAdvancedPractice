@@ -16,3 +16,5 @@
 
 <a href="https://blog.csdn.net/qq_34184412/article/details/80696871">[App实战：夜间模式实现方法一](https://blog.csdn.net/qq_34184412/article/details/80696871)</a>
 
+<a href="https://blog.csdn.net/qq_34184412/article/details/80720565">[App实战：权限管理再封装之一键调用](https://blog.csdn.net/qq_34184412/article/details/80720565)</a>
+
