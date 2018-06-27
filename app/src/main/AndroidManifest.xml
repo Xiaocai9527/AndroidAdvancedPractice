@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".App"
@@ -41,6 +41,9 @@
             android:name=".ui.big_mvp.BigMvpActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoBarTheme" />
+
+        <activity android:name=".ui.multi_rv_sample.MultiRvActivity" />
+
     </application>
 
 </manifest>
