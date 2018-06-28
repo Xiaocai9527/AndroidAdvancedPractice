@@ -9,13 +9,16 @@ import android.widget.FrameLayout;
 import com.xiaokun.httpexceptiondemo.Constants;
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.rx.util.RxBus;
+import com.xiaokun.httpexceptiondemo.rx.util.RxBus2;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.detail.DetailFragment;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.detail.DetailPresenter;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.list.ListFragment;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.list.ListPresenter;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.task.TasksRepository;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -35,6 +38,8 @@ public class BigMvpActivity extends AppCompatActivity
     private DetailPresenter mDetailPresenter;
     private ListFragment mListFragment;
     private Observable<String> mObservableWebview;
+    private Flowable<String> mRegister;
+    private Disposable mDisposable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -62,6 +67,16 @@ public class BigMvpActivity extends AppCompatActivity
         //主要原理是暴露出一个Observable,利用同一个Observable,上游和下游事件串联
         mObservableWebview = RxBus.getInstance().register(Constants.SHOW_WEBVIEW);
         mObservableWebview.subscribe(new Consumer<String>()
+        {
+            @Override
+            public void accept(String url) throws Exception
+            {
+                mDetailPresenter.loadWebview(url);
+            }
+        });
+
+        mRegister = RxBus2.getInstance().register(Constants.SHOW_WEBVIEW);
+        mDisposable = mRegister.subscribe(new Consumer<String>()
         {
             @Override
             public void accept(String url) throws Exception
@@ -101,5 +116,14 @@ public class BigMvpActivity extends AppCompatActivity
     protected void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        RxBus.getInstance().unregister(Constants.SHOW_WEBVIEW);
+        RxBus2.getInstance().unregister(Constants.SHOW_WEBVIEW);
+        mDisposable.dispose();
     }
 }

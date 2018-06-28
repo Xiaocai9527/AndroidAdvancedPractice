@@ -1,5 +1,6 @@
 package com.xiaokun.httpexceptiondemo.ui.multi_rv_sample;
 
+import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,19 +14,23 @@ import com.xiaokun.httpexceptiondemo.R;
  *      版本  ：1.0
  * </pre>
  */
-public class TypeBHoder extends BaseMultiHoder
+public class TypeBHoder extends BaseMultiHoder<ItemB>
 {
+
+    @LayoutRes
+    public static final int LAYOUT = R.layout.type_b_layout;
+
     public TypeBHoder(View itemView)
     {
         super(itemView);
     }
 
     @Override
-    public void bindType(MultiItem multiItem)
+    public void bind(ItemB multiItem)
     {
-        Item2 item2 = (Item2) multiItem;
-        ((TextView) itemView.findViewById(R.id.sub_title_tv)).setText(item2.getDetail());
-        ((TextView) itemView.findViewById(R.id.author_tv)).setText(item2.getAuthor());
-        ((TextView) itemView.findViewById(R.id.date_tv)).setText(item2.getDate());
+        ItemB itemB = (ItemB) multiItem;
+        ((TextView) itemView.findViewById(R.id.sub_title_tv)).setText(itemB.getDetail());
+        ((TextView) itemView.findViewById(R.id.author_tv)).setText(itemB.getAuthor());
+        ((TextView) itemView.findViewById(R.id.date_tv)).setText(itemB.getDate());
     }
 }

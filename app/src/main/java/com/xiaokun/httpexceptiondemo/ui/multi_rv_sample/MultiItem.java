@@ -11,9 +11,6 @@ package com.xiaokun.httpexceptiondemo.ui.multi_rv_sample;
 public interface MultiItem
 {
 
-    int TYPE_A = 1;
-    int TYPE_B = 2;
-
-    int getItemType();
+    int getItemType(TypeFactory typeFactory);
 
 }

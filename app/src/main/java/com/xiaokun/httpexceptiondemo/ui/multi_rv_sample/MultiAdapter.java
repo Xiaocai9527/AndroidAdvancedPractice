@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.xiaokun.httpexceptiondemo.R;
 
@@ -21,20 +22,128 @@ import java.util.List;
  */
 public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHoder>
 {
+    public static final int LOADING = 110;
+    public static final int LOAD_FAILED = 111;
+    public static final int LOAD_COMPLETE = 112;
+    private int currentState = LOADING;
+
     private List<MultiItem> mData;
-    private final static int TYPE_FOOTER = 3;
-    public static final int TYPE_NONE = 4;
+    private final static int TYPE_FOOTER = R.layout.footer_layout;
     private BaseMultiHoder mHolder;
+    private LoadFailedClickListener mLoadFailedClickListener;
+    private TypeFactory mTypeFactory;
 
-
-    public MultiAdapter()
+    public MultiAdapter(TypeFactory typeFactory)
     {
+        mTypeFactory = typeFactory;
         mData = new ArrayList<>();
     }
 
-    public MultiAdapter(List<MultiItem> multiItems)
+    public MultiAdapter(TypeFactory typeFactory, List<MultiItem> multiItems)
     {
+        mTypeFactory = typeFactory;
         mData = multiItems;
+    }
+
+    public void setLoadFailedClickListener(LoadFailedClickListener loadFailedClickListener)
+    {
+        this.mLoadFailedClickListener = loadFailedClickListener;
+    }
+
+    @NonNull
+    @Override
+    public BaseMultiHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
+        if (viewType == TYPE_FOOTER)
+        {
+            return new FooterHoder(itemView);
+        }
+        return mTypeFactory.createViewHolder(itemView, viewType);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull BaseMultiHoder holder, int position)
+    {
+        mHolder = holder;
+        if (position < mData.size())
+        {
+            holder.bind(mData.get(position));
+        } else
+        {
+            switch (currentState)
+            {
+                case LOADING:
+                    ((FooterHoder) holder).showLoad();
+                    break;
+                case LOAD_COMPLETE:
+                    ((FooterHoder) holder).showComplete();
+                    break;
+                case LOAD_FAILED:
+                    ((FooterHoder) holder).showFailed();
+                    break;
+                default:
+
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position)
+    {
+        if (position == mData.size())
+        {
+            return TYPE_FOOTER;
+        }
+        return mData.get(position).getItemType(mTypeFactory);
+    }
+
+    @Override
+    public int getItemCount()
+    {
+        return mData == null || mData.isEmpty() ? 0 : mData.size() + 1;
+    }
+
+    public int getCurrentState()
+    {
+        return currentState;
+    }
+
+    /**
+     * 显示正在加载
+     */
+    public void loading()
+    {
+        currentState = LOADING;
+        if (mHolder instanceof FooterHoder)
+        {
+            ((FooterHoder) mHolder).showLoad();
+        }
+    }
+
+    /**
+     * 加载完成
+     */
+    public void loadComplete()
+    {
+        currentState = LOAD_COMPLETE;
+        if (mHolder instanceof FooterHoder)
+        {
+            ((FooterHoder) mHolder).showComplete();
+        }
+    }
+
+    /**
+     * 加载失败,点击重试
+     */
+    public void loadFailed()
+    {
+        currentState = LOAD_FAILED;
+        if (mHolder instanceof FooterHoder)
+        {
+            ((FooterHoder) mHolder).showFailed();
+        }
     }
 
     /**
@@ -97,6 +206,7 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHoder>
     public void clear()
     {
         mData.clear();
+        notifyDataSetChanged();
     }
 
     /**
@@ -109,66 +219,68 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHoder>
         notifyItemRangeRemoved(0, oldSize);
     }
 
-    @NonNull
-    @Override
-    public BaseMultiHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    interface LoadFailedClickListener
     {
-        switch (viewType)
-        {
-            case MultiItem.TYPE_A:
-                View typeViewA = LayoutInflater.from(parent.getContext()).inflate(R.layout.type_a_layout, parent,
-                        false);
-                return new TypeAHoder(typeViewA);
-            case MultiItem.TYPE_B:
-                View typeViewB = LayoutInflater.from(parent.getContext()).inflate(R.layout.type_b_layout, parent,
-                        false);
-                return new TypeBHoder(typeViewB);
-            case TYPE_FOOTER:
-                View footerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.footer_layout, parent,
-                        false);
-                return new FooterHoder(footerView);
-            default:
-                return null;
-        }
+        void onClick();
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull BaseMultiHoder holder, int position)
+    class FooterHoder extends BaseMultiHoder<MultiItem>
     {
-        mHolder = holder;
-        if (position < mData.size())
-        {
-            holder.bindType(mData.get(position));
-        } else
-        {
-            ((FooterHoder) holder).showLoad();
-        }
-    }
+        private LinearLayout mLoading;
+        private LinearLayout mComplete;
+        private LinearLayout mFailed;
 
-    /**
-     * 加载完成
-     */
-    public void loadComplete()
-    {
-        if (mHolder instanceof FooterHoder)
+        public FooterHoder(View itemView)
         {
-            ((FooterHoder) mHolder).showComplete();
+            super(itemView);
+            initView(itemView);
         }
-    }
 
-    @Override
-    public int getItemViewType(int position)
-    {
-        if (position == mData.size())
+        @Override
+        public void bind(MultiItem multiItem)
         {
-            return TYPE_FOOTER;
-        }
-        return mData.get(position).getItemType();
-    }
 
-    @Override
-    public int getItemCount()
-    {
-        return mData == null || mData.isEmpty() ? 0 : mData.size() + 1;
+        }
+
+        public void showComplete()
+        {
+            mComplete.setVisibility(View.VISIBLE);
+            mLoading.setVisibility(View.GONE);
+            mFailed.setVisibility(View.GONE);
+        }
+
+        public void showLoad()
+        {
+            mLoading.setVisibility(View.VISIBLE);
+            mComplete.setVisibility(View.GONE);
+            mFailed.setVisibility(View.GONE);
+        }
+
+        public void showFailed()
+        {
+            mFailed.setVisibility(View.VISIBLE);
+            mLoading.setVisibility(View.GONE);
+            mComplete.setVisibility(View.GONE);
+        }
+
+        private void initView(View itemView)
+        {
+            mLoading = itemView.findViewById(R.id.loading);
+            mComplete = itemView.findViewById(R.id.complete);
+            mFailed = itemView.findViewById(R.id.failed);
+            mFailed.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    if (mLoadFailedClickListener != null)
+                    {
+                        showLoad();
+                        currentState = LOADING;
+                        mLoadFailedClickListener.onClick();
+                    }
+                }
+            });
+        }
     }
 }

@@ -7,43 +7,43 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.subjects.PublishSubject;
+import io.reactivex.processors.FlowableProcessor;
+import io.reactivex.processors.PublishProcessor;
 import io.reactivex.subjects.Subject;
 
 /**
  * <pre>
- *     作者   : 肖坤
- *     时间   : 2018/04/19
- *     描述   : Rxjava 2.0中Subject不支持背压,已经使用PublishProcessor代替
- *              请使用RxBus2来代替RxBus
- *     版本   : 1.0
+ *      作者  ：肖坤
+ *      时间  ：2018/06/28
+ *      描述  ：
+ *      版本  ：1.0
  * </pre>
  */
-public class RxBus
+public class RxBus2
 {
-    private static RxBus instance;
+    private static RxBus2 instance;
 
     /**
      * ConcurrentHashMap: 线程安全集合
-     * Subject 同时充当了Observer和Observable的角色
-     * 但是2.0后Subject不支持背压,已经使用PublishProcessor代替
+     * PublishProcessor 同时充当了Observer和Observable的角色
      */
     @SuppressWarnings("rawtypes")
-    private ConcurrentHashMap<Object, List<Subject>> subjectMapper = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Object, List<FlowableProcessor>> subjectMapper = new ConcurrentHashMap<>();
 
-    public static synchronized RxBus getInstance()
+    public static synchronized RxBus2 getInstance()
     {
         if (null == instance)
         {
-            instance = new RxBus();
+            instance = new RxBus2();
         }
         return instance;
     }
 
-    private RxBus()
+    private RxBus2()
     {
     }
 
@@ -54,7 +54,7 @@ public class RxBus
      * @param consumer
      * @return
      */
-    public RxBus onEvent(Observable<?> observable, Consumer<Object> consumer)
+    public RxBus2 onEvent(Observable<?> observable, Consumer<Object> consumer)
     {
         observable.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(consumer, new Consumer<Throwable>()
@@ -76,18 +76,19 @@ public class RxBus
      * @return
      */
     @SuppressWarnings({"rawtypes"})
-    public <T> Observable<T> register(@NonNull Object tag)
+    public <T> Flowable<T> register(@NonNull Object tag)
     {
-        List<Subject> subjectList = subjectMapper.get(tag);
+        List<FlowableProcessor> subjectList = subjectMapper.get(tag);
         if (null == subjectList)
         {
             subjectList = new ArrayList<>();
             subjectMapper.put(tag, subjectList);
         }
 
-        Subject<T> subject = PublishSubject.create();
-        subjectList.add(subject);
-        return subject;
+        //考虑到多线程原因使用toSerialized方法
+        FlowableProcessor<T> processor = (FlowableProcessor<T>) PublishProcessor.create().toSerialized();
+        subjectList.add(processor);
+        return processor;
     }
 
     /**
@@ -98,7 +99,7 @@ public class RxBus
     @SuppressWarnings("rawtypes")
     public void unregister(@NonNull Object tag)
     {
-        List<Subject> subjectList = subjectMapper.get(tag);
+        List<FlowableProcessor> subjectList = subjectMapper.get(tag);
         if (null != subjectList)
         {
             subjectMapper.remove(tag);
@@ -113,15 +114,15 @@ public class RxBus
      * @return
      */
     @SuppressWarnings("rawtypes")
-    public RxBus unregister(@NonNull Object tag,
-                            @NonNull Observable<?> observable)
+    public RxBus2 unregister(@NonNull Object tag,
+                             @NonNull Observable<?> observable)
     {
         if (null == observable)
         {
             return getInstance();
         }
 
-        List<Subject> subjectList = subjectMapper.get(tag);
+        List<FlowableProcessor> subjectList = subjectMapper.get(tag);
         if (null != subjectList)
         {
             // 从subjectList中删去observable
@@ -154,10 +155,10 @@ public class RxBus
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void post(@NonNull Object tag, @NonNull Object content)
     {
-        List<Subject> subjectList = subjectMapper.get(tag);
+        List<FlowableProcessor> subjectList = subjectMapper.get(tag);
         if (!isEmpty(subjectList))
         {
-            for (Subject subject : subjectList)
+            for (FlowableProcessor subject : subjectList)
             {
                 subject.onNext(content);
             }
@@ -171,9 +172,8 @@ public class RxBus
      * @return
      */
     @SuppressWarnings("rawtypes")
-    public static boolean isEmpty(Collection<Subject> collection)
+    public static boolean isEmpty(Collection<FlowableProcessor> collection)
     {
         return null == collection || collection.isEmpty();
     }
-
 }

@@ -11,13 +11,13 @@ import android.view.View;
  *      版本  ：1.0
  * </pre>
  */
-public abstract class BaseMultiHoder extends RecyclerView.ViewHolder
+public abstract class BaseMultiHoder<T> extends RecyclerView.ViewHolder
 {
     public BaseMultiHoder(View itemView)
     {
         super(itemView);
     }
 
-    public abstract void bindType(MultiItem multiItem);
+    public abstract void bind(T multiItem);
 
 }

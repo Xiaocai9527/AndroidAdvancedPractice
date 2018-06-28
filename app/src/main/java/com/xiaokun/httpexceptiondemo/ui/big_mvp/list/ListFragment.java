@@ -20,6 +20,7 @@ import com.xiaokun.httpexceptiondemo.Constants;
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.network.entity.ListResEntity;
 import com.xiaokun.httpexceptiondemo.rx.util.RxBus;
+import com.xiaokun.httpexceptiondemo.rx.util.RxBus2;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.BigMvpActivity;
 import com.xiaokun.httpexceptiondemo.util.Preconditions;
 
@@ -66,7 +67,8 @@ public class ListFragment extends Fragment implements ListContract.View
         public void onItemClick(String url)
         {
 //            ((BigMvpActivity) getActivity()).showWebview(url);
-            RxBus.getInstance().post(Constants.SHOW_WEBVIEW, url);
+//            RxBus.getInstance().post(Constants.SHOW_WEBVIEW, url);
+            RxBus2.getInstance().post(Constants.SHOW_WEBVIEW, url);
         }
     };
 

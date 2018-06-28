@@ -16,11 +16,13 @@ public class DiffCallback extends DiffUtil.Callback
 {
 
     private List<MultiItem> mOldDatas, mNewDatas;
+    private TypeFactory mTypeFactory;
 
-    public DiffCallback(List<MultiItem> oldDatas, List<MultiItem> newDatas)
+    public DiffCallback(List<MultiItem> oldDatas, List<MultiItem> newDatas, TypeFactory typeFactory)
     {
         mOldDatas = oldDatas;
         mNewDatas = newDatas;
+        mTypeFactory = typeFactory;
     }
 
     @Override
@@ -46,29 +48,29 @@ public class DiffCallback extends DiffUtil.Callback
     {
         MultiItem oldItem = mOldDatas.get(oldItemPosition);
         MultiItem newItem = mNewDatas.get(newItemPosition);
-        if (oldItem instanceof Item1 && newItem instanceof Item1)
+        if (oldItem instanceof ItemA && newItem instanceof ItemA)
         {
-            int itemType = ((Item1) oldItem).getItemType();
-            String title = ((Item1) oldItem).getTitle();
-            int itemType1 = newItem.getItemType();
-            String title1 = ((Item1) newItem).getTitle();
+            int itemType = ((ItemA) oldItem).getItemType(mTypeFactory);
+            String title = ((ItemA) oldItem).getTitle();
+            int itemType1 = newItem.getItemType(mTypeFactory);
+            String title1 = ((ItemA) newItem).getTitle();
 
             if (!title.equals(title1) || itemType != itemType1)
             {
                 return false;
             }
         }
-        if (oldItem instanceof Item2 && newItem instanceof Item2)
+        if (oldItem instanceof ItemB && newItem instanceof ItemB)
         {
-            int itemType = ((Item2) oldItem).getItemType();
-            String detail = ((Item2) oldItem).getDetail();
-            String author = ((Item2) oldItem).getAuthor();
-            String date = ((Item2) oldItem).getDate();
+            int itemType = ((ItemB) oldItem).getItemType(mTypeFactory);
+            String detail = ((ItemB) oldItem).getDetail();
+            String author = ((ItemB) oldItem).getAuthor();
+            String date = ((ItemB) oldItem).getDate();
 
-            int itemType1 = newItem.getItemType();
-            String detail1 = ((Item2) newItem).getDetail();
-            String author1 = ((Item2) newItem).getAuthor();
-            String date1 = ((Item2) newItem).getDate();
+            int itemType1 = newItem.getItemType(mTypeFactory);
+            String detail1 = ((ItemB) newItem).getDetail();
+            String author1 = ((ItemB) newItem).getAuthor();
+            String date1 = ((ItemB) newItem).getDate();
 
             if (!detail.equals(detail1) || itemType != itemType1 || !author.equals(author1) || !date.equals(date1))
             {

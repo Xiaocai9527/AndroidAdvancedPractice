@@ -8,13 +8,13 @@ package com.xiaokun.httpexceptiondemo.ui.multi_rv_sample;
  *      版本  ：1.0
  * </pre>
  */
-public class Item2 implements MultiItem
+public class ItemB implements MultiItem
 {
     private String detail;
     private String author;
     private String date;
 
-    public Item2(String detail, String author, String date)
+    public ItemB(String detail, String author, String date)
     {
         this.detail = detail;
         this.author = author;
@@ -52,8 +52,8 @@ public class Item2 implements MultiItem
     }
 
     @Override
-    public int getItemType()
+    public int getItemType(TypeFactory typeFactory)
     {
-        return TYPE_B;
+        return typeFactory.type(this);
     }
 }
