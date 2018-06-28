@@ -18,3 +18,7 @@
 
 <a href="https://blog.csdn.net/qq_34184412/article/details/80720565">[App实战：权限管理再封装之一键调用](https://blog.csdn.net/qq_34184412/article/details/80720565)</a>
 
+<a href="https://blog.csdn.net/qq_34184412/article/details/80738464">[Android Studio一些使用技巧](https://blog.csdn.net/qq_34184412/article/details/80738464)</a>
+
+<a href="https://blog.csdn.net/qq_34184412/article/details/80849094">[App实战：多类型列表写法(RecyclerView)](https://blog.csdn.net/qq_34184412/article/details/80849094)</a>
+
