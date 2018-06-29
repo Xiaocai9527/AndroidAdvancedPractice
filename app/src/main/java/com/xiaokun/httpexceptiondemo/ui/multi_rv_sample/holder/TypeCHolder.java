@@ -1,13 +1,16 @@
-package com.xiaokun.httpexceptiondemo.ui.multi_rv_sample;
+package com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.holder;
 
 import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.R;
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.entity.ItemC;
 
 /**
  * <pre>
@@ -49,5 +52,15 @@ public class TypeCHolder extends BaseMultiHoder<ItemC>
         mTypeCImg = itemView.findViewById(R.id.type_c_img);
         mDetailTv = itemView.findViewById(R.id.detail_tv);
         mAuthorTv = itemView.findViewById(R.id.author_tv);
+
+        itemView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                int adapterPosition = getAdapterPosition();
+                Toast.makeText(App.getAppContext(), adapterPosition + "", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

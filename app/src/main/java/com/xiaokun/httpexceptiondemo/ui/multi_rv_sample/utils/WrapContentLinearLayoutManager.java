@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo.ui.multi_rv_sample;
+package com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.utils;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;

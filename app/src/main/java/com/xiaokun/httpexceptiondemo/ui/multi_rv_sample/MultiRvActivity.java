@@ -12,16 +12,23 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.R;
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.entity.ItemA;
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.entity.ItemB;
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.entity.ItemC;
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.entity.ItemD;
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.entity.ItemE;
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.entity.MultiItem;
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.utils.DiffCallback;
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.utils.TypeFactory;
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.utils.TypeFactoryList;
 
 import org.reactivestreams.Publisher;
 
@@ -54,7 +61,7 @@ public class MultiRvActivity extends AppCompatActivity
 {
     private static final String TAG = "MultiRvActivity";
     private RecyclerView mRecyvlerView;
-    private LinearLayoutManager mManager;
+    private GridLayoutManager mManager;
     private int mTotalItemCount;
     private int mLastVisibleItemPosition;
     private boolean loading = false;
@@ -81,7 +88,7 @@ public class MultiRvActivity extends AppCompatActivity
         setContentView(R.layout.activity_multi_rv);
         initView();
         initData();
-        setUpLoadMoreListener();
+//        setUpLoadMoreListener();
         subscribeForData();
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
@@ -105,6 +112,7 @@ public class MultiRvActivity extends AppCompatActivity
     {
         mTypeFactory = new TypeFactoryList();
         mMultiAdapter = new MultiAdapter(mTypeFactory);
+        mMultiAdapter.isShowFooterView(true);
         mMultiAdapter.setLoadFailedClickListener(new MultiAdapter.LoadFailedClickListener()
         {
             @Override
@@ -113,7 +121,34 @@ public class MultiRvActivity extends AppCompatActivity
                 paginator.onNext(pageNumber);
             }
         });
-        mManager = new LinearLayoutManager(this);
+        mMultiAdapter.setLoadMoreListener(new MultiAdapter.LoadMoreListener()
+        {
+            @Override
+            public void autoLoad()
+            {
+                pageNumber++;
+                paginator.onNext(pageNumber);
+            }
+        }, mRecyvlerView);
+
+        mManager = new GridLayoutManager(this, 2);
+
+        mManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
+        {
+            @Override
+            public int getSpanSize(int position)
+            {
+                int size = mMultiAdapter.getData().size();
+                MultiItem multiItem = null;
+                if (position < size)
+                {
+                    multiItem = mMultiAdapter.getData().get(position);
+                }
+
+                return multiItem instanceof ItemE ? 1 : mManager.getSpanCount();
+            }
+        });
+
         mRecyvlerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyvlerView.setLayoutManager(mManager);
         mRecyvlerView.setAdapter(mMultiAdapter);
@@ -156,7 +191,8 @@ public class MultiRvActivity extends AppCompatActivity
                     @Override
                     public Publisher<List<MultiItem>> apply(Integer page) throws Exception
                     {
-                        loading = true;
+//                        loading = true;
+                        mMultiAdapter.setLoading(true);
                         return dataFromNetword(page);
                     }
                 }).observeOn(AndroidSchedulers.mainThread())
@@ -170,7 +206,8 @@ public class MultiRvActivity extends AppCompatActivity
                             mMultiAdapter.clear();
                             refreshTvAnim();
                         }
-                        loading = false;
+//                        loading = false;
+                        mMultiAdapter.setLoading(false);
                         mMultiAdapter.addItems(multiItems);
                         if (mSwipeRefreshLayout.isRefreshing())
                         {
@@ -228,6 +265,9 @@ public class MultiRvActivity extends AppCompatActivity
                         multiItems.add(new ItemD("http://ww1.sinaimg.cn/large/0065oQSqly1fsb0lh7vl0j30go0ligni.jpg",
                                 "http://ww1.sinaimg.cn/large/0065oQSqly1fsfq2pwt72j30qo0yg78u.jpg",
                                 "http://ww1.sinaimg.cn/large/0065oQSqly1fsfq1ykabxj30k00pracv.jpg"));
+                        multiItems.add(new ItemA("两张图片,一行两个item"));
+                        multiItems.add(new ItemE("http://ww1.sinaimg.cn/large/0065oQSqly1fsb0lh7vl0j30go0ligni.jpg"));
+                        multiItems.add(new ItemE("http://ww1.sinaimg.cn/large/0065oQSqly1fsfq2pwt72j30qo0yg78u.jpg"));
 
                         if (page == 2 && !firstFlag)
                         {

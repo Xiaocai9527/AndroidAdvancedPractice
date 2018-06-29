@@ -1,25 +1,26 @@
-package com.xiaokun.httpexceptiondemo.ui.multi_rv_sample;
+package com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.entity;
+
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.utils.TypeFactory;
 
 /**
  * <pre>
  *      作者  ：肖坤
- *      时间  ：2018/06/28
- *      描述  ：带图片的
+ *      时间  ：2018/06/27
+ *      描述  ：
  *      版本  ：1.0
  * </pre>
  */
-public class ItemC implements MultiItem
+public class ItemB implements MultiItem
 {
-
     private String detail;
     private String author;
-    private String imgUrl;
+    private String date;
 
-    public ItemC(String detail, String author, String imgUrl)
+    public ItemB(String detail, String author, String date)
     {
         this.detail = detail;
         this.author = author;
-        this.imgUrl = imgUrl;
+        this.date = date;
     }
 
     public String getDetail()
@@ -42,14 +43,14 @@ public class ItemC implements MultiItem
         this.author = author;
     }
 
-    public String getImgUrl()
+    public String getDate()
     {
-        return imgUrl;
+        return date;
     }
 
-    public void setImgUrl(String imgUrl)
+    public void setDate(String date)
     {
-        this.imgUrl = imgUrl;
+        this.date = date;
     }
 
     @Override

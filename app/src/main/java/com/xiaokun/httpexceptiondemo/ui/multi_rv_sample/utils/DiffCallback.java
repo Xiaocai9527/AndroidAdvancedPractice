@@ -1,6 +1,10 @@
-package com.xiaokun.httpexceptiondemo.ui.multi_rv_sample;
+package com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.utils;
 
 import android.support.v7.util.DiffUtil;
+
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.entity.ItemA;
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.entity.ItemB;
+import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.entity.MultiItem;
 
 import java.util.List;
 
