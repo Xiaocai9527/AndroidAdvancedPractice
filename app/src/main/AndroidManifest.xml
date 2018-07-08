@@ -43,6 +43,7 @@
             android:theme="@style/NoBarTheme" />
 
         <activity android:name=".ui.multi_rv_sample.MultiRvActivity" />
+        <activity android:name=".ui.MergeArrayActivity"/>
 
     </application>
 
