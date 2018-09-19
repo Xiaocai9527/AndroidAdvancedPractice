@@ -44,6 +44,7 @@
 
         <activity android:name=".ui.multi_rv_sample.MultiRvActivity" />
         <activity android:name=".ui.MergeArrayActivity"/>
+        <activity android:name=".ui.ToolbarActivity"/>
 
     </application>
 

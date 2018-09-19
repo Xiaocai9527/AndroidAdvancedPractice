@@ -34,6 +34,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton21;
     private Button mButton22;
     private Button mButton23;
+    private Button mButton24;
     private Context mContext;
 
     @Override
@@ -58,9 +59,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mButton21 = (Button) findViewById(R.id.button21);
         mButton22 = (Button) findViewById(R.id.button22);
         mButton23 = (Button) findViewById(R.id.button23);
+        mButton24 = (Button) findViewById(R.id.button24);
 
         initListener(mButton10, mButton11, mButton12, mButton14,
-                mButton15, mButton19, mButton20, mButton21, mButton22, mButton23);
+                mButton15, mButton19, mButton20, mButton21, mButton22, mButton23, mButton24);
     }
 
     private void initListener(View... views)
@@ -105,6 +107,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button23:
                 MergeArrayActivity.start(this);
+                break;
+            case R.id.button24:
+                ToolbarActivity.start(this);
                 break;
             default:
                 break;
