@@ -21,8 +21,7 @@ import com.xiaokun.httpexceptiondemo.ui.mvp.MvpMainActivity;
  *     版本   : 1.0
  * </pre>
  */
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener
-{
+public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mButton10;
     private Button mButton11;
@@ -35,11 +34,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton22;
     private Button mButton23;
     private Button mButton24;
+    private Button mButton25;
     private Context mContext;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mContext = this;
@@ -47,8 +46,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         initView();
     }
 
-    private void initView()
-    {
+    private void initView() {
         mButton10 = (Button) findViewById(R.id.button10);
         mButton11 = (Button) findViewById(R.id.button11);
         mButton12 = (Button) findViewById(R.id.button12);
@@ -60,24 +58,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mButton22 = (Button) findViewById(R.id.button22);
         mButton23 = (Button) findViewById(R.id.button23);
         mButton24 = (Button) findViewById(R.id.button24);
+        mButton25 = (Button) findViewById(R.id.button25);
 
         initListener(mButton10, mButton11, mButton12, mButton14,
-                mButton15, mButton19, mButton20, mButton21, mButton22, mButton23, mButton24);
+                mButton15, mButton19, mButton20, mButton21, mButton22, mButton23, mButton24, mButton25);
     }
 
-    private void initListener(View... views)
-    {
-        for (View view : views)
-        {
+    private void initListener(View... views) {
+        for (View view : views) {
             view.setOnClickListener(this);
         }
     }
 
     @Override
-    public void onClick(View view)
-    {
-        switch (view.getId())
-        {
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.button10:
                 startActivity(new Intent(mContext, MainActivity.class));
                 break;
@@ -110,6 +105,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button24:
                 ToolbarActivity.start(this);
+                break;
+            case R.id.button25:
+                StateListAnimatorActivity.start(this);
                 break;
             default:
                 break;

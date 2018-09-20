@@ -124,5 +124,16 @@
         app:layout_constraintStart_toEndOf="@+id/button23"
         app:layout_constraintTop_toBottomOf="@+id/button21" />
 
+    <Button
+        android:id="@+id/button25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="全屏对话框"
+        app:layout_constraintStart_toEndOf="@+id/button24"
+        app:layout_constraintTop_toBottomOf="@+id/button22" />
+
 
 </android.support.constraint.ConstraintLayout>
