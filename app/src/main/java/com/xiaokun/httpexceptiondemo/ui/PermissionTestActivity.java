@@ -25,8 +25,7 @@ import java.util.List;
  * @date 2018/6/16
  */
 
-public class PermissionTestActivity extends AppCompatActivity implements View.OnClickListener
-{
+public class PermissionTestActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mRecordBtn;
     private Button mStoreBtn;
@@ -35,16 +34,14 @@ public class PermissionTestActivity extends AppCompatActivity implements View.On
     private Context mContext;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
         setContentView(R.layout.activity_permission_test);
         initView();
     }
 
-    private void initView()
-    {
+    private void initView() {
         mRecordBtn = (Button) findViewById(R.id.record_btn);
         mStoreBtn = (Button) findViewById(R.id.store_btn);
         mLocationBtn = (Button) findViewById(R.id.location_btn);
@@ -53,19 +50,15 @@ public class PermissionTestActivity extends AppCompatActivity implements View.On
         initListener(mRecordBtn, mStoreBtn, mLocationBtn, mCameraBtn);
     }
 
-    private void initListener(View... views)
-    {
-        for (View view : views)
-        {
+    private void initListener(View... views) {
+        for (View view : views) {
             view.setOnClickListener(this);
         }
     }
 
     @Override
-    public void onClick(View view)
-    {
-        switch (view.getId())
-        {
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.record_btn:
                 record();
                 break;
@@ -75,25 +68,21 @@ public class PermissionTestActivity extends AppCompatActivity implements View.On
     }
 
     public static final int RECORD_CODE = 1;
-    String[] recordPerm = {Manifest.permission.RECORD_AUDIO};
+    String[] recordPerm = {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-    private void record()
-    {
+    private void record() {
         PermissionHelper.init(this)
                 .permissions(recordPerm)
-                .rationale("录音权限")
+                .rationale("录音权限,存储权限")
                 .requestCode(RECORD_CODE)
-                .permissionListener(new PermissionHelper.PermissionListener()
-                {
+                .permissionListener(new PermissionHelper.PermissionListener() {
                     @Override
-                    public void onPermissionsGranted(int requestCode, List<String> perms)
-                    {
+                    public void onPermissionsGranted(int requestCode, List<String> perms) {
                         Toast.makeText(App.getAppContext(), "启动录音代码", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onPermissionsDenied(int requestCode, List<String> perms)
-                    {
+                    public void onPermissionsDenied(int requestCode, List<String> perms) {
                         Toast.makeText(App.getAppContext(), "缺少录音权限", Toast.LENGTH_SHORT).show();
                         //在拒绝的这个地方来进行终极处理, 这里防止有人点击了不再提醒的选项
                         App.getSp().edit().putInt(Constants.REQUEST_CODE_PERMISSION, RECORD_CODE).commit();
