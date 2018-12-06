@@ -1,7 +1,7 @@
 package com.xiaokun.httpexceptiondemo.network.api;
 
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.TotalResEntity;
-import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanBaseResponseEntity;
+import com.xiaokun.baselib.network.WanBaseResponseEntity;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanLoginEntityRes;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.TotalResEntity.HomeArticles;
 

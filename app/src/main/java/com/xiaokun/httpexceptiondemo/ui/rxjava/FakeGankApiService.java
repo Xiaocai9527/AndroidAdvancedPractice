@@ -1,11 +1,10 @@
 package com.xiaokun.httpexceptiondemo.ui.rxjava;
 
-import com.xiaokun.httpexceptiondemo.network.BaseResponse;
+import com.xiaokun.baselib.network.BaseResponse;
 import com.xiaokun.httpexceptiondemo.network.entity.GankResEntity;
 
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import retrofit2.http.GET;
 

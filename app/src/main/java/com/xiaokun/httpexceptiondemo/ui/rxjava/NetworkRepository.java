@@ -1,7 +1,7 @@
 package com.xiaokun.httpexceptiondemo.ui.rxjava;
 
 import com.xiaokun.httpexceptiondemo.network.entity.GankResEntity;
-import com.xiaokun.httpexceptiondemo.rx.transform.HttpResultFunc;
+import com.xiaokun.baselib.rx.transform.HttpResultFunc;
 
 import java.util.List;
 

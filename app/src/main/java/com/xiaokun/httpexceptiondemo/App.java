@@ -1,12 +1,14 @@
 package com.xiaokun.httpexceptiondemo;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.facebook.stetho.Stetho;
 import com.xiaokun.baselib.BaseApplication;
-import com.xiaokun.httpexceptiondemo.util.ACache;
+import com.xiaokun.baselib.network.RetrofitHelper;
+import com.xiaokun.baselib.util.ACache;
+import com.xiaokun.httpexceptiondemo.network.api.ApiService;
+import com.xiaokun.httpexceptiondemo.network.api.WanApiService;
 
 import java.io.File;
 
@@ -19,41 +21,21 @@ import java.io.File;
  * </pre>
  */
 public class App extends BaseApplication {
-    private static App app;
-    private static SharedPreferences mSp;
-    private static ACache cache;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        app = this;
-        mSp = getSharedPreferences("xiaokun", MODE_PRIVATE);
-        cache = ACache.get(getCacheFile());
+
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
 //        DiskCache.openCache(this);
+        //配置网络
+        RetrofitHelper.getInstance()
+                .setDebug(BuildConfig.DEBUG)
+                .cache(false)
+                .baseUrl(ApiService.baseUrl);
     }
 
-    public static Context getAppContext() {
-        return app;
-    }
-
-    public static SharedPreferences getSp() {
-        return mSp;
-    }
-
-    public static ACache getCache() {
-        return cache;
-    }
-
-    //获取缓存目录
-    private File getCacheFile() {
-        File file = new File(getExternalCacheDir() + "/http_exception_data");
-        if (!(file.exists() && file.isDirectory())) {
-            file.mkdirs();
-        }
-        return file;
-    }
 
 }

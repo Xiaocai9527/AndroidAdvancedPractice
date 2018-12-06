@@ -11,7 +11,7 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.xiaokun.httpexceptiondemo.R;
-import com.xiaokun.httpexceptiondemo.util.Preconditions;
+import com.xiaokun.baselib.util.Preconditions;
 
 /**
  * Created by 肖坤 on 2018/6/3.

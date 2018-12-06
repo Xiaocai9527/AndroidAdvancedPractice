@@ -20,13 +20,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.xiaokun.httpexceptiondemo.App;
-import com.xiaokun.httpexceptiondemo.Constants;
+import com.xiaokun.baselib.config.Constants;
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.artimgloader.ArtImageLoader;
-import com.xiaokun.httpexceptiondemo.rx.exception.ApiException;
+import com.xiaokun.baselib.rx.exception.ApiException;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.BigMvpActivity;
-import com.xiaokun.httpexceptiondemo.util.PermissionHelper;
-import com.xiaokun.httpexceptiondemo.util.PermissionUtil;
+import com.xiaokun.baselib.util.PermissionHelper;
+import com.xiaokun.baselib.util.PermissionUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;

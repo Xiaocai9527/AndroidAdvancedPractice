@@ -7,8 +7,8 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.xiaokun.httpexceptiondemo.simpleimageLoader.DiskLruCache;
-import com.xiaokun.httpexceptiondemo.util.MD5;
-import com.xiaokun.httpexceptiondemo.util.Utils;
+import com.xiaokun.baselib.util.MD5;
+import com.xiaokun.baselib.util.Utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

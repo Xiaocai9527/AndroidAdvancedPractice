@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 
-import com.xiaokun.httpexceptiondemo.util.MD5;
+import com.xiaokun.baselib.util.MD5;
 
 import java.io.File;
 import java.io.FileInputStream;

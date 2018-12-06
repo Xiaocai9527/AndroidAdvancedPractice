@@ -1,17 +1,14 @@
 package com.xiaokun.httpexceptiondemo.ui.rxjava;
 
 import com.xiaokun.httpexceptiondemo.App;
-import com.xiaokun.httpexceptiondemo.Constants;
+import com.xiaokun.baselib.config.Constants;
 import com.xiaokun.httpexceptiondemo.network.entity.GankResEntity;
 
-import java.io.InputStream;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Maybe;
 import io.reactivex.MaybeEmitter;
 import io.reactivex.MaybeOnSubscribe;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 

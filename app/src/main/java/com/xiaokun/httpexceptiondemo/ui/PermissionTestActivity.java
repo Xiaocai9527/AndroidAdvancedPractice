@@ -11,10 +11,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.xiaokun.httpexceptiondemo.App;
-import com.xiaokun.httpexceptiondemo.Constants;
+import com.xiaokun.baselib.config.Constants;
 import com.xiaokun.httpexceptiondemo.R;
-import com.xiaokun.httpexceptiondemo.util.PermissionHelper;
-import com.xiaokun.httpexceptiondemo.util.PermissionUtil;
+import com.xiaokun.baselib.util.PermissionHelper;
+import com.xiaokun.baselib.util.PermissionUtil;
 
 import java.util.List;
 

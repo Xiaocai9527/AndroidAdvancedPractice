@@ -7,7 +7,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import static com.xiaokun.httpexceptiondemo.util.Preconditions.checkNotNull;
+import static com.xiaokun.baselib.util.Preconditions.checkNotNull;
 
 /**
  * Created by 肖坤 on 2018/6/3.

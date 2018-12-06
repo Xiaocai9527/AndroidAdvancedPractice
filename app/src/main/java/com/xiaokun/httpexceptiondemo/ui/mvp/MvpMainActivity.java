@@ -13,10 +13,10 @@ import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
 import com.xiaokun.httpexceptiondemo.network.entity.UniversalResEntity;
-import com.xiaokun.httpexceptiondemo.rx.download.DownLoadListener;
-import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
-import com.xiaokun.httpexceptiondemo.rx.download.DownloadManager;
-import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
+import com.xiaokun.baselib.rx.download.DownLoadListener;
+import com.xiaokun.baselib.rx.download.DownloadEntity;
+import com.xiaokun.baselib.rx.download.DownloadManager;
+import com.xiaokun.baselib.rx.util.RxManager;
 import com.xiaokun.httpexceptiondemo.ui.viewpager.ViewPagerActivity;
 
 import java.io.File;

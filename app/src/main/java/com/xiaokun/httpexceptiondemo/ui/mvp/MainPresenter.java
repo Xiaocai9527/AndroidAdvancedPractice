@@ -5,11 +5,11 @@ import com.xiaokun.httpexceptiondemo.network.entity.GankResEntity;
 import com.xiaokun.httpexceptiondemo.network.entity.ServerResponse;
 import com.xiaokun.httpexceptiondemo.network.entity.UniversalResEntity;
 import com.xiaokun.httpexceptiondemo.network.entity.XmNeswResEntity;
-import com.xiaokun.httpexceptiondemo.rx.BaseObserver;
-import com.xiaokun.httpexceptiondemo.rx.download.DownLoadObserver;
-import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
-import com.xiaokun.httpexceptiondemo.rx.download.DownloadManager;
-import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
+import com.xiaokun.baselib.rx.BaseObserver;
+import com.xiaokun.baselib.rx.download.DownLoadObserver;
+import com.xiaokun.baselib.rx.download.DownloadEntity;
+import com.xiaokun.baselib.rx.download.DownloadManager;
+import com.xiaokun.baselib.rx.util.RxManager;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

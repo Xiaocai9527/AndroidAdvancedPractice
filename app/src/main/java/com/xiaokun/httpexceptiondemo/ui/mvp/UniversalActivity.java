@@ -12,9 +12,9 @@ import android.widget.Toast;
 
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.network.entity.UniversalResEntity;
-import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
+import com.xiaokun.baselib.rx.util.RxManager;
 import com.xiaokun.httpexceptiondemo.ui.adapter.UniversalRvAdapter;
-import com.xiaokun.httpexceptiondemo.util.OffsetDecoration;
+import com.xiaokun.baselib.util.OffsetDecoration;
 
 import java.util.List;
 

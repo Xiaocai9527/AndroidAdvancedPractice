@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.Looper;
 import android.util.Log;
 
-import com.xiaokun.httpexceptiondemo.util.Utils;
+import com.xiaokun.baselib.util.Utils;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

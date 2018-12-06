@@ -11,25 +11,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xiaokun.httpexceptiondemo.App;
-import com.xiaokun.httpexceptiondemo.Constants;
+import com.xiaokun.baselib.config.Constants;
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.network.api.ApiService;
-import com.xiaokun.httpexceptiondemo.network.OkhttpHelper;
+import com.xiaokun.baselib.network.OkhttpHelper;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
-import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
-import com.xiaokun.httpexceptiondemo.network.interceptors.AppCacheInterceptor;
-import com.xiaokun.httpexceptiondemo.network.interceptors.HeaderInterceptor;
-import com.xiaokun.httpexceptiondemo.network.interceptors.TokenInterceptor;
-import com.xiaokun.httpexceptiondemo.rx.BaseObserver;
-import com.xiaokun.httpexceptiondemo.rx.ErrorConsumer;
-import com.xiaokun.httpexceptiondemo.rx.download.DownLoadListener;
-import com.xiaokun.httpexceptiondemo.rx.download.DownLoadObserver;
-import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
-import com.xiaokun.httpexceptiondemo.rx.download.DownloadManager;
-import com.xiaokun.httpexceptiondemo.rx.transform.HttpResultFunc;
-import com.xiaokun.httpexceptiondemo.rx.transform.RxSchedulers;
-import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
-import com.xiaokun.httpexceptiondemo.util.PermissionUtil;
+import com.xiaokun.baselib.network.RetrofitHelper;
+import com.xiaokun.baselib.network.interceptors.AppCacheInterceptor;
+import com.xiaokun.baselib.network.interceptors.HeaderInterceptor;
+import com.xiaokun.baselib.network.interceptors.TokenInterceptor;
+import com.xiaokun.baselib.rx.BaseObserver;
+import com.xiaokun.baselib.rx.ErrorConsumer;
+import com.xiaokun.baselib.rx.download.DownLoadListener;
+import com.xiaokun.baselib.rx.download.DownLoadObserver;
+import com.xiaokun.baselib.rx.download.DownloadEntity;
+import com.xiaokun.baselib.rx.download.DownloadManager;
+import com.xiaokun.baselib.rx.transform.HttpResultFunc;
+import com.xiaokun.baselib.rx.transform.RxSchedulers;
+import com.xiaokun.baselib.rx.util.RxManager;
+import com.xiaokun.baselib.util.PermissionUtil;
 
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         DownloadManager.initDownManager(this);
         rxManager = new RxManager();
-        apiService = RetrofitHelper.createService(ApiService.class, false);
+        apiService = RetrofitHelper.getInstance().createService(ApiService.class);
     }
 
     private void initView() {
@@ -226,12 +226,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //测试过期token的接口
     private void testToken() {
-        OkHttpClient okhttpClient = OkhttpHelper.getOkhttpClient(false, new HeaderInterceptor(), new
+        OkHttpClient okhttpClient = OkhttpHelper.getOkhttpClient(new HeaderInterceptor(), new
                         AppCacheInterceptor(),
                 new TokenInterceptor());
-        ApiService apiService = RetrofitHelper.createService(ApiService.class,
-                RetrofitHelper.getRetrofit(okhttpClient, ApiService.baseUrl));
-//        ApiService apiService = RetrofitHelper.createService(ApiService.class, RetrofitHelper.getRetrofit2());
+        ApiService apiService = RetrofitHelper.getInstance().createService(ApiService.class,
+                RetrofitHelper.getInstance().getRetrofit(okhttpClient, ApiService.baseUrl));
         Observable<ResEntity1.DataBean> compose = apiService.getExpiredHttp()
                 .map(new HttpResultFunc<ResEntity1.DataBean>())
                 .compose(RxSchedulers.<ResEntity1.DataBean>io_main());
@@ -258,8 +257,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void downloadFile() {
         fileName = "httpTest.apk";
         downloadEntity = new DownloadEntity(loadListener, fileName);
-        ApiService apiService = RetrofitHelper.createService(ApiService.class,
-                RetrofitHelper.getDownloadRetrofit(downloadEntity));
+        ApiService apiService = RetrofitHelper.getInstance().createService(ApiService.class,
+                RetrofitHelper.getInstance().getDownloadRetrofit(downloadEntity));
 
         Observable<ResponseBody> observable = apiService.downLoadFile(url)
                 .subscribeOn(Schedulers.io());

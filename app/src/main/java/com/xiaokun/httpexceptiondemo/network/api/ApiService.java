@@ -1,6 +1,6 @@
 package com.xiaokun.httpexceptiondemo.network.api;
 
-import com.xiaokun.httpexceptiondemo.network.BaseResponse;
+import com.xiaokun.baselib.network.BaseResponse;
 import com.xiaokun.httpexceptiondemo.network.LoginEntity;
 import com.xiaokun.httpexceptiondemo.network.RegisterEntity;
 import com.xiaokun.httpexceptiondemo.network.ResEntity1;
@@ -9,7 +9,7 @@ import com.xiaokun.httpexceptiondemo.network.entity.ListResEntity;
 import com.xiaokun.httpexceptiondemo.network.entity.ServerResponse;
 import com.xiaokun.httpexceptiondemo.network.entity.XmNeswResEntity;
 import com.xiaokun.httpexceptiondemo.network.meizi.CategoryResEntity;
-import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanBaseResponseEntity;
+import com.xiaokun.baselib.network.WanBaseResponseEntity;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanLoginEntityRes;
 
 import java.util.List;

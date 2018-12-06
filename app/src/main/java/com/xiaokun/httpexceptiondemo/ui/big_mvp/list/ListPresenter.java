@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
-import static com.xiaokun.httpexceptiondemo.util.Preconditions.checkNotNull;
+import static com.xiaokun.baselib.util.Preconditions.checkNotNull;
 
 /**
  * Created by 肖坤 on 2018/6/3.

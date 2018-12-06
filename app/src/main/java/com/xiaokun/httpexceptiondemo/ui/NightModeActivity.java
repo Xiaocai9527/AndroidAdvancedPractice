@@ -18,15 +18,15 @@ import com.jaeger.library.StatusBarUtil;
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.colorful.Colorful;
 import com.xiaokun.httpexceptiondemo.colorful.setter.ViewGroupSetter;
-import com.xiaokun.httpexceptiondemo.network.OkhttpHelper;
-import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
+import com.xiaokun.baselib.network.OkhttpHelper;
+import com.xiaokun.baselib.network.RetrofitHelper;
 import com.xiaokun.httpexceptiondemo.network.api.ApiService;
 import com.xiaokun.httpexceptiondemo.network.meizi.CategoryResEntity;
-import com.xiaokun.httpexceptiondemo.rx.BaseObserver;
-import com.xiaokun.httpexceptiondemo.rx.transform.RxSchedulers;
-import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
+import com.xiaokun.baselib.rx.BaseObserver;
+import com.xiaokun.baselib.rx.transform.RxSchedulers;
+import com.xiaokun.baselib.rx.util.RxManager;
 import com.xiaokun.httpexceptiondemo.ui.adapter.NightModeAdapter;
-import com.xiaokun.httpexceptiondemo.util.OffsetDecoration;
+import com.xiaokun.baselib.util.OffsetDecoration;
 
 import okhttp3.OkHttpClient;
 
@@ -152,9 +152,9 @@ public class NightModeActivity extends AppCompatActivity
 
     private void getHttpData()
     {
-        OkHttpClient client = OkhttpHelper.getDefaultClient(false);
-        ApiService service = RetrofitHelper.createService(ApiService.class, RetrofitHelper.
-                getRetrofit(client, ApiService.baseUrl2));
+        OkHttpClient client = OkhttpHelper.getDefaultClient();
+        ApiService service = RetrofitHelper.getInstance().createService(ApiService.class,
+                RetrofitHelper.getInstance().getRetrofit(client, ApiService.baseUrl2));
         service.getCategoryData("Android", 20, 1)
                 .compose(RxSchedulers.<CategoryResEntity>io_main()).subscribe(new BaseObserver<CategoryResEntity>
                 (rxManager)

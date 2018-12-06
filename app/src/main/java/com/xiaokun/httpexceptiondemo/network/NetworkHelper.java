@@ -1,12 +1,10 @@
 package com.xiaokun.httpexceptiondemo.network;
 
-import com.xiaokun.httpexceptiondemo.network.api.ApiService;
 import com.xiaokun.httpexceptiondemo.network.api.WanApiService;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.TotalResEntity;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanLoginEntityRes;
-import com.xiaokun.httpexceptiondemo.rx.transform.HttpResultFunc;
-import com.xiaokun.httpexceptiondemo.rx.transform.RxSchedulers;
-import com.xiaokun.httpexceptiondemo.rx.transform.WanHttpResultFunc;
+import com.xiaokun.baselib.rx.transform.RxSchedulers;
+import com.xiaokun.baselib.rx.transform.WanHttpResultFunc;
 
 import io.reactivex.Observable;
 

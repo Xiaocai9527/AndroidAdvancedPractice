@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
 import com.xiaokun.httpexceptiondemo.R;
-import com.xiaokun.httpexceptiondemo.util.ActivityUtils;
+import com.xiaokun.baselib.util.ActivityUtils;
 
 import java.util.concurrent.TimeUnit;
 

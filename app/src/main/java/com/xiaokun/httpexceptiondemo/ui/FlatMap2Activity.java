@@ -12,17 +12,17 @@ import android.widget.Toast;
 
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.network.api.ApiService;
-import com.xiaokun.httpexceptiondemo.network.BaseResponse;
+import com.xiaokun.baselib.network.BaseResponse;
 import com.xiaokun.httpexceptiondemo.network.LoginEntity;
-import com.xiaokun.httpexceptiondemo.network.OkhttpHelper;
+import com.xiaokun.baselib.network.OkhttpHelper;
 import com.xiaokun.httpexceptiondemo.network.RegisterEntity;
-import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
+import com.xiaokun.baselib.network.RetrofitHelper;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanLoginEntityRes;
-import com.xiaokun.httpexceptiondemo.rx.BaseObserver;
-import com.xiaokun.httpexceptiondemo.rx.transform.HttpResultFunc;
-import com.xiaokun.httpexceptiondemo.rx.transform.RxSchedulers;
-import com.xiaokun.httpexceptiondemo.rx.transform.WanHttpResFunc;
-import com.xiaokun.httpexceptiondemo.rx.util.RxManager;
+import com.xiaokun.baselib.rx.BaseObserver;
+import com.xiaokun.baselib.rx.transform.HttpResultFunc;
+import com.xiaokun.baselib.rx.transform.RxSchedulers;
+import com.xiaokun.baselib.rx.transform.WanHttpResFunc;
+import com.xiaokun.baselib.rx.util.RxManager;
 
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
@@ -49,9 +49,9 @@ public class FlatMap2Activity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flat_map_2);
         rxManager = new RxManager();
-        OkHttpClient okhttp = OkhttpHelper.getDefaultClient(false);
-        RetrofitHelper.getRetrofit(okhttp, ApiService.baseUrl);
-        apiService = RetrofitHelper.createService(ApiService.class, false);
+        OkHttpClient okhttp = OkhttpHelper.getDefaultClient();
+        RetrofitHelper.getInstance().getRetrofit(okhttp, ApiService.baseUrl);
+        apiService = RetrofitHelper.getInstance().createService(ApiService.class);
         initView();
     }
 

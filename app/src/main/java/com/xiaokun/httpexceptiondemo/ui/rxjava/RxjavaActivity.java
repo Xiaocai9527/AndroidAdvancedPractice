@@ -11,16 +11,16 @@ import android.widget.Toast;
 
 import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.httpexceptiondemo.R;
-import com.xiaokun.httpexceptiondemo.network.BaseResponse;
+import com.xiaokun.baselib.network.BaseResponse;
 import com.xiaokun.httpexceptiondemo.network.LoginEntity;
-import com.xiaokun.httpexceptiondemo.network.OkhttpHelper;
+import com.xiaokun.baselib.network.OkhttpHelper;
 import com.xiaokun.httpexceptiondemo.network.RegisterEntity;
-import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
+import com.xiaokun.baselib.network.RetrofitHelper;
 import com.xiaokun.httpexceptiondemo.network.api.ApiService;
 import com.xiaokun.httpexceptiondemo.network.entity.GankResEntity;
-import com.xiaokun.httpexceptiondemo.rx.ErrorConsumer;
-import com.xiaokun.httpexceptiondemo.rx.transform.HttpResultFunc;
-import com.xiaokun.httpexceptiondemo.rx.transform.RxSchedulers;
+import com.xiaokun.baselib.rx.ErrorConsumer;
+import com.xiaokun.baselib.rx.transform.HttpResultFunc;
+import com.xiaokun.baselib.rx.transform.RxSchedulers;
 
 import java.io.Serializable;
 import java.util.List;
@@ -32,7 +32,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import retrofit2.Retrofit;
 
-import static com.xiaokun.httpexceptiondemo.Constants.GANK_DATA;
+import static com.xiaokun.baselib.config.Constants.GANK_DATA;
 
 /**
  * <pre>
@@ -73,15 +73,19 @@ public class RxjavaActivity extends AppCompatActivity implements View.OnClickLis
 
         initListener(mButton27, mButton28, mButton29);
 
-        mNetworkRepository = new NetworkRepository(RetrofitHelper.createService(FakeGankApiService.class, false));
+        mNetworkRepository = new NetworkRepository(RetrofitHelper.getInstance()
+                .createService(FakeGankApiService.class));
         mCacheRepository = new CacheRepository();
-        mService = RetrofitHelper.createService(ApiService.class, false);
+        mService = RetrofitHelper.getInstance().createService(ApiService.class);
 
-        RetrofitHelper.createService(FakeGankApiService.class, false);
+        RetrofitHelper.getInstance().getInstance()
+                .createService(FakeGankApiService.class);
 
-        Retrofit retrofit = RetrofitHelper.getRetrofit(OkhttpHelper.getDefaultClient(false), "http://gank.io/api/");
+        Retrofit retrofit = RetrofitHelper.getInstance()
+                .getRetrofit(OkhttpHelper.getDefaultClient(), "http://gank.io/api/");
 
-        mRealGankApiService = RetrofitHelper.createService(RealGankApiService.class, retrofit);
+        mRealGankApiService = RetrofitHelper.getInstance()
+                .createService(RealGankApiService.class, retrofit);
     }
 
     private void initListener(View... views) {

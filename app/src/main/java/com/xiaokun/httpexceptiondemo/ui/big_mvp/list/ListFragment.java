@@ -16,13 +16,12 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.xiaokun.httpexceptiondemo.Constants;
+import com.xiaokun.baselib.config.Constants;
 import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.network.entity.ListResEntity;
-import com.xiaokun.httpexceptiondemo.rx.util.RxBus;
-import com.xiaokun.httpexceptiondemo.rx.util.RxBus2;
-import com.xiaokun.httpexceptiondemo.ui.big_mvp.BigMvpActivity;
-import com.xiaokun.httpexceptiondemo.util.Preconditions;
+import com.xiaokun.baselib.rx.util.RxBus;
+import com.xiaokun.baselib.rx.util.RxBus2;
+import com.xiaokun.baselib.util.Preconditions;
 
 import java.util.List;
 

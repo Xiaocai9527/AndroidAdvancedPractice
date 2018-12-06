@@ -6,10 +6,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
-import com.xiaokun.httpexceptiondemo.Constants;
+import com.xiaokun.baselib.config.Constants;
 import com.xiaokun.httpexceptiondemo.R;
-import com.xiaokun.httpexceptiondemo.rx.util.RxBus;
-import com.xiaokun.httpexceptiondemo.rx.util.RxBus2;
+import com.xiaokun.baselib.rx.util.RxBus;
+import com.xiaokun.baselib.rx.util.RxBus2;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.detail.DetailFragment;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.detail.DetailPresenter;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.list.ListFragment;

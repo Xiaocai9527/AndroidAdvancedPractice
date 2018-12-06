@@ -4,7 +4,7 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.xiaokun.httpexceptiondemo.network.api.ApiService;
 import com.xiaokun.httpexceptiondemo.network.api.WanApiService;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.TotalResEntity;
-import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanBaseResponseEntity;
+import com.xiaokun.baselib.network.WanBaseResponseEntity;
 import com.xiaokun.httpexceptiondemo.network.wanAndroid.WanLoginEntityRes;
 
 import org.junit.Before;
@@ -25,8 +25,6 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static org.junit.Assert.*;
 
 /**
  * <pre>

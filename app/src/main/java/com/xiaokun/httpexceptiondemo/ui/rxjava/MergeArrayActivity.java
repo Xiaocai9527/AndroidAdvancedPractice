@@ -11,12 +11,12 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.xiaokun.httpexceptiondemo.R;
-import com.xiaokun.httpexceptiondemo.network.OkhttpHelper;
-import com.xiaokun.httpexceptiondemo.network.RetrofitHelper;
+import com.xiaokun.baselib.network.OkhttpHelper;
+import com.xiaokun.baselib.network.RetrofitHelper;
 import com.xiaokun.httpexceptiondemo.network.api.ApiService;
 import com.xiaokun.httpexceptiondemo.network.meizi.CategoryResEntity;
 import com.xiaokun.httpexceptiondemo.ui.adapter.NightModeAdapter;
-import com.xiaokun.httpexceptiondemo.util.OffsetDecoration;
+import com.xiaokun.baselib.util.OffsetDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,9 +69,9 @@ public class MergeArrayActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(nightModeAdapter);
 
-        OkHttpClient client = OkhttpHelper.getDefaultClient(false);
-        ApiService service = RetrofitHelper.createService(ApiService.class, RetrofitHelper.
-                getRetrofit(client, ApiService.baseUrl2));
+        OkHttpClient client = OkhttpHelper.getDefaultClient();
+        ApiService service = RetrofitHelper.getInstance().createService(ApiService.class,
+                RetrofitHelper.getInstance().getRetrofit(client, ApiService.baseUrl2));
 
         List<Observable<CategoryResEntity>> datas = new ArrayList<>();
         Observable<CategoryResEntity>[] observables = new Observable[6];
