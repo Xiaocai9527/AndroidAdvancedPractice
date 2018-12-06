@@ -21,6 +21,7 @@ import com.xiaokun.httpexceptiondemo.network.interceptors.AppCacheInterceptor;
 import com.xiaokun.httpexceptiondemo.network.interceptors.HeaderInterceptor;
 import com.xiaokun.httpexceptiondemo.network.interceptors.TokenInterceptor;
 import com.xiaokun.httpexceptiondemo.rx.BaseObserver;
+import com.xiaokun.httpexceptiondemo.rx.ErrorConsumer;
 import com.xiaokun.httpexceptiondemo.rx.download.DownLoadListener;
 import com.xiaokun.httpexceptiondemo.rx.download.DownLoadObserver;
 import com.xiaokun.httpexceptiondemo.rx.download.DownloadEntity;
@@ -34,14 +35,14 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, EasyPermissions.PermissionCallbacks
-{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
     private static final String TAG = "MainActivity";
 
     private RxManager rxManager;
@@ -60,8 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String fileName;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -72,8 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         apiService = RetrofitHelper.createService(ApiService.class, false);
     }
 
-    private void initView()
-    {
+    private void initView() {
         mButton = (Button) findViewById(R.id.button);
         mButton2 = (Button) findViewById(R.id.button2);
         mButton3 = (Button) findViewById(R.id.button3);
@@ -89,19 +88,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 , mButton7, mButton8, mButton9);
     }
 
-    private void initListener(View... views)
-    {
-        for (View view : views)
-        {
+    private void initListener(View... views) {
+        for (View view : views) {
             view.setOnClickListener(this);
         }
     }
 
     @Override
-    public void onClick(View view)
-    {
-        switch (view.getId())
-        {
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.button:
                 testSuccess();
                 break;
@@ -146,35 +141,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //请求写文件权限
     //注意本方法返回类型必须是void, 而且是无参数
     @AfterPermissionGranted(Constants.WRITE_REQUEST_CODE)
-    private void requestWriteFilePermission()
-    {
+    private void requestWriteFilePermission() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        if (EasyPermissions.hasPermissions(this, perms))
-        {
+        if (EasyPermissions.hasPermissions(this, perms)) {
             downloadFile();
-        } else
-        {
+        } else {
             EasyPermissions.requestPermissions(this, "下载文件需要文件存储",
                     Constants.WRITE_REQUEST_CODE, perms);
         }
     }
 
-    private void testSuccess()
-    {
+    private void testSuccess() {
         Observable<ResEntity1.DataBean> compose = apiService.getHttpData1()
                 .map(new HttpResultFunc<ResEntity1.DataBean>())
                 .compose(RxSchedulers.<ResEntity1.DataBean>io_main());
 
-        compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
-        {
+
+        //这种方式可以更加灵活地拿到每个网络请求的disposable,更加方便地对网络请求进行处理
+        Disposable disposable = compose.subscribe(new Consumer<ResEntity1.DataBean>() {
             @Override
-            public void onErrorMsg(String msg)
-            {
+            public void accept(ResEntity1.DataBean dataBean) throws Exception {
+
+            }
+        }, new ErrorConsumer() {
+            @Override
+            public void onErrorMsg(String errorMsg) {
+
+            }
+        });
+
+        compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager) {
+            @Override
+            public void onErrorMsg(String msg) {
             }
 
             @Override
-            public void onNext(ResEntity1.DataBean dataBean)
-            {
+            public void onNext(ResEntity1.DataBean dataBean) {
                 //输出 E/MainActivity: onNext(MainActivity.java:53)返回成功
                 mTextView.setText(dataBean.getRes());
                 Toast.makeText(MainActivity.this, dataBean.getRes(), Toast.LENGTH_SHORT).show();
@@ -182,17 +184,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void testFailed()
-    {
+    private void testFailed() {
         Observable<ResEntity1.DataBean> compose = apiService.getHttpData2()
                 .map(new HttpResultFunc<ResEntity1.DataBean>())
                 .compose(RxSchedulers.<ResEntity1.DataBean>io_main());
 
-        compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
-        {
+        compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager) {
             @Override
-            public void onErrorMsg(String msg)
-            {
+            public void onErrorMsg(String msg) {
                 //输出 E/MainActivity: errorMsg:错误码：6
                 //    服务器出错
                 Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
@@ -200,39 +199,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onNext(ResEntity1.DataBean dataBean)
-            {
+            public void onNext(ResEntity1.DataBean dataBean) {
 
             }
         });
     }
 
-    private void testNoLogin()
-    {
+    private void testNoLogin() {
         Observable<ResEntity1.DataBean> compose = apiService.getHttpData3()
                 .map(new HttpResultFunc<ResEntity1.DataBean>())
                 .compose(RxSchedulers.<ResEntity1.DataBean>io_main());
 
-        compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
-        {
+        compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager) {
             @Override
-            public void onErrorMsg(String msg)
-            {
+            public void onErrorMsg(String msg) {
                 Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                 mTextView.setText(msg);
             }
 
             @Override
-            public void onNext(ResEntity1.DataBean dataBean)
-            {
+            public void onNext(ResEntity1.DataBean dataBean) {
                 mTextView.setText(dataBean.getRes());
             }
         });
     }
 
     //测试过期token的接口
-    private void testToken()
-    {
+    private void testToken() {
         OkHttpClient okhttpClient = OkhttpHelper.getOkhttpClient(false, new HeaderInterceptor(), new
                         AppCacheInterceptor(),
                 new TokenInterceptor());
@@ -243,18 +236,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .map(new HttpResultFunc<ResEntity1.DataBean>())
                 .compose(RxSchedulers.<ResEntity1.DataBean>io_main());
 
-        compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager)
-        {
+        compose.subscribe(new BaseObserver<ResEntity1.DataBean>(rxManager) {
             @Override
-            public void onErrorMsg(String msg)
-            {
+            public void onErrorMsg(String msg) {
                 Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                 mTextView.setText(msg + "\n刷新得到的新token: " + App.getSp().getString("token", ""));
             }
 
             @Override
-            public void onNext(ResEntity1.DataBean dataBean)
-            {
+            public void onNext(ResEntity1.DataBean dataBean) {
 
             }
         });
@@ -265,8 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Disposable disposable;
 
     //测试下载文件哦
-    private void downloadFile()
-    {
+    private void downloadFile() {
         fileName = "httpTest.apk";
         downloadEntity = new DownloadEntity(loadListener, fileName);
         ApiService apiService = RetrofitHelper.createService(ApiService.class,
@@ -274,31 +263,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Observable<ResponseBody> observable = apiService.downLoadFile(url)
                 .subscribeOn(Schedulers.io());
-        observable.subscribe(new DownLoadObserver()
-        {
+        observable.subscribe(new DownLoadObserver() {
             @Override
-            public void onSubscribe(Disposable d)
-            {
+            public void onSubscribe(Disposable d) {
                 disposable = d;
             }
         });
     }
 
-    DownLoadListener loadListener = new DownLoadListener()
-    {
+    DownLoadListener loadListener = new DownLoadListener() {
         @Override
-        public void onProgress(final int progress, boolean downSuc, boolean downFailed)
-        {
-            if (downFailed)
-            {
+        public void onProgress(final int progress, boolean downSuc, boolean downFailed) {
+            if (downFailed) {
                 mTextView.setText("下载失败");
-            } else
-            {
-                if (!downSuc)
-                {
+            } else {
+                if (!downSuc) {
                     mTextView.setText("下载进度：" + progress + "%");
-                } else
-                {
+                } else {
                     mTextView.setText("下载已完成");
                 }
             }
@@ -307,18 +288,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     };
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
         rxManager.clear();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case Constants.WRITE_REQUEST_CODE:
                 //说白了就是用EasyPermissions来接管Activity中的此方法
                 EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
@@ -330,10 +308,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms)
-    {
-        switch (requestCode)
-        {
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        switch (requestCode) {
             case Constants.WRITE_REQUEST_CODE:
                 //这里如果调用saveImgToPhone，writePer中还会执行一次
                 //如果说此次动态申请的权限全部成功，没有一个拒绝，那么会执行writePer方法
@@ -346,10 +322,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms)
-    {
-        switch (requestCode)
-        {
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        switch (requestCode) {
             case Constants.WRITE_REQUEST_CODE:
                 Toast.makeText(MainActivity.this, "缺少文件存储，图片保存失败", Toast.LENGTH_SHORT).show();
                 //在拒绝的这个地方来进行终极处理, 这里防止有人点击了不再提醒的选项
@@ -363,11 +337,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case Constants.WRITE_REQUEST_CODE:
                 //页面返回后再次执行此方法
                 requestWriteFilePermission();

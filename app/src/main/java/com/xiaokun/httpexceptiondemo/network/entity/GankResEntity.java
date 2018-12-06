@@ -1,5 +1,6 @@
 package com.xiaokun.httpexceptiondemo.network.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,8 +11,7 @@ import java.util.List;
  *     版本   : 1.0
  * </pre>
  */
-public class GankResEntity
-{
+public class GankResEntity implements Serializable {
 
     /**
      * Data : [{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"}]
@@ -23,38 +23,31 @@ public class GankResEntity
     private String Message;
     private List<DataBean> Data;
 
-    public int getCode()
-    {
+    public int getCode() {
         return Code;
     }
 
-    public void setCode(int Code)
-    {
+    public void setCode(int Code) {
         this.Code = Code;
     }
 
-    public String getMessage()
-    {
+    public String getMessage() {
         return Message;
     }
 
-    public void setMessage(String Message)
-    {
+    public void setMessage(String Message) {
         this.Message = Message;
     }
 
-    public List<DataBean> getData()
-    {
+    public List<DataBean> getData() {
         return Data;
     }
 
-    public void setData(List<DataBean> Data)
-    {
+    public void setData(List<DataBean> Data) {
         this.Data = Data;
     }
 
-    public static class DataBean implements UniversalResEntity
-    {
+    public static class DataBean implements UniversalResEntity, Serializable {
         /**
          * desc : MusicLibrary-一个丰富的音频播放SDK
          * publishedAt : 2018-03-12T08:44:50.326Z
@@ -65,51 +58,42 @@ public class GankResEntity
         private String publishedAt;
         private String who;
 
-        public String getDesc()
-        {
+        public String getDesc() {
             return desc;
         }
 
-        public void setDesc(String desc)
-        {
+        public void setDesc(String desc) {
             this.desc = desc;
         }
 
-        public String getPublishedAt()
-        {
+        public String getPublishedAt() {
             return publishedAt;
         }
 
-        public void setPublishedAt(String publishedAt)
-        {
+        public void setPublishedAt(String publishedAt) {
             this.publishedAt = publishedAt;
         }
 
-        public String getWho()
-        {
+        public String getWho() {
             return who;
         }
 
-        public void setWho(String who)
-        {
+        public void setWho(String who) {
             this.who = who;
         }
 
         @Override
-        public String getText1()
-        {
+        public String getText1() {
             return desc;
         }
 
         @Override
-        public String getText2()
-        {
+        public String getText2() {
             return publishedAt;
         }
 
         @Override
-        public String getText3()
-        {
+        public String getText3() {
             return who;
         }
     }

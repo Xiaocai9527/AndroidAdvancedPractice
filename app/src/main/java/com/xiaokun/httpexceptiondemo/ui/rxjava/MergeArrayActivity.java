@@ -1,4 +1,4 @@
-package com.xiaokun.httpexceptiondemo.ui;
+package com.xiaokun.httpexceptiondemo.ui.rxjava;
 
 import android.content.Context;
 import android.content.Intent;

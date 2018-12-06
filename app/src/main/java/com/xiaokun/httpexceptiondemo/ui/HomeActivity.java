@@ -12,6 +12,8 @@ import com.xiaokun.httpexceptiondemo.R;
 import com.xiaokun.httpexceptiondemo.ui.big_mvp.BigMvpActivity;
 import com.xiaokun.httpexceptiondemo.ui.multi_rv_sample.MultiRvActivity;
 import com.xiaokun.httpexceptiondemo.ui.mvp.MvpMainActivity;
+import com.xiaokun.httpexceptiondemo.ui.rxjava.MergeArrayActivity;
+import com.xiaokun.httpexceptiondemo.ui.rxjava.RxjavaActivity;
 
 /**
  * <pre>
@@ -35,6 +37,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton23;
     private Button mButton24;
     private Button mButton25;
+    private Button mButton26;
     private Context mContext;
 
     @Override
@@ -59,9 +62,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mButton23 = (Button) findViewById(R.id.button23);
         mButton24 = (Button) findViewById(R.id.button24);
         mButton25 = (Button) findViewById(R.id.button25);
+        mButton26 = (Button) findViewById(R.id.button26);
 
-        initListener(mButton10, mButton11, mButton12, mButton14,
-                mButton15, mButton19, mButton20, mButton21, mButton22, mButton23, mButton24, mButton25);
+        initListener(mButton10, mButton11, mButton12, mButton14, mButton15, mButton19, mButton20,
+                mButton21, mButton22, mButton23, mButton24, mButton25, mButton26);
     }
 
     private void initListener(View... views) {
@@ -108,6 +112,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button25:
                 StateListAnimatorActivity.start(this);
+                break;
+            case R.id.button26:
+                RxjavaActivity.start(this);
                 break;
             default:
                 break;

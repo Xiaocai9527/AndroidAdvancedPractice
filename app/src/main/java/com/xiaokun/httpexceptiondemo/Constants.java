@@ -10,8 +10,11 @@ import java.io.File;
  *     版本   : 1.0
  * </pre>
  */
-public class Constants
-{
+public class Constants {
+
+    //wanandroid 请求成功码
+    public static final int WAN_HTTP_SUCCESS = 0;
+
     //http请求成功
     public static final int HTTP_SUCCESS = 1;
 
@@ -30,9 +33,11 @@ public class Constants
     public static final int PAUSE_DOWNLOAD = 5;
     public static final int CANCEL_DOWNLOAD = 6;
 
+    //-------------------------------ACache缓存框架key----------------------------------------------
     //cookie
     public static final String COOKIES = "cookies";
-
+    //================= gank数据key ====================
+    public static final String GANK_DATA = "gank_data";
 
     //存储权限
     public static final int WRITE_REQUEST_CODE = 1001;
@@ -42,5 +47,6 @@ public class Constants
     public static final String REQUEST_CODE_PERMISSION = "request_code_permission";
 
     public static final String SHOW_WEBVIEW = "show_webview";
+
 
 }

@@ -122,9 +122,9 @@ public class PermissionHelper
             if (mPermissionFragment == null)
             {
                 mPermissionFragment = PermissionFragment.newInstance();
-                mPermissionFragment.setPermissionListener(mPermissionListener);
                 ActivityUtils.addNoUiFgToActivity(fragmentManager, mPermissionFragment, TAG);
             }
+            mPermissionFragment.setPermissionListener(mPermissionListener);
             return new PermissionHelper(this);
         }
 
@@ -167,8 +167,6 @@ public class PermissionHelper
         public void onActivityCreated(@Nullable Bundle savedInstanceState)
         {
             super.onActivityCreated(savedInstanceState);
-            L.e("onActivityCreated(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() +
-                    ")" + "");
         }
 
         @Override
