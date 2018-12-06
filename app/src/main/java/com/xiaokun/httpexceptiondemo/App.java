@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.facebook.stetho.Stetho;
+import com.xiaokun.baselib.BaseApplication;
 import com.xiaokun.httpexceptiondemo.util.ACache;
 
 import java.io.File;
@@ -17,47 +18,39 @@ import java.io.File;
  *     版本   : 1.0
  * </pre>
  */
-public class App extends Application
-{
+public class App extends BaseApplication {
     private static App app;
     private static SharedPreferences mSp;
     private static ACache cache;
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
         app = this;
         mSp = getSharedPreferences("xiaokun", MODE_PRIVATE);
         cache = ACache.get(getCacheFile());
-        if (BuildConfig.DEBUG)
-        {
+        if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
 //        DiskCache.openCache(this);
     }
 
-    public static Context getAppContext()
-    {
+    public static Context getAppContext() {
         return app;
     }
 
-    public static SharedPreferences getSp()
-    {
+    public static SharedPreferences getSp() {
         return mSp;
     }
 
-    public static ACache getCache()
-    {
+    public static ACache getCache() {
         return cache;
     }
 
     //获取缓存目录
-    private File getCacheFile()
-    {
+    private File getCacheFile() {
         File file = new File(getExternalCacheDir() + "/http_exception_data");
-        if (!(file.exists() && file.isDirectory()))
-        {
+        if (!(file.exists() && file.isDirectory())) {
             file.mkdirs();
         }
         return file;

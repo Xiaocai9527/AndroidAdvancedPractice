@@ -11,6 +11,10 @@ import java.io.File;
  * </pre>
  */
 public class Constants {
+
+    //wanandroid 请求成功码
+    public static final int WAN_HTTP_SUCCESS = 0;
+
     //http请求成功
     public static final int HTTP_SUCCESS = 1;
 
