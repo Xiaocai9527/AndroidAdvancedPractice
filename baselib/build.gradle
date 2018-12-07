@@ -45,7 +45,7 @@ dependencies {
     //Retrofit
     api 'com.squareup.retrofit2:retrofit:2.3.0'
     api 'com.squareup.retrofit2:converter-gson:+'
-    api ('com.squareup.retrofit2:adapter-rxjava:2.1.0'){
+    api('com.squareup.retrofit2:adapter-rxjava:2.1.0') {
         exclude module: 'rxjava'
     }
     //调试工具
@@ -63,5 +63,8 @@ dependencies {
     releaseApi 'com.readystatesoftware.chuck:library-no-op:1.1.0'
     //打印Log
     api 'com.elvishew:xlog:1.4.0'
-
+    //解决rxbus
+    api('com.jakewharton.rxrelay2:rxrelay:2.1.0') {
+        exclude group: 'io.reactivex.rxjava2'
+    }
 }

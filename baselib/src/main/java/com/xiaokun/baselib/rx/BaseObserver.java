@@ -2,9 +2,8 @@ package com.xiaokun.baselib.rx;
 
 import android.content.Intent;
 
-import com.xiaokun.httpexceptiondemo.App;
+import com.xiaokun.baselib.BaseApplication;
 import com.xiaokun.baselib.config.Constants;
-import com.xiaokun.httpexceptiondemo.LoginActivity;
 import com.xiaokun.baselib.rx.exception.ApiException;
 import com.xiaokun.baselib.rx.util.RxManager;
 
@@ -56,9 +55,9 @@ public abstract class BaseObserver<T> implements Observer<T>
         if (errorCode == Constants.HTTP_NO_LOGIN)
         {
             //跳转至登录页面
-            Intent intent = new Intent(App.getAppContext(), LoginActivity.class);
-            intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
-            App.getAppContext().startActivity(intent);
+//            Intent intent = new Intent(BaseApplication.getAppContext(), LoginActivity.class);
+//            intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
+//            BaseApplication.getAppContext().startActivity(intent);
         }
         onErrorMsg("错误码：" + errorCode + "\n" + msg);
     }

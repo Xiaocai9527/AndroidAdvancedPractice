@@ -2,8 +2,6 @@
     <string name="app_name">HttpExceptionDemo</string>
     <string name="position">确定</string>
     <string name="negative">取消</string>
-    <string name="cancel">取消</string>
-    <string name="setting">设置</string>
     <string name="refuse">残忍拒绝</string>
     <string name="gladly_agree">欣然同意</string>
 </resources>

@@ -2,9 +2,7 @@ package com.xiaokun.baselib.rx;
 
 import android.content.Intent;
 
-import com.xiaokun.httpexceptiondemo.App;
 import com.xiaokun.baselib.config.Constants;
-import com.xiaokun.httpexceptiondemo.LoginActivity;
 import com.xiaokun.baselib.rx.exception.ApiException;
 
 import io.reactivex.functions.Consumer;
@@ -31,9 +29,9 @@ public abstract class ErrorConsumer implements Consumer<Throwable> {
         }
         if (errorCode == Constants.HTTP_NO_LOGIN) {
             //跳转至登录页面
-            Intent intent = new Intent(App.getAppContext(), LoginActivity.class);
-            intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
-            App.getAppContext().startActivity(intent);
+//            Intent intent = new Intent(App.getAppContext(), LoginActivity.class);
+//            intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
+//            App.getAppContext().startActivity(intent);
         }
         onErrorMsg("错误码：" + errorCode + "\n" + msg);
     }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">baselib</string>
+    <string name="cancel">取消</string>
+    <string name="setting">设置</string>
 </resources>

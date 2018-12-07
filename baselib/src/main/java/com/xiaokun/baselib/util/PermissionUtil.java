@@ -15,20 +15,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.xiaokun.httpexceptiondemo.App;
-import com.xiaokun.httpexceptiondemo.Constants;
-import com.xiaokun.httpexceptiondemo.R;
+import com.xiaokun.baselib.BaseApplication;
+import com.xiaokun.baselib.R;
+import com.xiaokun.baselib.config.Constants;
 
 
 /**
  * Created by 肖坤 on 2017/9/27.
  */
 
-public class PermissionUtil
-{
+public class PermissionUtil {
 
-    public static void showMissingPermissionDialog(final Activity activity, final String pers)
-    {
+    public static void showMissingPermissionDialog(final Activity activity, final String pers) {
         final View dialog = View.inflate(activity, R.layout.permission_dialog_layout, null);
         TextView message = (TextView) dialog.findViewById(R.id.message);
         final LinearLayout linearLayout = (LinearLayout) dialog.findViewById(R.id.linear_layout);
@@ -43,11 +41,9 @@ public class PermissionUtil
         Drawable drawable = activity.getResources().getDrawable(R.drawable.permission1);
         final int width = drawable.getIntrinsicWidth();
         final int height = drawable.getIntrinsicHeight();
-        dialog.post(new Runnable()
-        {
+        dialog.post(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 //保证getWidth不为0
                 int linearLayoutWidth = linearLayout.getWidth();
                 LinearLayout.LayoutParams imgParams = (LinearLayout.LayoutParams) img1.getLayoutParams();
@@ -61,23 +57,19 @@ public class PermissionUtil
 
         // 拒绝, 退出应用
         builder.setNegativeButton(R.string.cancel,
-                new DialogInterface.OnClickListener()
-                {
+                new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
+                    public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        Toast.makeText(App.getAppContext(), "当前应用缺少" + pers + "权限", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BaseApplication.getAppContext(), "当前应用缺少" + pers + "权限", Toast.LENGTH_SHORT).show();
 //                        CustomDialogUtil.showSuccessTips(activity, "当前应用缺少" + pers + "权限");
                     }
                 });
 
         builder.setPositiveButton(R.string.setting,
-                new DialogInterface.OnClickListener()
-                {
+                new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
+                    public void onClick(DialogInterface dialog, int which) {
                         startAppSettings(activity);
                     }
                 });
@@ -92,22 +84,23 @@ public class PermissionUtil
      *
      * @param activity
      */
-    public static void startAppSettings(Activity activity)
-    {
+    public static void startAppSettings(Activity activity) {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.parse("package:" + activity.getPackageName()));
-        activity.startActivityForResult(intent, App.getSp().getInt(Constants.REQUEST_CODE_PERMISSION, 0));
+        activity.startActivityForResult(intent, BaseApplication.getSp().getInt(Constants.REQUEST_CODE_PERMISSION, 0));
     }
 
-    public static AlertDialog.Builder dialogBuilder(Context context, int title, View view)
-    {
+    /**
+     * @param context context
+     * @param title   标题
+     * @param view    布局
+     */
+    public static AlertDialog.Builder dialogBuilder(Context context, int title, View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        if (view != null)
-        {
+        if (view != null) {
             builder.setView(view);
         }
-        if (title > 0)
-        {
+        if (title > 0) {
             builder.setTitle(title);
         }
         return builder;

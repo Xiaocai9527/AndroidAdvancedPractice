@@ -2,46 +2,45 @@ package com.xiaokun.baselib.rx.util;
 
 import android.support.annotation.NonNull;
 
+import com.jakewharton.rxrelay2.PublishRelay;
+import com.jakewharton.rxrelay2.Relay;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.processors.FlowableProcessor;
-import io.reactivex.processors.PublishProcessor;
 import io.reactivex.subjects.Subject;
 
 /**
  * <pre>
  *      作者  ：肖坤
- *      时间  ：2018/06/28
+ *      时间  ：2018/12/07
  *      描述  ：PublishProcessor存在onError后,不再接受消息。使用Relay来解决
- *              请使用RxBus3代替RxBus2
  *      版本  ：1.0
  * </pre>
  */
-public class RxBus2 {
-    private static RxBus2 instance;
+public class RxBus3 {
+    private static RxBus3 instance;
 
     /**
      * ConcurrentHashMap: 线程安全集合
      * PublishProcessor 同时充当了Observer和Observable的角色
      */
     @SuppressWarnings("rawtypes")
-    private ConcurrentHashMap<Object, List<FlowableProcessor>> subjectMapper = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Object, List<Relay>> subjectMapper = new ConcurrentHashMap<>();
 
-    public static synchronized RxBus2 getInstance() {
+    public static synchronized RxBus3 getInstance() {
         if (null == instance) {
-            instance = new RxBus2();
+            instance = new RxBus3();
         }
         return instance;
     }
 
-    private RxBus2() {
+    private RxBus3() {
     }
 
     /**
@@ -51,7 +50,7 @@ public class RxBus2 {
      * @param consumer
      * @return
      */
-    public RxBus2 onEvent(Observable<?> observable, Consumer<Object> consumer) {
+    public RxBus3 onEvent(Observable<?> observable, Consumer<Object> consumer) {
         observable.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(consumer, new Consumer<Throwable>() {
                     @Override
@@ -70,15 +69,16 @@ public class RxBus2 {
      * @return
      */
     @SuppressWarnings({"rawtypes"})
-    public <T> Flowable<T> register(@NonNull Object tag) {
-        List<FlowableProcessor> subjectList = subjectMapper.get(tag);
+    public <T> Relay<T> register(@NonNull Object tag) {
+        List<Relay> subjectList = subjectMapper.get(tag);
         if (null == subjectList) {
             subjectList = new ArrayList<>();
             subjectMapper.put(tag, subjectList);
         }
 
         //考虑到多线程原因使用toSerialized方法
-        FlowableProcessor<T> processor = (FlowableProcessor<T>) PublishProcessor.create().toSerialized();
+        Relay<T> processor = (Relay<T>) PublishRelay.create().toSerialized();
+
         subjectList.add(processor);
         return processor;
     }
@@ -90,7 +90,7 @@ public class RxBus2 {
      */
     @SuppressWarnings("rawtypes")
     public void unregister(@NonNull Object tag) {
-        List<FlowableProcessor> subjectList = subjectMapper.get(tag);
+        List<Relay> subjectList = subjectMapper.get(tag);
         if (null != subjectList) {
             subjectMapper.remove(tag);
         }
@@ -104,13 +104,12 @@ public class RxBus2 {
      * @return
      */
     @SuppressWarnings("rawtypes")
-    public RxBus2 unregister(@NonNull Object tag,
-                             @NonNull Observable<?> observable) {
+    public RxBus3 unregister(@NonNull Object tag, @NonNull Observable<?> observable) {
         if (null == observable) {
             return getInstance();
         }
 
-        List<FlowableProcessor> subjectList = subjectMapper.get(tag);
+        List<Relay> subjectList = subjectMapper.get(tag);
         if (null != subjectList) {
             // 从subjectList中删去observable
             subjectList.remove((Subject<?>) observable);
@@ -139,10 +138,10 @@ public class RxBus2 {
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void post(@NonNull Object tag, @NonNull Object content) {
-        List<FlowableProcessor> subjectList = subjectMapper.get(tag);
+        List<Relay> subjectList = subjectMapper.get(tag);
         if (!isEmpty(subjectList)) {
-            for (FlowableProcessor subject : subjectList) {
-                subject.onNext(content);
+            for (Relay subject : subjectList) {
+                subject.accept(content);
             }
         }
     }
@@ -154,7 +153,8 @@ public class RxBus2 {
      * @return
      */
     @SuppressWarnings("rawtypes")
-    public static boolean isEmpty(Collection<FlowableProcessor> collection) {
+    public static boolean isEmpty(Collection<Relay> collection) {
         return null == collection || collection.isEmpty();
     }
+
 }
