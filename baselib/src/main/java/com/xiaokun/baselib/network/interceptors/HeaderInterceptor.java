@@ -1,6 +1,6 @@
 package com.xiaokun.baselib.network.interceptors;
 
-import com.xiaokun.httpexceptiondemo.App;
+import com.xiaokun.baselib.BaseApplication;
 
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ public class HeaderInterceptor implements Interceptor
     {
         //这里我随便写一个token
         //其实应该从sp中取出token,这个token首次是从登录接口取到的
-        String token = App.getSp().getString("token", "");
+        String token = BaseApplication.getSp().getString("token", "");
         Request request = chain.request().newBuilder()
                 .header("token", token)
                 .build();

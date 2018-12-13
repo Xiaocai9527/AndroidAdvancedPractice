@@ -1,7 +1,7 @@
 package com.xiaokun.baselib.network.interceptors;
 
-import com.xiaokun.httpexceptiondemo.App;
-import com.xiaokun.httpexceptiondemo.Constants;
+import com.xiaokun.baselib.BaseApplication;
+import com.xiaokun.baselib.config.Constants;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -25,7 +25,7 @@ public class CookieInterceptor implements Interceptor
     public Response intercept(Chain chain) throws IOException
     {
         Request request = chain.request();
-        List<String> cookies = (List<String>) App.getCache().getAsObject(Constants.COOKIES);
+        List<String> cookies = (List<String>) BaseApplication.getCache().getAsObject(Constants.COOKIES);
         if (cookies != null)
         {
             Request.Builder builder = chain.request().newBuilder();
@@ -37,7 +37,7 @@ public class CookieInterceptor implements Interceptor
         }
         Response response = chain.proceed(request);
         List<String> headers = response.headers("Set-Cookie");
-        App.getCache().put(Constants.COOKIES, (Serializable) headers);
+        BaseApplication.getCache().put(Constants.COOKIES, (Serializable) headers);
         return response;
     }
 }

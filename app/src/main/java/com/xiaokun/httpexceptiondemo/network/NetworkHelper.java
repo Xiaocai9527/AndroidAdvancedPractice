@@ -25,9 +25,7 @@ public class NetworkHelper {
     }
 
     /**
-     * 登录玩android
-     *
-     * @param userName
+     * 登录
      * @param password
      * @return
      */
