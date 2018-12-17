@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
@@ -81,7 +82,19 @@ public class FragmentNestActivity extends AppCompatActivity implements View.OnCl
             ft.addToBackStack(null);
         }
         ft.commitAllowingStateLoss();
+        //会引发Can not perform this action after onSaveInstanceState
+        //https://medium.com/@elye.project/handling-illegalstateexception-can-not-perform-this-action-after-onsaveinstancestate-d4ee8b630066
+        // 使用ft.commitAllowingStateLoss();代替
+        //ft.commit();
         mFragmentStack.push(fragment);
+    }
+
+    private static final String TAG = "FragmentNestActivity";
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.e(TAG, "onSaveInstanceState(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")");
     }
 
     /**

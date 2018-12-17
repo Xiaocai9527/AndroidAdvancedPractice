@@ -29,10 +29,9 @@ android {
 }
 
 dependencies {
-
     api fileTree(dir: 'libs', include: ['*.jar'])
-
     api 'com.android.support:appcompat-v7:27.1.1'
+    api 'com.android.support.constraint:constraint-layout:1.1.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -72,4 +71,6 @@ dependencies {
     api('com.jakewharton.rxrelay2:rxrelay:2.1.0') {
         exclude group: 'io.reactivex.rxjava2'
     }
+    //适配器
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.38'
 }

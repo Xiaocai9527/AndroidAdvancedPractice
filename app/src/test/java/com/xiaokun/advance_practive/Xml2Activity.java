@@ -31,14 +31,17 @@ public class Xml2Activity {
         System.out.println("rootDir:" + rootDir);
 
         String xmlPathDir = rootDir + xmlApp;
-        String activityPathDir = rootDir + activityApp + "\\ui\\fragment_nest";
+        String activityPathDir = rootDir + activityApp;
+
+        xmlPathDir = "D:\\AndroidStudioProjects\\AndroidAdvancedPractice\\wanandroid\\src\\main\\res\\layout\\";
+        activityPathDir = "D:\\AndroidStudioProjects\\AndroidAdvancedPractice\\wanandroid\\src\\main\\java\\com\\xiaokun\\wanandroid\\";
 
         //你的Activity布局xml所在路径
-        File file = new File(xmlPathDir + "activity_fragment_nest.xml");
+        File file = new File(xmlPathDir + "activity_login.xml");
         //你的Activity的java类放在哪个包里
         File out = new File(activityPathDir);
         //你的Activity的名字--不要加.java
-        String name = "FragmentNestActivity";
+        String name = "LoginActivity";
         initView(file, out, name);
     }
 

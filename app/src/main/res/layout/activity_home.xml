@@ -163,6 +163,16 @@
             app:layout_constraintStart_toEndOf="@+id/button26"
             app:layout_constraintTop_toTopOf="@+id/button26" />
 
+        <Button
+            android:id="@+id/button31"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="玩Android"
+            app:layout_constraintStart_toEndOf="@+id/button30"
+            app:layout_constraintTop_toTopOf="@+id/button30" />
+
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

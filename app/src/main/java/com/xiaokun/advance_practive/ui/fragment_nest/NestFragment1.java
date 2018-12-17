@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.os.Bundle;
@@ -117,6 +118,14 @@ public class NestFragment1 extends Fragment implements View.OnClickListener {
             titleTv.setText(item.getDesc());
             titleTv.setOnClickListener(v -> mListItemListener.onItemClick(item.getUrl()));
         }
+    }
+
+    private static final String TAG = "NestFragment1";
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.e(TAG, "onSaveInstanceState(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")");
     }
 
     public interface ListItemListener {

@@ -1,2 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xiaokun.wanandroid" />
+    package="com.xiaokun.wanandroid">
+
+
+    <application>
+
+        <activity android:name=".WanLoginActivity" />
+
+    </application>
+
+
+</manifest>

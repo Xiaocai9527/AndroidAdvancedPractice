@@ -31,12 +31,15 @@ public class Xml2Fragment {
         String xmlPathDir = rootDir + xmlApp;
         String activityPathDir = rootDir + activityApp + "\\ui\\fragment_nest";
 
+        xmlPathDir = "D:\\AndroidStudioProjects\\AndroidAdvancedPractice\\wanandroid\\src\\main\\res\\layout\\";
+        activityPathDir = "D:\\AndroidStudioProjects\\AndroidAdvancedPractice\\wanandroid\\src\\main\\java\\com\\xiaokun\\wanandroid\\";
+
         //你的Activity布局xml所在路径
-        File file = new File(xmlPathDir + "fragment_detail.xml");
+        File file = new File(xmlPathDir + "fragment_register.xml");
         //你的Activity的java类放在哪个包里
         File out = new File(activityPathDir);
         //你的Activity的名字--不要加.java
-        String name = "NestFragment2";
+        String name = "RegisterFragment";
         initView(file, out, name);
     }
 
