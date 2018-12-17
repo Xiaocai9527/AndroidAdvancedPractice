@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
 
-import com.xiaokun.httpexceptiondemo.App;
+import com.xiaokun.baselib.BaseApplication;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -148,7 +148,7 @@ public class SystemUtils
      */
     public static boolean isNetworkConnected()
     {
-        ConnectivityManager connectivityManager = (ConnectivityManager) App.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) BaseApplication.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         return connectivityManager.getActiveNetworkInfo() != null;
     }
 

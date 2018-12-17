@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HttpExceptionDemo</string>
+    <string name="app_name">android汇总</string>
     <string name="position">确定</string>
     <string name="negative">取消</string>
     <string name="refuse">残忍拒绝</string>
