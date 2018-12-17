@@ -7,9 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.wajahatkarim3.easyflipviewpager.CardFlipPageTransformer;
 import com.xiaokun.wanandroid.widget.CustomViewPager;
@@ -46,9 +45,8 @@ public class WanLoginActivity extends AppCompatActivity implements View.OnClickL
         cardFlipPageTransformer.setScalable(false);
         cardFlipPageTransformer.setFlipOrientation(CardFlipPageTransformer.VERTICAL);
 
-        List<Fragment> fragments = new ArrayList<>();
-        fragments.add(LoginFragment.newInstance());
-        fragments.add(RegisterFragment.newInstance());
+        List<Fragment> fragments = getFragmentsByReflect();
+
         MyAdapter adapter = new MyAdapter(getSupportFragmentManager(), fragments);
         Utils.changViewpagerTime(mviewpager);
         mviewpager.setAdapter(adapter);
@@ -56,10 +54,44 @@ public class WanLoginActivity extends AppCompatActivity implements View.OnClickL
         mviewpager.setPagingEnabled(false);
     }
 
+    /**
+     * 默认的传统方法
+     *
+     * @return
+     */
+    private List<Fragment> getFragmentsDefault() {
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(LoginFragment.newInstance());
+        fragments.add(RegisterFragment.newInstance());
+        return fragments;
+    }
+
+    /**
+     * 通过反射获取fragment,更加解耦
+     *
+     * @return
+     */
+    private List<Fragment> getFragmentsByReflect() {
+        List<Fragment> fragments = new ArrayList<>();
+        try {
+            for (String fragmentName : PageConfig.fragmentNames) {
+                Class<?> clazz = Class.forName(fragmentName);
+                Fragment fragment = (Fragment) clazz.newInstance();
+                fragments.add(fragment);
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+        return fragments;
+    }
+
     public void openFg(int position) {
         mviewpager.setCurrentItem(position);
     }
-
 
     private class MyAdapter extends FragmentStatePagerAdapter {
 

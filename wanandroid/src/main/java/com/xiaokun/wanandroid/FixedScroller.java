@@ -8,7 +8,7 @@ import android.widget.Scroller;
  * <pre>
  *      作者  ：肖坤
  *      时间  ：2018/12/17
- *      描述  ：
+ *      描述  ：修改viewpager中页面切换的时间
  *      版本  ：1.0
  * </pre>
  */

@@ -19,6 +19,8 @@ public class Utils {
 
     /**
      * 改变viewpager自动播放的滑动时间为500ms 默认是250ms
+     *
+     * @param viewPager
      */
     public static void changViewpagerTime(ViewPager viewPager) {
         try {

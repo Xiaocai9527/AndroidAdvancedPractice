@@ -40,6 +40,7 @@ public class BaseApplication extends Application {
     ActivityLifecycleCallbacks mActivityLifecycleCallbacks = new ActivityLifecycleCallbacks() {
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+            //在创建时设置
             mCurrentActivity = activity;
         }
 
@@ -50,7 +51,8 @@ public class BaseApplication extends Application {
 
         @Override
         public void onActivityResumed(Activity activity) {
-
+            //在Activity声明周期时设置顶层Activity对象
+            mCurrentActivity = activity;
         }
 
         @Override

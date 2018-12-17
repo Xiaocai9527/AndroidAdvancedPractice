@@ -13,11 +13,11 @@ import com.xiaokun.advance_practive.App;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.network.ResEntity1;
 import com.xiaokun.advance_practive.network.entity.UniversalResEntity;
+import com.xiaokun.advance_practive.ui.viewpager.ViewPagerActivity;
 import com.xiaokun.baselib.rx.download.DownLoadListener;
 import com.xiaokun.baselib.rx.download.DownloadEntity;
 import com.xiaokun.baselib.rx.download.DownloadManager;
 import com.xiaokun.baselib.rx.util.RxManager;
-import com.xiaokun.advance_practive.ui.viewpager.ViewPagerActivity;
 
 import java.io.File;
 import java.util.List;
@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -38,8 +37,7 @@ import okhttp3.RequestBody;
  *     版本   : 1.0
  * </pre>
  */
-public class MvpMainActivity extends AppCompatActivity implements View.OnClickListener, MainView, UniversalView
-{
+public class MvpMainActivity extends AppCompatActivity implements View.OnClickListener, MainView, UniversalView {
     private static final String TAG = "MainActivity";
 
     String url = "http://imtt.dd.qq.com/16891/8EE1D586937A31F6E0B14DA48F8D362E.apk?fsname=com.dewmobile.kuaiya_5.4.2(CN)_216.apk&csr=1bbd";
@@ -64,8 +62,7 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
     private MainPresenter mainPresenter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -76,39 +73,34 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
         mainPresenter = new MainPresenter(this, rxManager);
     }
 
-    private void initView()
-    {
-        mButton = (Button) findViewById(R.id.button);
-        mButton2 = (Button) findViewById(R.id.button2);
-        mButton3 = (Button) findViewById(R.id.button3);
-        mButton4 = (Button) findViewById(R.id.button4);
-        mButton5 = (Button) findViewById(R.id.button5);
-        mButton6 = (Button) findViewById(R.id.button6);
-        mButton7 = (Button) findViewById(R.id.button7);
-        mButton8 = (Button) findViewById(R.id.button8);
-        mButton9 = (Button) findViewById(R.id.button9);
-        mButton16 = (Button) findViewById(R.id.button16);
-        mButton17 = (Button) findViewById(R.id.button17);
-        mButton18 = (Button) findViewById(R.id.button18);
-        mTextView = (TextView) findViewById(R.id.textView);
+    private void initView() {
+        mButton = findViewById(R.id.button);
+        mButton2 = findViewById(R.id.button2);
+        mButton3 = findViewById(R.id.button3);
+        mButton4 = findViewById(R.id.button4);
+        mButton5 = findViewById(R.id.button5);
+        mButton6 = findViewById(R.id.button6);
+        mButton7 = findViewById(R.id.button7);
+        mButton8 = findViewById(R.id.button8);
+        mButton9 = findViewById(R.id.button9);
+        mButton16 = findViewById(R.id.button16);
+        mButton17 = findViewById(R.id.button17);
+        mButton18 = findViewById(R.id.button18);
+        mTextView = findViewById(R.id.textView);
 
         initListener(mButton, mButton2, mButton3, mButton4, mButton5, mButton6
                 , mButton7, mButton8, mButton9, mButton16, mButton17, mButton18);
     }
 
-    private void initListener(View... views)
-    {
-        for (View view : views)
-        {
+    private void initListener(View... views) {
+        for (View view : views) {
             view.setOnClickListener(this);
         }
     }
 
     @Override
-    public void onClick(View view)
-    {
-        switch (view.getId())
-        {
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.button:
                 mainPresenter.getHttp1();
                 break;
@@ -116,29 +108,13 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
                 mainPresenter.getHttp2();
                 break;
             case R.id.button3:
-//                mainPresenter.getHttp2();
-//                mainPresenter.getGankData();
                 Intent intent = new Intent(this, ViewPagerActivity.class);
                 startActivity(intent);
                 Observable.just(1)
-                        .subscribe(new Consumer<Integer>()
-                        {
-                            @Override
-                            public void accept(Integer integer) throws Exception
-                            {
-                                Log.d(TAG, "onNext: " + Thread.currentThread());
-                            }
-                        });
+                        .subscribe(integer -> Log.d(TAG, "onNext: " + Thread.currentThread()));
 
                 Observable.timer(2, TimeUnit.SECONDS)
-                        .subscribe(new Consumer<Long>()
-                        {
-                            @Override
-                            public void accept(Long aLong) throws Exception
-                            {
-                                Log.d(TAG, "onNext: " + Thread.currentThread());
-                            }
-                        });
+                        .subscribe(aLong -> Log.d(TAG, "onNext: " + Thread.currentThread()));
                 break;
             case R.id.button4:
                 mainPresenter.getHttp3();
@@ -157,8 +133,7 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.button8:
                 //继续下载
-                if (downloadEntity == null)
-                {
+                if (downloadEntity == null) {
                     return;
                 }
                 mainPresenter.downloadFile(url, downloadEntity);
@@ -190,74 +165,59 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void getHttp1Suc(ResEntity1.DataBean dataBean)
-    {
+    public void getHttp1Suc(ResEntity1.DataBean dataBean) {
         mTextView.setText(dataBean.getRes());
     }
 
     @Override
-    public void getHttp1Failed(String errorMsg)
-    {
+    public void getHttp1Failed(String errorMsg) {
         mTextView.setText(errorMsg);
     }
 
     @Override
-    public void getHttp2Suc(ResEntity1.DataBean dataBean)
-    {
+    public void getHttp2Suc(ResEntity1.DataBean dataBean) {
         mTextView.setText(dataBean.getRes());
     }
 
     @Override
-    public void getHttp2Failed(String errorMsg)
-    {
+    public void getHttp2Failed(String errorMsg) {
         mTextView.setText(errorMsg);
     }
 
     @Override
-    public void getHttp3Suc(ResEntity1.DataBean dataBean)
-    {
+    public void getHttp3Suc(ResEntity1.DataBean dataBean) {
         mTextView.setText(dataBean.getRes());
     }
 
     @Override
-    public void getHttp3Failed(String errorMsg)
-    {
+    public void getHttp3Failed(String errorMsg) {
         mTextView.setText(errorMsg);
     }
 
     @Override
-    public void getExpiredSuc(ResEntity1.DataBean dataBean)
-    {
+    public void getExpiredSuc(ResEntity1.DataBean dataBean) {
         mTextView.setText(dataBean.getRes());
     }
 
     @Override
-    public void getExpiredFailed(String errorMsg)
-    {
+    public void getExpiredFailed(String errorMsg) {
         mTextView.setText(errorMsg + "\n刷新得到的新token: " + App.getSp().getString("token", ""));
     }
 
     @Override
-    public void downloadDisposable(Disposable disposable)
-    {
+    public void downloadDisposable(Disposable disposable) {
         this.disposable = disposable;
     }
 
-    DownLoadListener loadListener = new DownLoadListener()
-    {
+    DownLoadListener loadListener = new DownLoadListener() {
         @Override
-        public void onProgress(final int progress, boolean downSuc, boolean downFailed)
-        {
-            if (downFailed)
-            {
+        public void onProgress(final int progress, boolean downSuc, boolean downFailed) {
+            if (downFailed) {
                 mTextView.setText("下载失败");
-            } else
-            {
-                if (!downSuc)
-                {
+            } else {
+                if (!downSuc) {
                     mTextView.setText("下载进度：" + progress + "%");
-                } else
-                {
+                } else {
                     mTextView.setText("下载已完成");
                 }
             }
@@ -265,21 +225,18 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
     };
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
         mainPresenter.detachView();
     }
 
     @Override
-    public void getUniversalSuc(List<UniversalResEntity> entity)
-    {
+    public void getUniversalSuc(List<UniversalResEntity> entity) {
         String text1 = entity.get(0).getText1();
     }
 
     @Override
-    public void getUniversalFailed(String errorMsg)
-    {
+    public void getUniversalFailed(String errorMsg) {
 
     }
 }
