@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class Xml2Fragment {
 
-    public String company = "peidou";
-    public String appName = "templatetest";
+    public String company = "xiaokun";
+    public String appName = "advance_practive";
     public String xmlApp = "\\src\\main\\res\\layout\\";
     public String activityApp = "\\src\\main\\java\\com\\" + company + "\\" + appName;
 
@@ -29,14 +29,14 @@ public class Xml2Fragment {
     public void main() {
         String rootDir = System.getProperty("user.dir");
         String xmlPathDir = rootDir + xmlApp;
-        String activityPathDir = rootDir + activityApp;
+        String activityPathDir = rootDir + activityApp + "\\ui\\fragment_nest";
 
         //你的Activity布局xml所在路径
-        File file = new File(xmlPathDir + "fragment_b.xml");
+        File file = new File(xmlPathDir + "fragment_detail.xml");
         //你的Activity的java类放在哪个包里
         File out = new File(activityPathDir);
         //你的Activity的名字--不要加.java
-        String name = "BFragment";
+        String name = "NestFragment2";
         initView(file, out, name);
     }
 

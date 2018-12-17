@@ -21,6 +21,7 @@ import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.network.entity.ListResEntity;
 import com.xiaokun.baselib.rx.util.RxBus;
 import com.xiaokun.baselib.rx.util.RxBus2;
+import com.xiaokun.baselib.rx.util.RxBus3;
 import com.xiaokun.baselib.util.Preconditions;
 
 import java.util.List;
@@ -33,19 +34,16 @@ import java.util.List;
  * @date 2018/6/3
  */
 
-public class ListFragment extends Fragment implements ListContract.View
-{
+public class ListFragment extends Fragment implements ListContract.View {
     private ListContract.Presenter listPresenter;
     private ListAdapter mListAdapter;
     private RecyclerView mListRv;
     private ProgressBar mListPb;
 
-    public ListFragment()
-    {
+    public ListFragment() {
     }
 
-    public static ListFragment newInstance()
-    {
+    public static ListFragment newInstance() {
         Bundle args = new Bundle();
         ListFragment fragment = new ListFragment();
         fragment.setArguments(args);
@@ -53,42 +51,37 @@ public class ListFragment extends Fragment implements ListContract.View
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mListAdapter = new ListAdapter(R.layout.item_list_fg);
         mListAdapter.setListItemListener(mListItemListener);
     }
 
-    ListItemListener mListItemListener = new ListItemListener()
-    {
+    ListItemListener mListItemListener = new ListItemListener() {
         @Override
-        public void onItemClick(String url)
-        {
+        public void onItemClick(String url) {
 //            ((BigMvpActivity) getActivity()).showWebview(url);
 //            RxBus.getInstance().post(Constants.SHOW_WEBVIEW, url);
             RxBus2.getInstance().post(Constants.SHOW_WEBVIEW, url);
+            RxBus3.getInstance().post(Constants.SHOW_WEBVIEW, url);
         }
     };
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         listPresenter.loadGankList();
     }
 
     @Override
-    public void setPresenter(ListContract.Presenter listPresenter)
-    {
+    public void setPresenter(ListContract.Presenter listPresenter) {
         this.listPresenter = Preconditions.checkNotNull(listPresenter);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
-            savedInstanceState)
-    {
+            savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_list, container, false);
         mListRv = contentView.findViewById(R.id.list_rv);
         mListPb = contentView.findViewById(R.id.list_pb);
@@ -102,8 +95,7 @@ public class ListFragment extends Fragment implements ListContract.View
     }
 
     @Override
-    public void showList(List<ListResEntity.ResultsBean> entity)
-    {
+    public void showList(List<ListResEntity.ResultsBean> entity) {
         mListPb.setVisibility(View.GONE);
         mListRv.setVisibility(View.VISIBLE);
         RxBus.getInstance().post(Constants.SHOW_WEBVIEW, entity.get(0).getUrl());
@@ -112,43 +104,35 @@ public class ListFragment extends Fragment implements ListContract.View
     }
 
     @Override
-    public void showListError(String errorMsg)
-    {
+    public void showListError(String errorMsg) {
         Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
     }
 
-    private static class ListAdapter extends BaseQuickAdapter<ListResEntity.ResultsBean, BaseViewHolder>
-    {
+    private static class ListAdapter extends BaseQuickAdapter<ListResEntity.ResultsBean, BaseViewHolder> {
         private ListItemListener mListItemListener;
 
-        public ListAdapter(int layoutResId)
-        {
+        public ListAdapter(int layoutResId) {
             super(layoutResId);
         }
 
-        private void setListItemListener(ListItemListener listener)
-        {
+        private void setListItemListener(ListItemListener listener) {
             this.mListItemListener = listener;
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, final ListResEntity.ResultsBean item)
-        {
+        protected void convert(BaseViewHolder helper, final ListResEntity.ResultsBean item) {
             TextView titleTv = helper.getView(R.id.title_tv);
             titleTv.setText(item.getDesc());
-            titleTv.setOnClickListener(new View.OnClickListener()
-            {
+            titleTv.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     mListItemListener.onItemClick(item.getUrl());
                 }
             });
         }
     }
 
-    public interface ListItemListener
-    {
+    public interface ListItemListener {
         void onItemClick(String url);
     }
 }

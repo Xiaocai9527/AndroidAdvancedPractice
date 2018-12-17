@@ -21,7 +21,7 @@ import java.util.List;
 public class Xml2Activity {
 
     public String company = "xiaokun";
-    public String appName = "httpexceptiondemo";
+    public String appName = "advance_practive";
     public String xmlApp = "\\src\\main\\res\\layout\\";
     public String activityApp = "\\src\\main\\java\\com\\" + company + "\\" + appName;
 

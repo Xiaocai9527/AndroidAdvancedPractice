@@ -10,14 +10,14 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
-        android:name="com.xiaokun.advance_practive.App"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.xiaokun.advance_practive.ui.HomeActivity">
+        <activity android:name=".ui.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,28 +25,29 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.xiaokun.advance_practive.LoginActivity" />
-        <activity android:name="com.xiaokun.advance_practive.ui.MainActivity" />
-        <activity android:name="com.xiaokun.advance_practive.ui.mvp.MvpMainActivity" />
-        <activity android:name="com.xiaokun.advance_practive.ui.FlatMap1Activity" />
-        <activity android:name="com.xiaokun.advance_practive.ui.FlatMap2Activity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.mvp.MvpMainActivity" />
+        <activity android:name=".ui.FlatMap1Activity" />
+        <activity android:name=".ui.FlatMap2Activity" />
         <activity
-            android:name="com.xiaokun.advance_practive.ui.NightModeActivity"
+            android:name=".ui.NightModeActivity"
             android:theme="@style/NoBarTheme" />
-        <activity android:name="com.xiaokun.advance_practive.ui.mvp.UniversalActivity" />
-        <activity android:name="com.xiaokun.advance_practive.ui.viewpager.ViewPagerActivity" />
-        <activity android:name="com.xiaokun.advance_practive.ui.ScrollviewActivity" />
-        <activity android:name="com.xiaokun.advance_practive.ui.PermissionTestActivity" />
+        <activity android:name=".ui.mvp.UniversalActivity" />
+        <activity android:name=".ui.viewpager.ViewPagerActivity" />
+        <activity android:name=".ui.ScrollviewActivity" />
+        <activity android:name=".ui.PermissionTestActivity" />
         <activity
-            android:name="com.xiaokun.advance_practive.ui.big_mvp.BigMvpActivity"
+            android:name=".ui.big_mvp.BigMvpActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoBarTheme" />
 
-        <activity android:name="com.xiaokun.advance_practive.ui.multi_rv_sample.MultiRvActivity" />
-        <activity android:name="com.xiaokun.advance_practive.ui.rxjava.MergeArrayActivity" />
-        <activity android:name="com.xiaokun.advance_practive.ui.ToolbarActivity" />
-        <activity android:name="com.xiaokun.advance_practive.ui.StateListAnimatorActivity" />
-        <activity android:name="com.xiaokun.advance_practive.ui.rxjava.RxjavaActivity" />
+        <activity android:name=".ui.multi_rv_sample.MultiRvActivity" />
+        <activity android:name=".ui.rxjava.MergeArrayActivity" />
+        <activity android:name=".ui.ToolbarActivity" />
+        <activity android:name=".ui.StateListAnimatorActivity" />
+        <activity android:name=".ui.rxjava.RxjavaActivity" />
+        <activity android:name=".ui.fragment_nest.FragmentNestActivity" />
     </application>
 
 </manifest>

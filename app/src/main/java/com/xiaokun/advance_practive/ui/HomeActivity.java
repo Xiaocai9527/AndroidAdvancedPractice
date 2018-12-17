@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.ui.big_mvp.BigMvpActivity;
+import com.xiaokun.advance_practive.ui.fragment_nest.FragmentNestActivity;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.MultiRvActivity;
 import com.xiaokun.advance_practive.ui.mvp.MvpMainActivity;
 import com.xiaokun.advance_practive.ui.rxjava.MergeArrayActivity;
@@ -51,20 +52,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        mButton10 = (Button) findViewById(R.id.button10);
-        mButton11 = (Button) findViewById(R.id.button11);
-        mButton12 = (Button) findViewById(R.id.button12);
-        mButton14 = (Button) findViewById(R.id.button14);
-        mButton15 = (Button) findViewById(R.id.button15);
-        mButton19 = (Button) findViewById(R.id.button19);
-        mButton20 = (Button) findViewById(R.id.button20);
-        mButton21 = (Button) findViewById(R.id.button21);
-        mButton22 = (Button) findViewById(R.id.button22);
-        mButton23 = (Button) findViewById(R.id.button23);
-        mButton24 = (Button) findViewById(R.id.button24);
-        mButton25 = (Button) findViewById(R.id.button25);
-        mButton26 = (Button) findViewById(R.id.button26);
-        mButton30 = (Button) findViewById(R.id.button30);
+        mButton10 = findViewById(R.id.button10);
+        mButton11 = findViewById(R.id.button11);
+        mButton12 = findViewById(R.id.button12);
+        mButton14 = findViewById(R.id.button14);
+        mButton15 = findViewById(R.id.button15);
+        mButton19 = findViewById(R.id.button19);
+        mButton20 = findViewById(R.id.button20);
+        mButton21 = findViewById(R.id.button21);
+        mButton22 = findViewById(R.id.button22);
+        mButton23 = findViewById(R.id.button23);
+        mButton24 = findViewById(R.id.button24);
+        mButton25 = findViewById(R.id.button25);
+        mButton26 = findViewById(R.id.button26);
+        mButton30 = findViewById(R.id.button30);
 
         initListener(mButton10, mButton11, mButton12, mButton14, mButton15, mButton19, mButton20,
                 mButton21, mButton22, mButton23, mButton24, mButton25, mButton26, mButton30);
@@ -119,6 +120,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 RxjavaActivity.start(this);
                 break;
             case R.id.button30:
+                FragmentNestActivity.start(this);
                 break;
             default:
                 break;

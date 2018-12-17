@@ -19,7 +19,7 @@ import java.util.HashMap;
  */
 public class Xml2Adapter {
     public String xmlApp = "\\src\\main\\res\\layout\\";
-    public String adapterApp = "\\src\\main\\java\\com\\peidou\\templatetest";
+    public String adapterApp = "\\src\\main\\java\\com\\xiaokun\\advance_practive";
 
     @Test
     public void main() {
