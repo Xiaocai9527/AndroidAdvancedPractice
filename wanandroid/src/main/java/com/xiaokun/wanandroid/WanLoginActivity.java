@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.wajahatkarim3.easyflipviewpager.CardFlipPageTransformer;
+import com.xiaokun.baselib.util.RefInvoke;
 import com.xiaokun.wanandroid.widget.CustomViewPager;
 
 import java.util.ArrayList;
@@ -73,18 +74,11 @@ public class WanLoginActivity extends AppCompatActivity implements View.OnClickL
      */
     private List<Fragment> getFragmentsByReflect() {
         List<Fragment> fragments = new ArrayList<>();
-        try {
-            for (String fragmentName : PageConfig.fragmentNames) {
-                Class<?> clazz = Class.forName(fragmentName);
-                Fragment fragment = (Fragment) clazz.newInstance();
-                fragments.add(fragment);
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
+        for (String fragmentName : PageConfig.fragmentNames) {
+            //这里用包名+类名的字符串来创建fragment是为了绝对的解耦
+            //此方法可以不用在本类中引用LoginFragment或者RegisterFragment
+            Fragment fragment = (Fragment) RefInvoke.createObject(fragmentName);
+            fragments.add(fragment);
         }
         return fragments;
     }

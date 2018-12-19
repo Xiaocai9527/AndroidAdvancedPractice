@@ -27,4 +27,5 @@ public class PageConfig {
 
     public static String[] fragmentNames = {LoginFragment, RegisterFragment};
 
+
 }
