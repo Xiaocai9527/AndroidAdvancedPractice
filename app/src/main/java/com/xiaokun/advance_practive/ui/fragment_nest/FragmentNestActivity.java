@@ -87,7 +87,7 @@ public class FragmentNestActivity extends AppCompatActivity implements View.OnCl
     public void addFragment(Fragment fragment) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+        ft.setCustomAnimations(R.anim.enter, 0, 0, R.anim.pop_exit);
         currentFragment = getCurrentFragment();
         if (getCurrentFragment() != null) {
             ft.hide(currentFragment);

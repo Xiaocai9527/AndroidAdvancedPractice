@@ -38,37 +38,27 @@ public class NetworkHelperTest {
 
     private WanApiService mApiService;
 
+    String username = "canglashi";
+    String password = "123456";
+
     @Before
     public void setUp() throws Exception {
         RxJavaPlugins.reset();
-        RxJavaPlugins.setIoSchedulerHandler(new Function<Scheduler, Scheduler>() {
-            @Override
-            public Scheduler apply(Scheduler scheduler) throws Exception {
-                return Schedulers.trampoline();
-            }
-        });
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
         RxAndroidPlugins.reset();
-        RxAndroidPlugins.setMainThreadSchedulerHandler(new Function<Scheduler, Scheduler>() {
-            @Override
-            public Scheduler apply(Scheduler scheduler) throws Exception {
-                return Schedulers.trampoline();
-            }
-        });
+        RxAndroidPlugins.setMainThreadSchedulerHandler(scheduler -> Schedulers.trampoline());
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                .addInterceptor(new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        final Request original = chain.request();
-                        //添加cookie
-                        final Request authorized = original.newBuilder()
-                                .addHeader("Cookie", "loginUserName=13886149842")
-                                .addHeader("Cookie", "loginUserPassword=xk939291")
-                                .build();
+                .addInterceptor(chain -> {
+                    final Request original = chain.request();
+                    //添加cookie
+                    final Request authorized = original.newBuilder()
+                            .addHeader("Cookie", "loginUserName=" + username)
+                            .addHeader("Cookie", "loginUserPassword=" + password)
+                            .build();
 
-                        return chain.proceed(authorized);
-                    }
+                    return chain.proceed(authorized);
                 })
                 .build();
 
@@ -80,51 +70,38 @@ public class NetworkHelperTest {
     }
 
     @Test
+    public void testRegister() {
+        mApiService.register(username, password, password).subscribe(registerWanBaseResponseEntity -> {
+        }, throwable -> {
+        });
+    }
+
+    @Test
     public void login() {
-        String username = "13886149842";
-        String password = "xk939291";
-        mApiService.login(username, password).subscribe(new Consumer<WanBaseResponseEntity<WanLoginEntityRes.DataBean>>() {
-            @Override
-            public void accept(WanBaseResponseEntity<WanLoginEntityRes.DataBean> dataBeanWanBaseResponseEntity) throws Exception {
+        mApiService.login(username, password).subscribe(dataBeanWanBaseResponseEntity -> {
 
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
+        }, throwable -> {
 
-            }
         });
     }
 
     @Test
     public void getHomeArticles() {
         int page = 0;
-        mApiService.getHomeArticles(page).subscribe(new Consumer<WanBaseResponseEntity<TotalResEntity.HomeArticles>>() {
-            @Override
-            public void accept(WanBaseResponseEntity<TotalResEntity.HomeArticles> homeArticlesWanBaseResponseEntity) throws Exception {
+        mApiService.getHomeArticles(page).subscribe(homeArticlesWanBaseResponseEntity -> {
 
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
+        }, throwable -> {
 
-            }
         });
     }
 
     @Test
     public void getCollect() {
         int page = 0;
-        mApiService.getCollect(page).subscribe(new Consumer<WanBaseResponseEntity<TotalResEntity.Collect>>() {
-            @Override
-            public void accept(WanBaseResponseEntity<TotalResEntity.Collect> collectWanBaseResponseEntity) throws Exception {
+        mApiService.getCollect(page).subscribe(collectWanBaseResponseEntity -> {
 
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
+        }, throwable -> {
 
-            }
         });
     }
 }
