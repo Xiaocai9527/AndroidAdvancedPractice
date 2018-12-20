@@ -32,6 +32,12 @@ public class RxBus3 {
      */
     @SuppressWarnings("rawtypes")
     private ConcurrentHashMap<Object, List<Relay>> subjectMapper = new ConcurrentHashMap<>();
+    /**
+     * 粘性
+     */
+    private ConcurrentHashMap<Object, Relay> stickSubjectMapper = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Object, Boolean> mHashMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Object, Object> mHashMap2 = new ConcurrentHashMap<>();
 
     public static synchronized RxBus3 getInstance() {
         if (null == instance) {
@@ -44,7 +50,7 @@ public class RxBus3 {
     }
 
     /**
-     * 订阅事件源
+     * 订阅事件源,封装事件,此方法没必要
      *
      * @param observable
      * @param consumer
@@ -78,9 +84,27 @@ public class RxBus3 {
 
         //考虑到多线程原因使用toSerialized方法
         Relay<T> processor = (Relay<T>) PublishRelay.create().toSerialized();
-
         subjectList.add(processor);
         return processor;
+    }
+
+    /**
+     * 注册粘性事件
+     */
+    public <T> Relay<T> registerStick(@NonNull Object tag, @NonNull Consumer<T> consumer) {
+        Relay relay = stickSubjectMapper.get(tag);
+        if (null == relay) {
+            relay = PublishRelay.create().toSerialized();
+        }
+        //如果已经post,直接订阅和发送
+        if (mHashMap.get(tag)) {
+            //先订阅
+            relay.subscribe(consumer);
+            //后发送
+            relay.accept(mHashMap2.get(tag));
+            return relay;
+        }
+        return relay;
     }
 
     /**
@@ -93,6 +117,18 @@ public class RxBus3 {
         List<Relay> subjectList = subjectMapper.get(tag);
         if (null != subjectList) {
             subjectMapper.remove(tag);
+        }
+    }
+
+    /**
+     * 取消tag粘性监听
+     *
+     * @param tag
+     */
+    public void unregisterStick(@NonNull Object tag) {
+        Relay relay = stickSubjectMapper.get(tag);
+        if (null != relay) {
+            stickSubjectMapper.remove(tag);
         }
     }
 
@@ -144,6 +180,17 @@ public class RxBus3 {
                 subject.accept(content);
             }
         }
+    }
+
+    /**
+     * 发送粘性事件
+     *
+     * @param tag
+     */
+    public <T> void postStick(@NonNull Object tag, T t) {
+        //做一个粘性标记
+        mHashMap.put(tag, true);
+        mHashMap2.put(tag, t);
     }
 
     /**

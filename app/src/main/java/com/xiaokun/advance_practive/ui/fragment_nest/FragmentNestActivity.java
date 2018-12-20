@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.jakewharton.rxrelay2.Relay;
 import com.xiaokun.advance_practive.R;
@@ -21,6 +22,9 @@ import com.xiaokun.baselib.rx.util.RxBus3;
 
 import java.util.Stack;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -55,6 +59,20 @@ public class FragmentNestActivity extends AppCompatActivity implements View.OnCl
 
         Relay<String> register = RxBus3.getInstance().register(Constants.SHOW_WEBVIEW);
         register.subscribe(s -> addFragment(NestFragment2.newInstance(s)));
+
+        RxBus3.getInstance().onEvent(Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+                e.onNext("test");
+            }
+        }), new Consumer<Object>() {
+            @Override
+            public void accept(Object o) throws Exception {
+                String o1 = (String) o;
+                Toast.makeText(FragmentNestActivity.this, o1, Toast.LENGTH_SHORT).show();
+            }
+        });
+        RxBus3.getInstance().postStick(Constants.STICK_TEST, "stick_test");
     }
 
     private void initView() {
@@ -123,5 +141,11 @@ public class FragmentNestActivity extends AppCompatActivity implements View.OnCl
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RxBus3.getInstance().unregister(Constants.SHOW_WEBVIEW);
     }
 }

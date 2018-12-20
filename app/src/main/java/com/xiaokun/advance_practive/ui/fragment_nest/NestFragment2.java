@@ -15,7 +15,13 @@ import android.support.v4.app.Fragment;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;;import com.xiaokun.advance_practive.R;
+import android.widget.ProgressBar;
+import android.widget.Toast;;import com.jakewharton.rxrelay2.Relay;
+import com.xiaokun.advance_practive.R;
+import com.xiaokun.baselib.config.Constants;
+import com.xiaokun.baselib.rx.util.RxBus3;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * <pre>
@@ -56,6 +62,7 @@ public class NestFragment2 extends Fragment implements View.OnClickListener {
     private void initView(View view) {
         mDetailPb = view.findViewById(R.id.detail_pb);
         mDetailWv = view.findViewById(R.id.detail_wv);
+        RxBus3.getInstance().registerStick(Constants.STICK_TEST, (Consumer<String>) s -> Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show());
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -97,5 +104,11 @@ public class NestFragment2 extends Fragment implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RxBus3.getInstance().unregisterStick(Constants.STICK_TEST);
     }
 }

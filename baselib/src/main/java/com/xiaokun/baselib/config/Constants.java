@@ -50,5 +50,6 @@ public class Constants {
 
     public static final String SHOW_WEBVIEW = "show_webview";
 
-
+    //粘性测试
+    public static final String STICK_TEST = "stick_test";
 }
