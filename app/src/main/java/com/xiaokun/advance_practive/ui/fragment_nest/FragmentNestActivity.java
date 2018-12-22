@@ -7,16 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.jakewharton.rxrelay2.Relay;
 import com.xiaokun.advance_practive.R;
-import com.xiaokun.advance_practive.ui.big_mvp.detail.DetailFragment;
-import com.xiaokun.advance_practive.ui.big_mvp.list.ListFragment;
 import com.xiaokun.baselib.config.Constants;
 import com.xiaokun.baselib.rx.util.RxBus3;
 
@@ -87,7 +85,7 @@ public class FragmentNestActivity extends AppCompatActivity implements View.OnCl
     public void addFragment(Fragment fragment) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.setCustomAnimations(R.anim.enter, 0, 0, R.anim.pop_exit);
+        ft.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
         currentFragment = getCurrentFragment();
         if (getCurrentFragment() != null) {
             ft.hide(currentFragment);

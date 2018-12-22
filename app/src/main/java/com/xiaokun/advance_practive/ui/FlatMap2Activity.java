@@ -5,26 +5,29 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xiaokun.advance_practive.R;
-import com.xiaokun.advance_practive.network.api.ApiService;
-import com.xiaokun.baselib.network.BaseResponse;
 import com.xiaokun.advance_practive.network.LoginEntity;
-import com.xiaokun.baselib.network.OkhttpHelper;
 import com.xiaokun.advance_practive.network.RegisterEntity;
-import com.xiaokun.baselib.network.RetrofitHelper;
+import com.xiaokun.advance_practive.network.api.ApiService;
 import com.xiaokun.advance_practive.network.wanAndroid.WanLoginEntityRes;
+import com.xiaokun.baselib.network.BaseResponse;
+import com.xiaokun.baselib.network.OkhttpHelper;
+import com.xiaokun.baselib.network.RetrofitHelper;
 import com.xiaokun.baselib.rx.BaseObserver;
 import com.xiaokun.baselib.rx.transform.HttpResultFunc;
 import com.xiaokun.baselib.rx.transform.RxSchedulers;
 import com.xiaokun.baselib.rx.transform.WanHttpResFunc;
 import com.xiaokun.baselib.rx.util.RxManager;
 
+import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import okhttp3.OkHttpClient;
 
@@ -36,16 +39,15 @@ import okhttp3.OkHttpClient;
  *     版本   : 1.0
  * </pre>
  */
-public class FlatMap2Activity extends AppCompatActivity implements View.OnClickListener
-{
+public class FlatMap2Activity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "FlatMap2Activity";
     private Button mRegister;
     private TextView mTextView;
     private RxManager rxManager;
     private ApiService apiService;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flat_map_2);
         rxManager = new RxManager();
@@ -55,29 +57,24 @@ public class FlatMap2Activity extends AppCompatActivity implements View.OnClickL
         initView();
     }
 
-    private void initView()
-    {
+    private void initView() {
         mRegister = (Button) findViewById(R.id.register);
         mTextView = (TextView) findViewById(R.id.textView);
         initListener(mRegister);
     }
 
-    private void initListener(View... views)
-    {
-        for (View view : views)
-        {
+    private void initListener(View... views) {
+        for (View view : views) {
             view.setOnClickListener(this);
         }
     }
 
     @Override
-    public void onClick(View view)
-    {
-        switch (view.getId())
-        {
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.register:
-//                registerAndLogin();
-                login("abc123456789", "123456");
+                registerAndLogin();
+//                login("abc123456789", "123456");
                 break;
             default:
                 break;
@@ -85,22 +82,18 @@ public class FlatMap2Activity extends AppCompatActivity implements View.OnClickL
     }
 
     //玩Android测试登录
-    private void login(String username, String password)
-    {
+    private void login(String username, String password) {
         apiService.login(username, password)
                 .map(new WanHttpResFunc<WanLoginEntityRes.DataBean>())
                 .compose(RxSchedulers.<WanLoginEntityRes.DataBean>io_main())
-                .subscribe(new BaseObserver<WanLoginEntityRes.DataBean>(rxManager)
-                {
+                .subscribe(new BaseObserver<WanLoginEntityRes.DataBean>(rxManager) {
                     @Override
-                    public void onErrorMsg(String msg)
-                    {
+                    public void onErrorMsg(String msg) {
 
                     }
 
                     @Override
-                    public void onNext(WanLoginEntityRes.DataBean dataBean)
-                    {
+                    public void onNext(WanLoginEntityRes.DataBean dataBean) {
 
                     }
                 });
@@ -111,8 +104,26 @@ public class FlatMap2Activity extends AppCompatActivity implements View.OnClickL
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     //注册成功后自动登录
-    private void registerAndLogin()
-    {
+    private void registerAndLogin() {
+
+//        Observable.just(null).map(new Function<Object, Boolean>() {
+//            @Override
+//            public Boolean apply(Object o) throws Exception {
+//                return true;
+//            }
+//        }).subscribe(new Consumer<Boolean>() {
+//
+//            @Override
+//            public void accept(Boolean aBoolean) throws Exception {
+//
+//            }
+//        }, new Consumer<Throwable>() {
+//            @Override
+//            public void accept(Throwable throwable) throws Exception {
+//
+//            }
+//        });
+
 
         mRegister.setText("注册中...");
         mRegister.setEnabled(false);
@@ -120,38 +131,43 @@ public class FlatMap2Activity extends AppCompatActivity implements View.OnClickL
         mTextView.setText(process);
         apiService.register()
                 //将注册成功后将注册的生产环境转换成登录的生产环境
-                .flatMap(new Function<BaseResponse<RegisterEntity.DataBean>, ObservableSource<BaseResponse<LoginEntity.DataBean>>>()
-                {
+                .flatMap(new Function<BaseResponse<RegisterEntity.DataBean>, ObservableSource<BaseResponse<LoginEntity.DataBean>>>() {
                     @Override
-                    public ObservableSource<BaseResponse<LoginEntity.DataBean>> apply(BaseResponse<RegisterEntity.DataBean> dataBeanBaseResponse) throws Exception
-                    {
+                    public ObservableSource<BaseResponse<LoginEntity.DataBean>> apply(BaseResponse<RegisterEntity.DataBean> dataBeanBaseResponse) throws Exception {
                         process = process + "\n根据注册生产登录";
-                        mHandler.post(new Runnable()
-                        {
+                        mHandler.post(new Runnable() {
                             @Override
-                            public void run()
-                            {
+                            public void run() {
                                 mRegister.setText("注册成功，登录中...");
                                 mTextView.setText(process);
                             }
                         });
-                        return apiService.login();
+                        return apiService.login().map(new Function<BaseResponse<LoginEntity.DataBean>, BaseResponse<LoginEntity.DataBean>>() {
+
+                            @Override
+                            public BaseResponse<LoginEntity.DataBean> apply(BaseResponse<LoginEntity.DataBean> dataBeanBaseResponse) throws Exception {
+                                Observable.error(new NullPointerException());
+                                return dataBeanBaseResponse;
+                            }
+                        }).doOnError(new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                Log.e(TAG, throwable.getMessage());
+                            }
+                        }).onErrorResumeNext(Observable.empty());
                     }
                 })
                 //最后将BaseResponse<T>转换成T
                 .map(new HttpResultFunc<LoginEntity.DataBean>())
                 .compose(RxSchedulers.<LoginEntity.DataBean>io_main())
-                .subscribe(new BaseObserver<LoginEntity.DataBean>(rxManager)
-                {
+                .subscribe(new BaseObserver<LoginEntity.DataBean>(rxManager) {
                     @Override
-                    public void onErrorMsg(String msg)
-                    {
+                    public void onErrorMsg(String msg) {
                         Toast.makeText(FlatMap2Activity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onNext(LoginEntity.DataBean dataBean)
-                    {
+                    public void onNext(LoginEntity.DataBean dataBean) {
                         process = process + "\n消费登录";
                         mRegister.setEnabled(true);
                         mRegister.setText("注册");
