@@ -105,7 +105,7 @@ public class FlatMap2Activity extends AppCompatActivity implements View.OnClickL
 
     //注册成功后自动登录
     private void registerAndLogin() {
-
+        //rxjava2.x不能发送null item
 //        Observable.just(null).map(new Function<Object, Boolean>() {
 //            @Override
 //            public Boolean apply(Object o) throws Exception {

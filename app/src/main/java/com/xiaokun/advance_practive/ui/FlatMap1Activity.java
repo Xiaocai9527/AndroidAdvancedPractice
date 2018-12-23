@@ -277,6 +277,11 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
             public void accept(Throwable throwable) throws Exception {
                 Log.e(TAG, throwable.getMessage());
             }
+        }).retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
+            @Override
+            public ObservableSource<?> apply(Observable<Throwable> throwableObservable) throws Exception {
+                return null;
+            }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Uri>() {
                     @Override

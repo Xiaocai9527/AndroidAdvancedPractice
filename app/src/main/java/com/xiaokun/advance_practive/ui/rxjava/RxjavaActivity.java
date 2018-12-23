@@ -5,29 +5,35 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.xiaokun.advance_practive.App;
 import com.xiaokun.advance_practive.R;
-import com.xiaokun.baselib.network.BaseResponse;
 import com.xiaokun.advance_practive.network.LoginEntity;
-import com.xiaokun.baselib.network.OkhttpHelper;
 import com.xiaokun.advance_practive.network.RegisterEntity;
-import com.xiaokun.baselib.network.RetrofitHelper;
 import com.xiaokun.advance_practive.network.api.ApiService;
 import com.xiaokun.advance_practive.network.entity.GankResEntity;
+import com.xiaokun.baselib.network.BaseResponse;
+import com.xiaokun.baselib.network.OkhttpHelper;
+import com.xiaokun.baselib.network.RetrofitHelper;
 import com.xiaokun.baselib.rx.ErrorConsumer;
 import com.xiaokun.baselib.rx.transform.HttpResultFunc;
 import com.xiaokun.baselib.rx.transform.RxSchedulers;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import retrofit2.Retrofit;
@@ -168,4 +174,96 @@ public class RxjavaActivity extends AppCompatActivity implements View.OnClickLis
     private void rxjavaZip() {
 
     }
+
+    private static final String TAG = "RxjavaActivity";
+    private int num = 0;
+
+    public void retryWhen(View view) {
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+                Log.e(TAG, "subscribing");
+                if (num > 2) {
+                    e.onNext(num + "");
+                } else {
+                    e.onError(new RuntimeException("always fails"));
+                }
+            }
+        }).retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
+            @Override
+            public ObservableSource<?> apply(Observable<Throwable> throwableObservable) throws Exception {
+                return throwableObservable.zipWith(Observable.range(1, 3), new BiFunction<Throwable, Integer, Integer>() {
+                    @Override
+                    public Integer apply(Throwable n, Integer i) throws Exception {
+                        num = i;
+                        return i;
+                    }
+                }).flatMap(i -> {
+                    Log.e(TAG, "delay retry by " + i + " second(s)");
+                    return Observable.timer(i, TimeUnit.SECONDS);
+                });
+            }
+        }).blockingForEach(s -> Log.e(TAG, s));
+    }
+
+
+    public void retryWhen2(View view) {
+        final boolean[] isValid = {false};
+        Observable.just(false)
+                .map(new Function<Boolean, Object>() {
+                    @Override
+                    public Object apply(Boolean aBoolean) throws Exception {
+                        Log.e(TAG, "isValid:" + isValid[0]);
+                        if (isValid[0]) {
+                            return "hello world";
+                        } else {
+                            throw new IllegalArgumentException("参数错误");
+                        }
+                    }
+                })
+                //携带错误异常,the same values as the source ObservableSource
+                .retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
+                    @Override
+                    public ObservableSource<?> apply(Observable<Throwable> throwableObservable) throws Exception {
+                        return throwableObservable.flatMap(new Function<Throwable, ObservableSource<?>>() {
+                            @Override
+                            public ObservableSource<?> apply(Throwable throwable) throws Exception {
+                                Log.e(TAG, throwable.getMessage());
+                                if (throwable instanceof IllegalArgumentException) {
+                                    //这里随便传什么参数都是重新执行,但是不能传null,否则直接走onError
+                                    // 原Observable source,false Observable.just(false)
+                                    isValid[0] = true;
+                                    return Observable.just(1);
+                                } else {
+                                    return Observable.error(throwable);
+                                }
+                            }
+                        });
+                    }
+                })
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Log.e(TAG, o.toString());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.e(TAG, throwable.getMessage());
+                    }
+                });
+    }
+
+    public void sync(View view) {
+        //不切换thread
+        Observable.create((ObservableOnSubscribe<String>) e -> {
+            //阻塞2s
+            Thread.sleep(2000);
+            //先执行
+            e.onNext("hello world");
+        }).subscribe(s -> Log.e(TAG, s));
+        //后执行
+        Log.e(TAG, "hello xiaocai");
+    }
+
 }
