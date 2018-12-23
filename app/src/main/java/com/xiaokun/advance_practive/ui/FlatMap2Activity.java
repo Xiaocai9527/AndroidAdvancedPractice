@@ -131,9 +131,9 @@ public class FlatMap2Activity extends AppCompatActivity implements View.OnClickL
         mTextView.setText(process);
         apiService.register()
                 //将注册成功后将注册的生产环境转换成登录的生产环境
-                .flatMap(new Function<BaseResponse<RegisterEntity.DataBean>, ObservableSource<BaseResponse<LoginEntity.DataBean>>>() {
+                .flatMap(new Function<BaseResponse<RegisterEntity.DataBean>, ObservableSource<LoginEntity.DataBean>>() {
                     @Override
-                    public ObservableSource<BaseResponse<LoginEntity.DataBean>> apply(BaseResponse<RegisterEntity.DataBean> dataBeanBaseResponse) throws Exception {
+                    public ObservableSource<LoginEntity.DataBean> apply(BaseResponse<RegisterEntity.DataBean> dataBeanBaseResponse) throws Exception {
                         process = process + "\n根据注册生产登录";
                         mHandler.post(new Runnable() {
                             @Override
@@ -142,23 +142,17 @@ public class FlatMap2Activity extends AppCompatActivity implements View.OnClickL
                                 mTextView.setText(process);
                             }
                         });
-                        return apiService.login().map(new Function<BaseResponse<LoginEntity.DataBean>, BaseResponse<LoginEntity.DataBean>>() {
-
-                            @Override
-                            public BaseResponse<LoginEntity.DataBean> apply(BaseResponse<LoginEntity.DataBean> dataBeanBaseResponse) throws Exception {
-                                Observable.error(new NullPointerException());
-                                return dataBeanBaseResponse;
-                            }
-                        }).doOnError(new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                Log.e(TAG, throwable.getMessage());
-                            }
-                        }).onErrorResumeNext(Observable.empty());
+                        return apiService.login().map(new HttpResultFunc<LoginEntity.DataBean>())
+                                .doOnError(new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        Log.e(TAG, throwable.getMessage());
+                                    }
+                                }).onErrorResumeNext(Observable.empty());
                     }
                 })
                 //最后将BaseResponse<T>转换成T
-                .map(new HttpResultFunc<LoginEntity.DataBean>())
+//                .map(new HttpResultFunc<LoginEntity.DataBean>())
                 .compose(RxSchedulers.<LoginEntity.DataBean>io_main())
                 .subscribe(new BaseObserver<LoginEntity.DataBean>(rxManager) {
                     @Override

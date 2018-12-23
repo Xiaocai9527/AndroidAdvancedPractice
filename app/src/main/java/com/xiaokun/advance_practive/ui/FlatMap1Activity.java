@@ -20,11 +20,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.xiaokun.advance_practive.App;
-import com.xiaokun.baselib.config.Constants;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.artimgloader.ArtImageLoader;
-import com.xiaokun.baselib.rx.exception.ApiException;
 import com.xiaokun.advance_practive.ui.big_mvp.BigMvpActivity;
+import com.xiaokun.baselib.config.Constants;
+import com.xiaokun.baselib.rx.exception.ApiException;
 import com.xiaokun.baselib.util.PermissionHelper;
 import com.xiaokun.baselib.util.PermissionUtil;
 
@@ -203,7 +203,20 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
                 if (bitmap == null) {
                     throw ApiException.handlerException(new NullPointerException());
                 }
+                //此时的thread是没有变化的,这里做的一些耗时操作一样会阻塞住rxjava的chain
+                Log.e(TAG, "time:" + System.currentTimeMillis());
                 Log.e(TAG, "accept: " + bitmap.getByteCount());
+                Log.e(TAG, "currentThread:" + Thread.currentThread());
+                //  Thread.sleep(2000);
+                Observable.just(bitmap)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(bitmap1 -> {
+                            //模拟耗时操作,这个时候我不希望这个耗时操作阻塞chain
+                            Thread.sleep(2000);
+                            Log.e(TAG, "currentThread:" + Thread.currentThread());
+                        }, throwable -> {
+
+                        });
             }
         }).doOnError(new Consumer<Throwable>() {//当出现一个错误时,执行此方法
             @Override
@@ -214,6 +227,7 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public ObservableSource<Uri> apply(Bitmap bitmap) throws Exception {
+                Log.e(TAG, "currentThread:" + Thread.currentThread());
                 File file = new File(Environment.getExternalStoragePublicDirectory(Environment
                         .DIRECTORY_DOWNLOADS).getPath(),
                         "http_exception");
@@ -243,7 +257,20 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
         }).doOnNext(new Consumer<Uri>() {//下一个发射之前执行此方法
             @Override
             public void accept(Uri uri) throws Exception {
+                //此时的thread跟上一个doOnNext一样是没有变化的,
+                //这里做的一些耗时操作一样会阻塞住rxjava的chain
                 Log.e(TAG, "uri:" + uri.toString());
+                Log.e(TAG, "currentThread:" + Thread.currentThread());
+                //  Thread.sleep(2000);
+                Observable.just(uri)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(bitmap1 -> {
+                            //模拟耗时操作,这个时候我不希望这个耗时操作阻塞chain
+                            Thread.sleep(2000);
+                            Log.e(TAG, "currentThread:" + Thread.currentThread());
+                        }, throwable -> {
+
+                        });
             }
         }).doOnError(new Consumer<Throwable>() {//当出现一个错误时,执行此方法
             @Override
@@ -254,6 +281,7 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
                 .subscribe(new Consumer<Uri>() {
                     @Override
                     public void accept(Uri uri) throws Exception {
+                        Log.e(TAG, "time:" + System.currentTimeMillis());
                         String msg = String.format("图片已保存至 %s 文件夹", imgFile.getAbsoluteFile());
                         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
                         mButton13.setEnabled(true);
