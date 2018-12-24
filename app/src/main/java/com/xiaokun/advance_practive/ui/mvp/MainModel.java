@@ -1,5 +1,6 @@
 package com.xiaokun.advance_practive.ui.mvp;
 
+import com.xiaokun.advance_practive.network.entity.UploadRes;
 import com.xiaokun.baselib.network.OkhttpHelper;
 import com.xiaokun.advance_practive.network.ResEntity1;
 import com.xiaokun.baselib.network.RetrofitHelper;
@@ -92,5 +93,14 @@ public class MainModel {
         return apiService.uploadFile(file, name)
                 .compose(RxSchedulers.<ServerResponse>io_main());
     }
+
+    //上传文件
+    public Observable<UploadRes> upload(MultipartBody.Part file) {
+        //AndServer.局域网
+        apiService = RetrofitHelper.getInstance().getRetrofit(OkhttpHelper.getDefaultClient(), "http://172.27.35.10:8080/")
+                .create(ApiService.class);
+        return apiService.uploadFile(file).subscribeOn(Schedulers.io());
+    }
+
 }
 

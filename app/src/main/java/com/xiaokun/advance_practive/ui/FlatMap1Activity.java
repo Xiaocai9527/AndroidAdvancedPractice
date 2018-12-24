@@ -123,7 +123,7 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
                         Toast.makeText(mContext, "缺少文件存储，图片保存失败", Toast.LENGTH_SHORT).show();
                         //在拒绝的这个地方来进行终极处理, 这里防止有人点击了不再提醒的选项
                         App.getSp().edit().putInt(Constants.REQUEST_CODE_PERMISSION, Constants
-                                .WRITE_REQUEST_CODE).commit();
+                                .WRITE_REQUEST_CODE).apply();
                         PermissionUtil.showMissingPermissionDialog((Activity) mContext, "存储");
                     }
                 })
@@ -276,11 +276,6 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
             @Override
             public void accept(Throwable throwable) throws Exception {
                 Log.e(TAG, throwable.getMessage());
-            }
-        }).retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
-            @Override
-            public ObservableSource<?> apply(Observable<Throwable> throwableObservable) throws Exception {
-                return null;
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Uri>() {

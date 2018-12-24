@@ -1,5 +1,6 @@
 package com.xiaokun.advance_practive.network.api;
 
+import com.xiaokun.advance_practive.network.entity.UploadRes;
 import com.xiaokun.baselib.network.BaseResponse;
 import com.xiaokun.advance_practive.network.LoginEntity;
 import com.xiaokun.advance_practive.network.RegisterEntity;
@@ -37,8 +38,7 @@ import retrofit2.http.Url;
  *     版本   : 1.0
  * </pre>
  */
-public interface ApiService
-{
+public interface ApiService {
     String baseUrl = "http://www.wanandroid.com/";
 
     String baseUrl2 = "http://gank.io/";
@@ -101,6 +101,10 @@ public interface ApiService
     @Multipart
     @POST("retrofit_example/upload_image.php")
     Observable<ServerResponse> uploadFile(@Part MultipartBody.Part file, @Part("file") RequestBody name);
+
+    @Multipart
+    @POST("user/upload")
+    Observable<UploadRes> uploadFile(@Part MultipartBody.Part file);
 
     @GET("api/data/{category}/{count}/{page}")
     Observable<ListResEntity> loadListData(@Path("category") String category,

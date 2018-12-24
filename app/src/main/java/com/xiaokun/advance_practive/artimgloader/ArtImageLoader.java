@@ -43,6 +43,7 @@ public class ArtImageLoader
     {
         private final AtomicInteger mCount = new AtomicInteger(1);
 
+        @Override
         public Thread newThread(Runnable r)
         {
             return new Thread(r, "ImageLoader#" + mCount.getAndIncrement());

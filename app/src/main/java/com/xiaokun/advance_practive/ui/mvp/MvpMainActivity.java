@@ -155,7 +155,7 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
                 String fileName = "meizi.jpg";
                 File imgFile = new File(file, fileName);
                 RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), imgFile);
-                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", imgFile.getName(), requestBody);
+                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("header", imgFile.getName(), requestBody);
                 RequestBody fileName1 = RequestBody.create(MediaType.parse("text/plain"), imgFile.getName());
                 mainPresenter.upload(fileToUpload, fileName1);
                 break;

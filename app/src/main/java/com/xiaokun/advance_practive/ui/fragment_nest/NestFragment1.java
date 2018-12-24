@@ -89,7 +89,7 @@ public class NestFragment1 extends Fragment implements View.OnClickListener {
 
     private void loadData() {
         ApiService service = RetrofitHelper.getInstance().createService(ApiService.class,
-                RetrofitHelper.getInstance().getRetrofit(OkhttpHelper.getDefaultClient(), ApiService.baseUrl2));
+                RetrofitHelper.getInstance().getRetrofit(OkhttpHelper.getDefaultClient(), "http://gank.io/"));
         service.loadListData("Android", 20, 1)
                 .compose(RxSchedulers.io_main())
                 .subscribe(listResEntity -> {

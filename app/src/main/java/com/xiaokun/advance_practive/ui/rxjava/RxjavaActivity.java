@@ -133,7 +133,7 @@ public class RxjavaActivity extends AppCompatActivity implements View.OnClickLis
         }, new ErrorConsumer() {
             @Override
             public void onErrorMsg(String errorMsg) {
-
+                Toast.makeText(RxjavaActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
             }
         });
     }

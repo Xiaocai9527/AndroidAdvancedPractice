@@ -58,6 +58,9 @@ public class FragmentNestActivity extends AppCompatActivity implements View.OnCl
         Relay<String> register = RxBus3.getInstance().register(Constants.SHOW_WEBVIEW);
         register.subscribe(s -> addFragment(NestFragment2.newInstance(s)));
 
+        Relay<String> relay = RxBus3.getInstance().register(Constants.ADD_NEST_FRAGMENT1);
+        relay.subscribe(s -> addFragment(NestFragment3.newInstance()));
+
         RxBus3.getInstance().onEvent(Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> e) throws Exception {
@@ -145,5 +148,6 @@ public class FragmentNestActivity extends AppCompatActivity implements View.OnCl
     protected void onDestroy() {
         super.onDestroy();
         RxBus3.getInstance().unregister(Constants.SHOW_WEBVIEW);
+        RxBus3.getInstance().unregister(Constants.ADD_NEST_FRAGMENT1);
     }
 }
