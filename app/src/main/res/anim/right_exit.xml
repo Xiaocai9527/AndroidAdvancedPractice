@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><!--<alpha xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:duration="1000"--><!--android:fillAfter="true"--><!--android:fromAlpha="0"--><!--android:toAlpha="1">-->
+
+<!--&lt;!&ndash;<scale&ndash;&gt;--><!--&lt;!&ndash;android:fromXScale="0.5"&ndash;&gt;--><!--&lt;!&ndash;android:fromYScale="0.5"&ndash;&gt;--><!--&lt;!&ndash;android:pivotX="0.5"&ndash;&gt;--><!--&lt;!&ndash;android:pivotY="0.5"&ndash;&gt;--><!--&lt;!&ndash;android:toXScale="1"&ndash;&gt;--><!--&lt;!&ndash;android:toYScale="1"/>&ndash;&gt;--><!--</alpha>-->
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="300"
+    android:fromXDelta="0"
+    android:fromYDelta="0"
+    android:toXDelta="100%"
+    android:toYDelta="0"></translate>

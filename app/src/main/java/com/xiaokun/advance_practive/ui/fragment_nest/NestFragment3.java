@@ -1,37 +1,33 @@
 package com.xiaokun.advance_practive.ui.fragment_nest;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;;import com.chad.library.adapter.base.BaseQuickAdapter;
+import android.widget.Toast;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.network.api.ApiService;
 import com.xiaokun.advance_practive.network.entity.ListResEntity;
-import com.xiaokun.advance_practive.ui.big_mvp.list.ListFragment;
 import com.xiaokun.baselib.config.Constants;
 import com.xiaokun.baselib.network.OkhttpHelper;
 import com.xiaokun.baselib.network.RetrofitHelper;
-import com.xiaokun.baselib.rx.ErrorConsumer;
 import com.xiaokun.baselib.rx.transform.RxSchedulers;
-import com.xiaokun.baselib.rx.util.RxBus2;
 import com.xiaokun.baselib.rx.util.RxBus3;
 
-import io.reactivex.functions.Consumer;
-import okhttp3.OkHttpClient;
+;
 
 /**
  * <pre>
@@ -41,19 +37,19 @@ import okhttp3.OkHttpClient;
  *      版本  ：1.0
  * </pre>
  */
-public class NestFragment1 extends Fragment implements View.OnClickListener {
+public class NestFragment3 extends Fragment implements View.OnClickListener {
     public ProgressBar mListPb;
     public RecyclerView mListRv;
     private ListAdapter mListAdapter;
 
-    public static NestFragment1 newInstance() {
+    public static NestFragment3 newInstance() {
         Bundle args = new Bundle();
-        NestFragment1 fragment = new NestFragment1();
+        NestFragment3 fragment = new NestFragment3();
         fragment.setArguments(args);
         return fragment;
     }
 
-    ListItemListener mListItemListener = url -> RxBus3.getInstance().post(Constants.ADD_NEST_FRAGMENT1, url);
+    ListItemListener mListItemListener = url -> RxBus3.getInstance().post(Constants.SHOW_WEBVIEW, url);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

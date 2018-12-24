@@ -49,6 +49,7 @@ public class Constants {
     public static final String REQUEST_CODE_PERMISSION = "request_code_permission";
 
     public static final String SHOW_WEBVIEW = "show_webview";
+    public static final String ADD_NEST_FRAGMENT1 = "add_nest_fragment1";
 
     //粘性测试
     public static final String STICK_TEST = "stick_test";
