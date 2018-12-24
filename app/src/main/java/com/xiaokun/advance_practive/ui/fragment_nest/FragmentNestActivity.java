@@ -7,18 +7,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.jakewharton.rxrelay2.Relay;
 import com.xiaokun.advance_practive.R;
-import com.xiaokun.advance_practive.ui.big_mvp.detail.DetailFragment;
-import com.xiaokun.advance_practive.ui.big_mvp.list.ListFragment;
 import com.xiaokun.baselib.config.Constants;
-import com.xiaokun.baselib.rx.util.RxBus;
 import com.xiaokun.baselib.rx.util.RxBus3;
 
 import java.util.Stack;
@@ -59,14 +56,19 @@ public class FragmentNestActivity extends AppCompatActivity implements View.OnCl
         addFragment(NestFragment1.newInstance());
 
         Relay<String> register = RxBus3.getInstance().register(Constants.SHOW_WEBVIEW);
-        register.subscribe(s -> FragmentNestActivity.this.addFragment(NestFragment2.newInstance(s)));
+        register.subscribe(s -> addFragment(NestFragment2.newInstance(s)));
 
-        Relay<String> register1 = RxBus3.getInstance().register(Constants.ADD_NEST_FRAGMENT1);
-        register1.subscribe(s -> FragmentNestActivity.this.addFragment(NestFragment3.newInstance()));
-
-        RxBus3.getInstance().onEvent(Observable.create((ObservableOnSubscribe<String>) e -> e.onNext("test")), o -> {
-            String o1 = (String) o;
-            Toast.makeText(FragmentNestActivity.this, o1, Toast.LENGTH_SHORT).show();
+        RxBus3.getInstance().onEvent(Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+                e.onNext("test");
+            }
+        }), new Consumer<Object>() {
+            @Override
+            public void accept(Object o) throws Exception {
+                String o1 = (String) o;
+                Toast.makeText(FragmentNestActivity.this, o1, Toast.LENGTH_SHORT).show();
+            }
         });
         RxBus3.getInstance().postStick(Constants.STICK_TEST, "stick_test");
     }
