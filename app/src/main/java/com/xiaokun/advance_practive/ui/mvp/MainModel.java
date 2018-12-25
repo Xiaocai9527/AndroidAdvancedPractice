@@ -9,7 +9,7 @@ import com.xiaokun.advance_practive.network.entity.GankResEntity;
 import com.xiaokun.advance_practive.network.entity.ServerResponse;
 import com.xiaokun.advance_practive.network.entity.XmNeswResEntity;
 import com.xiaokun.baselib.network.interceptors.TokenInterceptor;
-import com.xiaokun.baselib.rx.download.DownloadEntity;
+import com.xiaokun.baselib.network.interceptors.UploadInterceptor;
 import com.xiaokun.baselib.rx.transform.HttpResultFunc;
 import com.xiaokun.baselib.rx.transform.RxSchedulers;
 
@@ -21,6 +21,9 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+
+import com.xiaokun.baselib.rx.download.ProgressResponseBody.DownloadEntity;
+import com.xiaokun.baselib.rx.upload.ProgressRequestBody;
 
 /**
  * <pre>
@@ -95,9 +98,10 @@ public class MainModel {
     }
 
     //上传文件
-    public Observable<UploadRes> upload(MultipartBody.Part file) {
+    public Observable<UploadRes> upload(MultipartBody.Part file, ProgressRequestBody.Listener listener) {
         //AndServer.局域网
-        apiService = RetrofitHelper.getInstance().getRetrofit(OkhttpHelper.getDefaultClient(), "http://172.27.35.10:8080/")
+        OkHttpClient okhttpClient = OkhttpHelper.getOkhttpClient(new UploadInterceptor(listener));
+        apiService = RetrofitHelper.getInstance().getRetrofit(okhttpClient, "http://172.27.35.4:8080/")
                 .create(ApiService.class);
         return apiService.uploadFile(file).subscribeOn(Schedulers.io());
     }

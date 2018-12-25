@@ -1,6 +1,5 @@
 package com.xiaokun.baselib.network.interceptors;
 
-import com.xiaokun.baselib.rx.download.DownloadEntity;
 import com.xiaokun.baselib.rx.download.DownloadManager;
 import com.xiaokun.baselib.rx.download.ProgressResponseBody;
 
@@ -18,23 +17,20 @@ import okhttp3.Response;
  *     版本   : 1.0
  * </pre>
  */
-public class DownloadInterceptor implements Interceptor
-{
-    private DownloadEntity downloadEntity;
+public class DownloadInterceptor implements Interceptor {
+    private ProgressResponseBody.DownloadEntity downloadEntity;
 
-    public DownloadInterceptor(DownloadEntity entity)
-    {
+    public DownloadInterceptor(ProgressResponseBody.DownloadEntity entity) {
         this.downloadEntity = entity;
     }
 
     @Override
-    public Response intercept(Chain chain) throws IOException
-    {
+    public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-        long downloadedLength = DownloadManager.dSp.getLong(downloadEntity.getFileName(), 0);
+        long downloadedLength = DownloadManager.dSp.getLong(downloadEntity.getFile().getPath(), 0);
 
         Response proceed = chain.proceed(request);
-        DownloadManager.dSp.edit().putLong(downloadEntity.getFileName() + "content_length", proceed.body().contentLength()).commit();
+        DownloadManager.dSp.edit().putLong(downloadEntity.getFile() + "content_length", proceed.body().contentLength()).commit();
         request = request.newBuilder()
                 .header("RANGE", "bytes=" + downloadedLength + "-")
                 .build();

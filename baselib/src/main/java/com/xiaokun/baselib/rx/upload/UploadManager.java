@@ -1,4 +1,4 @@
-package com.xiaokun.baselib.rx.download;
+package com.xiaokun.baselib.rx.upload;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,31 +10,28 @@ import java.io.File;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by 肖坤 on 2018/4/22.
- *
- * @author 肖坤
- * @date 2018/4/22
+ * <pre>
+ *      作者  ：肖坤
+ *      时间  ：2018/12/25
+ *      描述  ：
+ *      版本  ：1.0
+ * </pre>
  */
+public class UploadManager {
 
-public class DownloadManager {
     public static SharedPreferences dSp;
 
-    /**
-     * 初始化DownloadManager
-     *
-     * @param context
-     */
     public static void init(Context context) {
-        dSp = context.getSharedPreferences("download_file", Context.MODE_PRIVATE);
+        dSp = context.getSharedPreferences("upload_file", Context.MODE_PRIVATE);
     }
 
     /**
-     * 暂停下载
+     * 暂停上传
      *
-     * @param disposable 控制rxjava的开关
-     * @param file       下载的文件
+     * @param disposable 控制网络开关
+     * @param file   需包含后缀名
      */
-    public static void pauseDownload(Disposable disposable, File file) {
+    public static void pauseUpload(Disposable disposable, File file) {
         if (disposable == null || !file.exists()) {
             return;
         }
@@ -44,30 +41,32 @@ public class DownloadManager {
         if (dSp == null) {
             throw new NullPointerException("必须首先初始化DownloadManager");
         }
+//        File file = initFile(fileName);
         if (file.exists() && dSp != null) {
-            dSp.edit().putLong(file.getPath(), file.length()).apply();
+            dSp.edit().putLong(file.getName(), file.length()).apply();
         }
     }
 
     /**
-     * 取消下载
+     * 取消上传
      *
-     * @param disposable 控制rxjava的开关
-     * @param file       下载的文件
+     * @param disposable 控制网络开关
+     * @param file   需包含后缀名
      */
-    public static void cancelDownload(Disposable disposable, File file) {
+    public static void cancelUpload(Disposable disposable, File file) {
         if (disposable == null || !file.exists()) {
             return;
         }
         if (!disposable.isDisposed()) {
             disposable.dispose();
         }
+        // File file = initFile(fileName);
         if (file.exists() && dSp != null) {
-            dSp.edit().putLong(file.getPath(), 0).apply();
+            dSp.edit().putLong(file.getName(), 0).apply();
         }
-        //取消下载，最后一步记得删除掉已经下载的文件
+        //取消上传,不用删除文件
         if (file.exists()) {
-            file.delete();
+            //file.delete();
         }
     }
 
@@ -76,4 +75,5 @@ public class DownloadManager {
         File file = new File(directory + File.separator + fileName);
         return file;
     }
+
 }

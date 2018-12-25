@@ -3,7 +3,7 @@ package com.xiaokun.baselib.network;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.xiaokun.baselib.rx.download.DownloadEntity;
+import com.xiaokun.baselib.rx.download.ProgressResponseBody;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -94,12 +94,16 @@ public class RetrofitHelper {
      *
      * @return
      */
-    public Retrofit getDownloadRetrofit(DownloadEntity entity) {
+    public Retrofit getDownloadRetrofit(ProgressResponseBody.DownloadEntity entity) {
         OkHttpClient client = OkhttpHelper.initDownloadClient(entity);
         Retrofit.Builder builder = getDefaultRetrofitBuilder();
         return builder.baseUrl(baseUrl)
                 .client(client).build();
     }
+
+//    public Retrofit getUploadRetrofit() {
+//
+//    }
 
     /**
      * 默认调用此方法

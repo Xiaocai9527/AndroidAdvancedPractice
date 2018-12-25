@@ -3,6 +3,7 @@ package com.xiaokun.advance_practive.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -22,15 +23,15 @@ import com.xiaokun.baselib.network.interceptors.HeaderInterceptor;
 import com.xiaokun.baselib.network.interceptors.TokenInterceptor;
 import com.xiaokun.baselib.rx.BaseObserver;
 import com.xiaokun.baselib.rx.ErrorConsumer;
-import com.xiaokun.baselib.rx.download.DownLoadListener;
 import com.xiaokun.baselib.rx.download.DownLoadObserver;
-import com.xiaokun.baselib.rx.download.DownloadEntity;
 import com.xiaokun.baselib.rx.download.DownloadManager;
 import com.xiaokun.baselib.rx.transform.HttpResultFunc;
 import com.xiaokun.baselib.rx.transform.RxSchedulers;
 import com.xiaokun.baselib.rx.util.RxManager;
 import com.xiaokun.baselib.util.PermissionUtil;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -41,6 +42,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+
+import com.xiaokun.baselib.rx.download.ProgressResponseBody.DownloadEntity;
+import com.xiaokun.baselib.rx.download.ProgressResponseBody.DownLoadListener;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
     private static final String TAG = "MainActivity";
@@ -59,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView mTextView;
     private DownloadEntity downloadEntity;
     private String fileName;
+    //    private String filePath;
+    private File mDownloadFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initView();
 
-        DownloadManager.initDownManager(this);
+        DownloadManager.init(this);
         rxManager = new RxManager();
         apiService = RetrofitHelper.getInstance().createService(ApiService.class);
     }
@@ -122,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button7:
                 //暂停下载
-                DownloadManager.pauseDownload(disposable, fileName);
+                DownloadManager.pauseDownload(disposable, mDownloadFile);
                 break;
             case R.id.button8:
                 //继续下载
@@ -130,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button9:
                 //取消下载
-                DownloadManager.cancelDownload(disposable, fileName);
+                DownloadManager.cancelDownload(disposable, mDownloadFile);
                 mTextView.setText("下载已取消");
                 break;
             default:
@@ -256,7 +262,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //测试下载文件哦
     private void downloadFile() {
         fileName = "httpTest.apk";
-        downloadEntity = new DownloadEntity(loadListener, fileName);
+//        filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator + fileName;
+        mDownloadFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(), fileName);
+        if (!mDownloadFile.exists()) {
+            try {
+                mDownloadFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        downloadEntity = new DownloadEntity(loadListener, mDownloadFile);
         ApiService apiService = RetrofitHelper.getInstance().createService(ApiService.class,
                 RetrofitHelper.getInstance().getDownloadRetrofit(downloadEntity));
 

@@ -1,20 +1,20 @@
 package com.xiaokun.advance_practive.ui.mvp;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.xiaokun.advance_practive.network.ResEntity1;
 import com.xiaokun.advance_practive.network.entity.GankResEntity;
-import com.xiaokun.advance_practive.network.entity.ServerResponse;
 import com.xiaokun.advance_practive.network.entity.UniversalResEntity;
 import com.xiaokun.advance_practive.network.entity.UploadRes;
 import com.xiaokun.advance_practive.network.entity.XmNeswResEntity;
 import com.xiaokun.baselib.rx.BaseObserver;
 import com.xiaokun.baselib.rx.download.DownLoadObserver;
-import com.xiaokun.baselib.rx.download.DownloadEntity;
 import com.xiaokun.baselib.rx.download.DownloadManager;
+import com.xiaokun.baselib.rx.download.ProgressResponseBody;
+import com.xiaokun.baselib.rx.upload.ProgressRequestBody;
 import com.xiaokun.baselib.rx.util.RxManager;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +104,7 @@ public class MainPresenter {
     }
 
     //下载文件,这里不用rxmanager,这里对下载的网络请求的取消单独处理
-    public void downloadFile(String url, DownloadEntity downloadEntity) {
+    public void downloadFile(String url, ProgressResponseBody.DownloadEntity downloadEntity) {
         mainModel.downLoadFile(url, downloadEntity).subscribe(new DownLoadObserver() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -170,7 +170,12 @@ public class MainPresenter {
 //
 //            }
 //        });
-        mainModel.upload(file).subscribe(new BaseObserver<UploadRes>(rxManager) {
+        mainModel.upload(file, new ProgressRequestBody.Listener() {
+            @Override
+            public void onProgress(int progress) {
+                Log.e(TAG, "onProgress(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + progress);
+            }
+        }).subscribe(new BaseObserver<UploadRes>(rxManager) {
             @Override
             public void onErrorMsg(String msg) {
                 Log.e(TAG, "onNext(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + msg);
@@ -184,13 +189,13 @@ public class MainPresenter {
     }
 
     //暂停下载
-    public void pauseDownload(Disposable disposable, String fileName) {
-        DownloadManager.pauseDownload(disposable, fileName);
+    public void pauseDownload(Disposable disposable, File file) {
+        DownloadManager.pauseDownload(disposable, file);
     }
 
     //取消下载
-    public void cancelDownload(Disposable disposable, String fileName) {
-        DownloadManager.cancelDownload(disposable, fileName);
+    public void cancelDownload(Disposable disposable, File file) {
+        DownloadManager.cancelDownload(disposable, file);
     }
 
     //解绑view，并取消网络

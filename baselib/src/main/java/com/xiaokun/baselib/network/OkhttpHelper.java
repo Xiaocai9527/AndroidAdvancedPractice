@@ -9,7 +9,7 @@ import com.xiaokun.baselib.network.interceptors.CookieInterceptor;
 import com.xiaokun.baselib.network.interceptors.DownloadInterceptor;
 import com.xiaokun.baselib.network.interceptors.HeaderInterceptor;
 import com.xiaokun.baselib.network.interceptors.TokenInterceptor;
-import com.xiaokun.baselib.rx.download.DownloadEntity;
+import com.xiaokun.baselib.rx.download.ProgressResponseBody;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -149,7 +149,7 @@ public class OkhttpHelper {
      * @param entity
      * @return
      */
-    public static OkHttpClient initDownloadClient(DownloadEntity entity) {
+    public static OkHttpClient initDownloadClient(ProgressResponseBody.DownloadEntity entity) {
         DownloadInterceptor downloadInterceptor = new DownloadInterceptor(entity);
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         if (mIsDebug) {
@@ -169,4 +169,7 @@ public class OkhttpHelper {
                 .retryOnConnectionFailure(true);
         return builder.build();
     }
+
+
+
 }

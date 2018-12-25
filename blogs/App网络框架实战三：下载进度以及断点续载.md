@@ -287,11 +287,11 @@ public class DownloadManager
      * 暂停下载
      *
      * @param disposable 控制rxjava的开关
-     * @param fileName   下载的文件名,必须包含后缀
+     * @param pathName   下载的文件名,必须包含后缀
      */
-    public static void pauseDownload(Disposable disposable, String fileName)
+    public static void pauseDownload(Disposable disposable, String pathName)
     {
-        if (disposable == null || TextUtils.isEmpty(fileName))
+        if (disposable == null || TextUtils.isEmpty(pathName))
         {
             return;
         }
@@ -303,7 +303,7 @@ public class DownloadManager
         {
             throw new NullPointerException("必须首先初始化DownloadManager");
         }
-        File file = initFile(fileName);
+        File file = initFile(pathName);
         if (file.exists() && dSp != null)
         {
             dSp.edit().putLong(file.getName(), file.length()).commit();
@@ -314,11 +314,11 @@ public class DownloadManager
      * 取消下载
      *
      * @param disposable 控制rxjava的开关
-     * @param fileName   下载的文件名,必须包含后缀
+     * @param pathName   下载的文件名,必须包含后缀
      */
-    public static void cancelDownload(Disposable disposable, String fileName)
+    public static void cancelDownload(Disposable disposable, String pathName)
     {
-        if (disposable == null || TextUtils.isEmpty(fileName))
+        if (disposable == null || TextUtils.isEmpty(pathName))
         {
             return;
         }
@@ -326,7 +326,7 @@ public class DownloadManager
         {
             disposable.dispose();
         }
-        File file = initFile(fileName);
+        File file = initFile(pathName);
         if (file.exists() && dSp != null)
         {
             dSp.edit().putLong(file.getName(), 0).commit();
@@ -338,10 +338,10 @@ public class DownloadManager
         }
     }
 
-    public static File initFile(String fileName)
+    public static File initFile(String pathName)
     {
         String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
-        File file = new File(directory + File.separator + fileName);
+        File file = new File(directory + File.separator + pathName);
         return file;
     }
 }

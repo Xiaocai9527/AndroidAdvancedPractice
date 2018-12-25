@@ -14,12 +14,12 @@ import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.network.ResEntity1;
 import com.xiaokun.advance_practive.network.entity.UniversalResEntity;
 import com.xiaokun.advance_practive.ui.viewpager.ViewPagerActivity;
-import com.xiaokun.baselib.rx.download.DownLoadListener;
-import com.xiaokun.baselib.rx.download.DownloadEntity;
 import com.xiaokun.baselib.rx.download.DownloadManager;
+import com.xiaokun.baselib.rx.upload.UploadManager;
 import com.xiaokun.baselib.rx.util.RxManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -28,6 +28,9 @@ import io.reactivex.disposables.Disposable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+
+import com.xiaokun.baselib.rx.download.ProgressResponseBody.DownloadEntity;
+import com.xiaokun.baselib.rx.download.ProgressResponseBody.DownLoadListener;
 
 /**
  * <pre>
@@ -59,6 +62,8 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
     private TextView mTextView;
     private DownloadEntity downloadEntity;
     private String fileName;
+    private String filePath;
+    private File mDownloadFile;
     private MainPresenter mainPresenter;
 
     @Override
@@ -68,7 +73,17 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
 
         initView();
         fileName = "httpTest.apk";
-        DownloadManager.initDownManager(this);
+        filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator + fileName;
+        mDownloadFile = new File(filePath);
+        if (!mDownloadFile.exists()) {
+            try {
+                mDownloadFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        DownloadManager.init(this);
+        UploadManager.init(this);
         rxManager = new RxManager();
         mainPresenter = new MainPresenter(this, rxManager);
     }
@@ -124,12 +139,14 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.button6:
                 //开始下载
-                downloadEntity = new DownloadEntity(loadListener, fileName);
+                if (downloadEntity == null) {
+                    downloadEntity = new DownloadEntity(loadListener, mDownloadFile);
+                }
                 mainPresenter.downloadFile(url, downloadEntity);
                 break;
             case R.id.button7:
                 //暂停下载
-                mainPresenter.pauseDownload(disposable, fileName);
+                mainPresenter.pauseDownload(disposable, mDownloadFile);
                 break;
             case R.id.button8:
                 //继续下载
@@ -140,7 +157,7 @@ public class MvpMainActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.button9:
                 //取消下载
-                mainPresenter.cancelDownload(disposable, fileName);
+                mainPresenter.cancelDownload(disposable, mDownloadFile);
                 mTextView.setText("下载已取消");
                 break;
             case R.id.button16:
