@@ -33,15 +33,15 @@ public class Xml2Activity {
         String xmlPathDir = rootDir + xmlApp;
         String activityPathDir = rootDir + activityApp;
 
-        xmlPathDir = "D:\\AndroidStudioProjects\\AndroidAdvancedPractice\\wanandroid\\src\\main\\res\\layout\\";
-        activityPathDir = "D:\\AndroidStudioProjects\\AndroidAdvancedPractice\\wanandroid\\src\\main\\java\\com\\xiaokun\\wanandroid\\";
+        xmlPathDir = "E:\\code\\HttpExceptionDemo\\app\\src\\main\\res\\layout\\";
+        activityPathDir = "E:\\code\\HttpExceptionDemo\\app\\src\\main\\java\\com\\xiaokun\\advance_practive\\ui\\view\\";
 
         //你的Activity布局xml所在路径
-        File file = new File(xmlPathDir + "activity_login.xml");
+        File file = new File(xmlPathDir + "activity_scroll_view.xml");
         //你的Activity的java类放在哪个包里
         File out = new File(activityPathDir);
         //你的Activity的名字--不要加.java
-        String name = "LoginActivity";
+        String name = "ScrollViewActivity";
         initView(file, out, name);
     }
 

@@ -9,8 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.processors.FlowableProcessor;
 import io.reactivex.processors.PublishProcessor;
 import io.reactivex.subjects.Subject;
@@ -25,8 +23,6 @@ import io.reactivex.subjects.Subject;
  * </pre>
  */
 public class RxBus2 {
-    private static RxBus2 instance;
-
     /**
      * ConcurrentHashMap: 线程安全集合
      * PublishProcessor 同时充当了Observer和Observable的角色
@@ -34,32 +30,15 @@ public class RxBus2 {
     @SuppressWarnings("rawtypes")
     private ConcurrentHashMap<Object, List<FlowableProcessor>> subjectMapper = new ConcurrentHashMap<>();
 
-    public static synchronized RxBus2 getInstance() {
-        if (null == instance) {
-            instance = new RxBus2();
-        }
-        return instance;
-    }
-
     private RxBus2() {
     }
 
-    /**
-     * 订阅事件源
-     *
-     * @param observable
-     * @param consumer
-     * @return
-     */
-    public RxBus2 onEvent(Observable<?> observable, Consumer<Object> consumer) {
-        observable.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(consumer, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        throwable.printStackTrace();
-                    }
-                });
-        return getInstance();
+    public static RxBus2 getInstance() {
+        return RxBus2Holder.sInstance;
+    }
+
+    private static class RxBus2Holder {
+        private static final RxBus2 sInstance = new RxBus2();
     }
 
     /**

@@ -48,6 +48,8 @@
         <activity android:name=".ui.StateListAnimatorActivity" />
         <activity android:name=".ui.rxjava.RxjavaActivity" />
         <activity android:name=".ui.fragment_nest.FragmentNestActivity" />
+        <activity android:name=".ui.view.AllViewsActivity" />
+        <activity android:name=".ui.view.ScrollViewActivity" />
     </application>
 
 </manifest>

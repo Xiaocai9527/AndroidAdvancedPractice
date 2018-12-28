@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.Subject;
 
@@ -24,7 +23,6 @@ import io.reactivex.subjects.Subject;
  * </pre>
  */
 public class RxBus3 {
-    private static RxBus3 instance;
 
     /**
      * ConcurrentHashMap: 线程安全集合
@@ -39,32 +37,15 @@ public class RxBus3 {
     private ConcurrentHashMap<Object, Boolean> mHashMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Object, Object> mHashMap2 = new ConcurrentHashMap<>();
 
-    public static synchronized RxBus3 getInstance() {
-        if (null == instance) {
-            instance = new RxBus3();
-        }
-        return instance;
-    }
-
     private RxBus3() {
     }
 
-    /**
-     * 订阅事件源,封装事件,此方法没必要
-     *
-     * @param observable
-     * @param consumer
-     * @return
-     */
-    public RxBus3 onEvent(Observable<?> observable, Consumer<Object> consumer) {
-        observable.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(consumer, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        throwable.printStackTrace();
-                    }
-                });
-        return getInstance();
+    public static RxBus3 getInstance() {
+        return RxBus3Holder.sInstance;
+    }
+
+    private static class RxBus3Holder {
+        private static final RxBus3 sInstance = new RxBus3();
     }
 
     /**
