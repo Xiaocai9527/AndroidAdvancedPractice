@@ -4,4 +4,7 @@
     <string name="negative">取消</string>
     <string name="refuse">残忍拒绝</string>
     <string name="gladly_agree">欣然同意</string>
+    <string name="title">标题</string>
+    <string name="message">这是一个dialog</string>
+    <string name="positive">确定</string>
 </resources>

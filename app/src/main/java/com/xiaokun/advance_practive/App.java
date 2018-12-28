@@ -1,5 +1,7 @@
 package com.xiaokun.advance_practive;
 
+import android.os.Build;
+
 import com.facebook.stetho.Stetho;
 import com.xiaokun.baselib.BaseApplication;
 import com.xiaokun.baselib.network.RetrofitHelper;
@@ -19,10 +21,10 @@ public class App extends BaseApplication {
     public void onCreate() {
         super.onCreate();
 
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG && !isRoboUnitTest()) {
             Stetho.initializeWithDefaults(this);
         }
-//        DiskCache.openCache(this);
+        //DiskCache.openCache(this);
         //配置网络
         RetrofitHelper.getInstance()
                 .setDebug(BuildConfig.DEBUG)
@@ -30,5 +32,7 @@ public class App extends BaseApplication {
                 .baseUrl(ApiService.baseUrl);
     }
 
-
+    public static boolean isRoboUnitTest() {
+        return "robolectric".equals(Build.FINGERPRINT);
+    }
 }

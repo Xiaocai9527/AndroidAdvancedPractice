@@ -48,6 +48,20 @@
         <activity android:name=".ui.StateListAnimatorActivity" />
         <activity android:name=".ui.rxjava.RxjavaActivity" />
         <activity android:name=".ui.fragment_nest.FragmentNestActivity" />
+        <activity android:name=".ui.unit_test.UnitTestActivity" />
+
+
+        <receiver
+            android:name=".ui.unit_test.MyReceiver"
+            android:enabled="true"
+            android:exported="false">
+
+            <intent-filter>
+                <action android:name="xiaokun.hahaha" />
+            </intent-filter>
+
+        </receiver>
+        <service android:name=".ui.unit_test.MyService" />
         <activity android:name=".ui.view.AllViewsActivity" />
         <activity android:name=".ui.view.ScrollViewActivity" />
     </application>

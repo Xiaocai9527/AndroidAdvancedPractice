@@ -35,6 +35,10 @@ public class GankResEntity implements Serializable {
         return Message;
     }
 
+    public String getMsg(String message) {
+        return message;
+    }
+
     public void setMessage(String Message) {
         this.Message = Message;
     }
