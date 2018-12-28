@@ -1,10 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent">-->
 <com.example.view.PullScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorAccent" />
-</com.example.view.PullScrollView>
+        android:layout_height="1000dp"
+        android:background="@color/colorAccent"
+        android:text="hahahaha
+            ahahhaha
+            ahahhaha
+            ahahhah
+        ahahah
+
+
+
+        ahahhaha
+
+
+
+
+
+
+
+        aahhahah
+
+        ahahhah
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+" />
+</com.example.view.PullScrollView><!--</LinearLayout>-->
