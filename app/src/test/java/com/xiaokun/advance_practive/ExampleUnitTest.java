@@ -1,6 +1,12 @@
 package com.xiaokun.advance_practive;
 
+import com.xiaokun.advance_practive.artimgloader.ArtImageLoader;
+import com.xiaokun.advance_practive.network.entity.GankResEntity;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,6 +20,7 @@ import java.util.stream.Stream;
 
 import static com.xiaokun.baselib.util.Utils.close;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -70,7 +77,6 @@ public class ExampleUnitTest {
             while ((s = bufferedReader.readLine()) != null) {
                 bufferedWriter.write(s + " && ");
                 fileWriter.write(s + " && ");
-                bufferedWriter.flush();
                 System.out.println(s + " && ");
             }
         } catch (FileNotFoundException e) {
@@ -84,6 +90,9 @@ public class ExampleUnitTest {
         }
     }
 
+    /**
+     * 创建文件
+     */
     private File checkFile(File file) {
         if (!file.exists()) {
             try {
@@ -95,5 +104,14 @@ public class ExampleUnitTest {
         return file;
     }
 
+
+    @Test
+    public void testFile() {
+        //创建文件夹
+        File file3 = new File("C:\\Users\\mayn\\Desktop\\uploadLibrary4.bat");
+        if (!file3.exists()) {
+            file3.mkdirs();
+        }
+    }
 
 }

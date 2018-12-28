@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xiaokun.advance_practive.App;
+import com.xiaokun.advance_practive.ui.unit_test.UnitTestActivity;
 import com.xiaokun.baselib.config.Constants;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.network.api.ApiService;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton7;
     private Button mButton8;
     private Button mButton9;
+    private Button mButton35;
     private TextView mTextView;
     private DownloadEntity downloadEntity;
     private String fileName;
@@ -88,10 +90,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton7 = (Button) findViewById(R.id.button7);
         mButton8 = (Button) findViewById(R.id.button8);
         mButton9 = (Button) findViewById(R.id.button9);
+        mButton35 = (Button) findViewById(R.id.button35);
         mTextView = (TextView) findViewById(R.id.textView);
 
         initListener(mButton, mButton2, mButton3, mButton4, mButton5, mButton6
-                , mButton7, mButton8, mButton9);
+                , mButton7, mButton8, mButton9, mButton35);
     }
 
     private void initListener(View... views) {
@@ -138,6 +141,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //取消下载
                 DownloadManager.cancelDownload(disposable, mDownloadFile);
                 mTextView.setText("下载已取消");
+                break;
+            case R.id.button35:
+                UnitTestActivity.start(this);
                 break;
             default:
                 break;

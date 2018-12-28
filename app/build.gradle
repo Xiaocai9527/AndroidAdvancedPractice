@@ -27,6 +27,12 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+    //https://stackoverflow.com/questions/29249986/finished-with-non-zero-exit-value/31198775
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -34,6 +40,19 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    //mockito
+    testImplementation "org.mockito:mockito-core:2.8.9"
+    //powermock
+    testImplementation "org.powermock:powermock-module-junit4:1.7.3"
+    testImplementation "org.powermock:powermock-module-junit4-rule:1.7.3"
+    testImplementation "org.powermock:powermock-api-mockito2:1.7.3"
+    testImplementation "org.powermock:powermock-classloading-xstream:1.7.3"
+    //robolectric
+    testImplementation "org.robolectric:robolectric:3.8"
+    testImplementation 'org.robolectric:shadows-support-v4:3.4-rc2'
+    testImplementation "com.android.support.test:monitor:1.0.2"
+    //mockwebserver
+    testImplementation 'com.squareup.okhttp3:mockwebserver:3.9.1'
 
     implementation project(':baselib')
     implementation project(':wanandroid')
