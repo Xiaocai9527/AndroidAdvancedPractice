@@ -5,6 +5,8 @@ import com.xiaokun.baselib.network.WanBaseResponseEntity;
 import com.xiaokun.advance_practive.network.wanAndroid.WanLoginEntityRes;
 import com.xiaokun.advance_practive.network.wanAndroid.TotalResEntity.HomeArticles;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -64,7 +66,7 @@ public interface WanApiService {
      * @return
      */
     @GET("banner/json")
-    Observable<WanBaseResponseEntity<TotalResEntity.HomeBanner>> getHomeBanner();
+    Observable<WanBaseResponseEntity<List<TotalResEntity.HomeBanner>>> getHomeBanner();
 
     /**
      * 获取常用网站

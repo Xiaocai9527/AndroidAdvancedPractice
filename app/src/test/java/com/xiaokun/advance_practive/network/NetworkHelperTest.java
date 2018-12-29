@@ -1,6 +1,7 @@
 package com.xiaokun.advance_practive.network;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.xiaokun.advance_practive.RxJavaRule;
 import com.xiaokun.advance_practive.network.api.ApiService;
 import com.xiaokun.advance_practive.network.api.WanApiService;
 import com.xiaokun.advance_practive.network.wanAndroid.TotalResEntity;
@@ -8,6 +9,7 @@ import com.xiaokun.baselib.network.WanBaseResponseEntity;
 import com.xiaokun.advance_practive.network.wanAndroid.WanLoginEntityRes;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -41,13 +43,11 @@ public class NetworkHelperTest {
     String username = "canglashi";
     String password = "123456";
 
+    @Rule
+    public RxJavaRule mRxJavaRule = new RxJavaRule();
+
     @Before
     public void setUp() throws Exception {
-        RxJavaPlugins.reset();
-        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
-        RxAndroidPlugins.reset();
-        RxAndroidPlugins.setMainThreadSchedulerHandler(scheduler -> Schedulers.trampoline());
-
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .addInterceptor(chain -> {

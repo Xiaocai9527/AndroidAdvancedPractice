@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnit;
@@ -123,7 +124,11 @@ public class MockTest {
         System.out.println(getCurrentTime());
 
         verify(mResEntity, after(1000)).getCode();
+        System.out.println(mResEntity.getCode());
         System.out.println(getCurrentTime());
+        //验证getCode方法被调用
+        //Mockito.verify(mResEntity).getCode();
+        //验证getCode方法至少被调用两次
         verify(mResEntity, atLeast(2)).getCode();
     }
 
@@ -171,7 +176,6 @@ public class MockTest {
         }))).thenReturn("肖坤真帅");
         System.out.println(mResEntity.getMsg("肖"));
     }
-
 
 
     private long getCurrentTime() {

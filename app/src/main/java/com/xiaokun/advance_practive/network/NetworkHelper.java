@@ -6,6 +6,8 @@ import com.xiaokun.advance_practive.network.wanAndroid.WanLoginEntityRes;
 import com.xiaokun.baselib.rx.transform.RxSchedulers;
 import com.xiaokun.baselib.rx.transform.WanHttpResultFunc;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 
 /**
@@ -66,10 +68,10 @@ public class NetworkHelper {
      *
      * @return
      */
-    public Observable<TotalResEntity.HomeBanner> getHomeBanner() {
+    public Observable<List<TotalResEntity.HomeBanner>> getHomeBanner() {
         return mWanApiService.getHomeBanner()
-                .map(new WanHttpResultFunc<TotalResEntity.HomeBanner>())
-                .compose(RxSchedulers.<TotalResEntity.HomeBanner>io_main());
+                .map(new WanHttpResultFunc<List<TotalResEntity.HomeBanner>>())
+                .compose(RxSchedulers.<List<TotalResEntity.HomeBanner>>io_main());
     }
 
     /**
