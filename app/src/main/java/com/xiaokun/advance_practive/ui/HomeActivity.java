@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.xiaokun.advance_practive.LoginActivity;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.ui.big_mvp.BigMvpActivity;
 import com.xiaokun.advance_practive.ui.fragment_nest.FragmentNestActivity;
@@ -16,6 +15,7 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.MultiRvActivity;
 import com.xiaokun.advance_practive.ui.mvp.MvpMainActivity;
 import com.xiaokun.advance_practive.ui.rxjava.MergeArrayActivity;
 import com.xiaokun.advance_practive.ui.rxjava.RxjavaActivity;
+import com.xiaokun.advance_practive.ui.view.AllViewsActivity;
 import com.xiaokun.wanandroid.WanLoginActivity;
 
 /**
@@ -43,6 +43,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton26;
     private Button mButton30;
     private Button mButton31;
+    private Button mButton32;
     private Context mContext;
 
     @Override
@@ -70,9 +71,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mButton26 = findViewById(R.id.button26);
         mButton30 = findViewById(R.id.button30);
         mButton31 = findViewById(R.id.button31);
+        mButton32 = findViewById(R.id.button32);
 
         initListener(mButton10, mButton11, mButton12, mButton14, mButton15, mButton19, mButton20,
-                mButton21, mButton22, mButton23, mButton24, mButton25, mButton26, mButton30, mButton31);
+                mButton21, mButton22, mButton23, mButton24, mButton25, mButton26, mButton30, mButton31
+                , mButton32);
     }
 
     private void initListener(View... views) {
@@ -128,6 +131,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button31:
                 WanLoginActivity.start(this);
+                break;
+            case R.id.button32:
+                AllViewsActivity.start(this);
                 break;
             default:
                 break;

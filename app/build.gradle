@@ -56,4 +56,5 @@ dependencies {
 
     implementation project(':baselib')
     implementation project(':wanandroid')
+    implementation project(':view')
 }

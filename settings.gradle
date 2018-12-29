@@ -1,1 +1,1 @@
-include ':app', ':wanandroid', ':baselib'
+include ':app', ':wanandroid', ':baselib', ':view'

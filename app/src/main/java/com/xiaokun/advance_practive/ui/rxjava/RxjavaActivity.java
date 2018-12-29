@@ -25,6 +25,7 @@ import com.xiaokun.baselib.rx.transform.RxSchedulers;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Maybe;
@@ -265,5 +266,21 @@ public class RxjavaActivity extends AppCompatActivity implements View.OnClickLis
         //后执行
         Log.e(TAG, "hello xiaocai");
     }
+
+    public void from() {
+        Observable.fromCallable(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return "小菜";
+            }
+        }).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                Log.e(TAG, s);
+            }
+        });
+    }
+
+
 
 }

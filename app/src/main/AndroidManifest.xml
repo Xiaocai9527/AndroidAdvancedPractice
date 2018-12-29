@@ -62,6 +62,8 @@
 
         </receiver>
         <service android:name=".ui.unit_test.MyService" />
+        <activity android:name=".ui.view.AllViewsActivity" />
+        <activity android:name=".ui.view.ScrollViewActivity" />
     </application>
 
 </manifest>

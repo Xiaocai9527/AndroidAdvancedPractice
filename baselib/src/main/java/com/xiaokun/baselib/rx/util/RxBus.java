@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
@@ -22,10 +20,7 @@ import io.reactivex.subjects.Subject;
  *     版本   : 1.0
  * </pre>
  */
-public class RxBus
-{
-    private static RxBus instance;
-
+public class RxBus {
     /**
      * ConcurrentHashMap: 线程安全集合
      * Subject 同时充当了Observer和Observable的角色
@@ -34,38 +29,15 @@ public class RxBus
     @SuppressWarnings("rawtypes")
     private ConcurrentHashMap<Object, List<Subject>> subjectMapper = new ConcurrentHashMap<>();
 
-    public static synchronized RxBus getInstance()
-    {
-        if (null == instance)
-        {
-            instance = new RxBus();
-        }
-        return instance;
+    private RxBus() {
     }
 
-    private RxBus()
-    {
+    public static RxBus getInstance() {
+        return RxBusHolder.sInstance;
     }
 
-    /**
-     * 订阅事件源
-     *
-     * @param observable
-     * @param consumer
-     * @return
-     */
-    public RxBus onEvent(Observable<?> observable, Consumer<Object> consumer)
-    {
-        observable.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(consumer, new Consumer<Throwable>()
-                {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception
-                    {
-                        throwable.printStackTrace();
-                    }
-                });
-        return getInstance();
+    private static class RxBusHolder {
+        private static final RxBus sInstance = new RxBus();
     }
 
     /**
@@ -76,11 +48,9 @@ public class RxBus
      * @return
      */
     @SuppressWarnings({"rawtypes"})
-    public <T> Observable<T> register(@NonNull Object tag)
-    {
+    public <T> Observable<T> register(@NonNull Object tag) {
         List<Subject> subjectList = subjectMapper.get(tag);
-        if (null == subjectList)
-        {
+        if (null == subjectList) {
             subjectList = new ArrayList<>();
             subjectMapper.put(tag, subjectList);
         }
@@ -96,11 +66,9 @@ public class RxBus
      * @param tag key
      */
     @SuppressWarnings("rawtypes")
-    public void unregister(@NonNull Object tag)
-    {
+    public void unregister(@NonNull Object tag) {
         List<Subject> subjectList = subjectMapper.get(tag);
-        if (null != subjectList)
-        {
+        if (null != subjectList) {
             subjectMapper.remove(tag);
         }
     }
@@ -114,21 +82,17 @@ public class RxBus
      */
     @SuppressWarnings("rawtypes")
     public RxBus unregister(@NonNull Object tag,
-                            @NonNull Observable<?> observable)
-    {
-        if (null == observable)
-        {
+                            @NonNull Observable<?> observable) {
+        if (null == observable) {
             return getInstance();
         }
 
         List<Subject> subjectList = subjectMapper.get(tag);
-        if (null != subjectList)
-        {
+        if (null != subjectList) {
             // 从subjectList中删去observable
             subjectList.remove((Subject<?>) observable);
             // 若此时subjectList为空则从subjectMapper中删去
-            if (isEmpty(subjectList))
-            {
+            if (isEmpty(subjectList)) {
                 subjectMapper.remove(tag);
             }
         }
@@ -140,8 +104,7 @@ public class RxBus
      *
      * @param content
      */
-    public void post(@NonNull Object content)
-    {
+    public void post(@NonNull Object content) {
         post(content.getClass().getName(), content);
     }
 
@@ -152,13 +115,10 @@ public class RxBus
      * @param content
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public void post(@NonNull Object tag, @NonNull Object content)
-    {
+    public void post(@NonNull Object tag, @NonNull Object content) {
         List<Subject> subjectList = subjectMapper.get(tag);
-        if (!isEmpty(subjectList))
-        {
-            for (Subject subject : subjectList)
-            {
+        if (!isEmpty(subjectList)) {
+            for (Subject subject : subjectList) {
                 subject.onNext(content);
             }
         }
@@ -171,8 +131,7 @@ public class RxBus
      * @return
      */
     @SuppressWarnings("rawtypes")
-    public static boolean isEmpty(Collection<Subject> collection)
-    {
+    public static boolean isEmpty(Collection<Subject> collection) {
         return null == collection || collection.isEmpty();
     }
 
