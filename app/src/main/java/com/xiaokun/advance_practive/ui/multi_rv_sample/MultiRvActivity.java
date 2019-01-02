@@ -243,28 +243,28 @@ public class MultiRvActivity extends AppCompatActivity
                     {
                         List<MultiItem> multiItems = new ArrayList<>();
 
-                        multiItems.add(new ItemA("小米"));
-                        for (int i = 0; i < 2; i++)
-                        {
-                            multiItems.add(new ItemB("小米向港交所申请上市：估值700亿美元", "观察者网", "2018-05-03 10:51:05"));
-                        }
-                        multiItems.add(new ItemA("Android"));
-                        for (int i = 0; i < 2; i++)
-                        {
-                            multiItems.add(new ItemB("MusicLibrary-一个丰富的音频播放SDK", "lizixian", "2018-03-12 08:44:50"));
-                        }
-                        multiItems.add(new ItemA("一张图片"));
-                        multiItems.add(new ItemC("Android 仿丁丁、微信 群聊组合头像", "作者：艾米", "http://ww1.sinaimg" +
-                                ".cn/large/0065oQSqly1fsq9iq8ttrj30k80q9wi4.jpg"));
-                        multiItems.add(new ItemC("Android新福利：调试神奇Pandora了解下哇", "作者：whatta", "http://ww1.sinaimg" +
-                                ".cn/large/0065oQSqly1frsllc19gfj30k80tfah5.jpg"));
-                        multiItems.add(new ItemA("三张图片"));
-                        multiItems.add(new ItemD("http://ww1.sinaimg.cn/large/0065oQSqly1fsp4iok6o4j30j60optbl" +
-                                ".jpg", "http://ww1.sinaimg.cn/large/0065oQSqly1fsoe3k2gkkj30g50niwla.jpg",
-                                "http://ww1.sinaimg.cn/large/0065oQSqly1fsmis4zbe7j30sg16fq9o.jpg"));
-                        multiItems.add(new ItemD("http://ww1.sinaimg.cn/large/0065oQSqly1fsb0lh7vl0j30go0ligni.jpg",
-                                "http://ww1.sinaimg.cn/large/0065oQSqly1fsfq2pwt72j30qo0yg78u.jpg",
-                                "http://ww1.sinaimg.cn/large/0065oQSqly1fsfq1ykabxj30k00pracv.jpg"));
+//                        multiItems.add(new ItemA("小米"));
+//                        for (int i = 0; i < 2; i++)
+//                        {
+//                            multiItems.add(new ItemB("小米向港交所申请上市：估值700亿美元", "观察者网", "2018-05-03 10:51:05"));
+//                        }
+//                        multiItems.add(new ItemA("Android"));
+//                        for (int i = 0; i < 2; i++)
+//                        {
+//                            multiItems.add(new ItemB("MusicLibrary-一个丰富的音频播放SDK", "lizixian", "2018-03-12 08:44:50"));
+//                        }
+//                        multiItems.add(new ItemA("一张图片"));
+//                        multiItems.add(new ItemC("Android 仿丁丁、微信 群聊组合头像", "作者：艾米", "http://ww1.sinaimg" +
+//                                ".cn/large/0065oQSqly1fsq9iq8ttrj30k80q9wi4.jpg"));
+//                        multiItems.add(new ItemC("Android新福利：调试神奇Pandora了解下哇", "作者：whatta", "http://ww1.sinaimg" +
+//                                ".cn/large/0065oQSqly1frsllc19gfj30k80tfah5.jpg"));
+//                        multiItems.add(new ItemA("三张图片"));
+//                        multiItems.add(new ItemD("http://ww1.sinaimg.cn/large/0065oQSqly1fsp4iok6o4j30j60optbl" +
+//                                ".jpg", "http://ww1.sinaimg.cn/large/0065oQSqly1fsoe3k2gkkj30g50niwla.jpg",
+//                                "http://ww1.sinaimg.cn/large/0065oQSqly1fsmis4zbe7j30sg16fq9o.jpg"));
+//                        multiItems.add(new ItemD("http://ww1.sinaimg.cn/large/0065oQSqly1fsb0lh7vl0j30go0ligni.jpg",
+//                                "http://ww1.sinaimg.cn/large/0065oQSqly1fsfq2pwt72j30qo0yg78u.jpg",
+//                                "http://ww1.sinaimg.cn/large/0065oQSqly1fsfq1ykabxj30k00pracv.jpg"));
                         multiItems.add(new ItemA("两张图片,一行两个item"));
                         multiItems.add(new ItemE("http://ww1.sinaimg.cn/large/0065oQSqly1fsb0lh7vl0j30go0ligni.jpg"));
                         multiItems.add(new ItemE("http://ww1.sinaimg.cn/large/0065oQSqly1fsfq2pwt72j30qo0yg78u.jpg"));
