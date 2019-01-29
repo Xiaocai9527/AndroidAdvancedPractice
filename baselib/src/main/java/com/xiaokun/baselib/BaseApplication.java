@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.xiaokun.baselib.util.ACache;
+import com.xiaokun.baselib.util.ContextHolder;
 
 import java.io.File;
 
@@ -30,6 +31,7 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         app = this;
+        ContextHolder.setContext(this);
         mSp = getSharedPreferences("xiaokun", MODE_PRIVATE);
         cache = ACache.get(getCacheFile());
 

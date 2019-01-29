@@ -1,4 +1,4 @@
-package com.xiaokun.advance_practive.ui;
+package com.xiaokun.advance_practive.ui.rxbus;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
 import com.xiaokun.advance_practive.R;
+import com.xiaokun.advance_practive.ui.WebFragment;
 import com.xiaokun.baselib.util.ActivityUtils;
 
 import java.util.concurrent.TimeUnit;

@@ -13,6 +13,7 @@ import com.xiaokun.advance_practive.ui.big_mvp.BigMvpActivity;
 import com.xiaokun.advance_practive.ui.fragment_nest.FragmentNestActivity;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.MultiRvActivity;
 import com.xiaokun.advance_practive.ui.mvp.MvpMainActivity;
+import com.xiaokun.advance_practive.ui.rxbus.ScrollviewActivity;
 import com.xiaokun.advance_practive.ui.rxjava.MergeArrayActivity;
 import com.xiaokun.advance_practive.ui.rxjava.RxjavaActivity;
 import com.xiaokun.advance_practive.ui.view.AllViewsActivity;
@@ -72,6 +73,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mButton30 = findViewById(R.id.button30);
         mButton31 = findViewById(R.id.button31);
         mButton32 = findViewById(R.id.button32);
+
 
         initListener(mButton10, mButton11, mButton12, mButton14, mButton15, mButton19, mButton20,
                 mButton21, mButton22, mButton23, mButton24, mButton25, mButton26, mButton30, mButton31

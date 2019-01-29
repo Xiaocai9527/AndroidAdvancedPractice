@@ -35,7 +35,7 @@
             android:theme="@style/NoBarTheme" />
         <activity android:name=".ui.mvp.UniversalActivity" />
         <activity android:name=".ui.viewpager.ViewPagerActivity" />
-        <activity android:name=".ui.ScrollviewActivity" />
+        <activity android:name=".ui.rxbus.ScrollviewActivity" />
         <activity android:name=".ui.PermissionTestActivity" />
         <activity
             android:name=".ui.big_mvp.BigMvpActivity"
@@ -64,6 +64,7 @@
         <service android:name=".ui.unit_test.MyService" />
         <activity android:name=".ui.view.AllViewsActivity" />
         <activity android:name=".ui.view.ScrollViewActivity" />
+        <activity android:name=".ui.rxbus.ProgressWvActivity" />
     </application>
 
 </manifest>

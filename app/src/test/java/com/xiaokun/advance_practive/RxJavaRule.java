@@ -1,8 +1,11 @@
 package com.xiaokun.advance_practive;
 
+import com.xiaokun.baselib.util.ContextHolder;
+
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowLog;
 
 import io.reactivex.Scheduler;
@@ -23,7 +26,10 @@ public class RxJavaRule implements TestRule {
 
     @Override
     public Statement apply(Statement base, Description description) {
+        //log打印
         ShadowLog.stream = System.out;
+        //获取context application级别的
+        ContextHolder.setContext(RuntimeEnvironment.application);
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {

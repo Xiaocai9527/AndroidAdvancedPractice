@@ -6,4 +6,9 @@
         <attr name="headerVisibleHeight" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="ProgressWebView">
+        <attr name="progressbar_height" format="dimension" />
+        <attr name="progressbar_color" format="color" />
+    </declare-styleable>
+
 </resources>

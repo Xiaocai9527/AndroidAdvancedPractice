@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.xiaokun.advance_practive.R;
+import com.xiaokun.advance_practive.ui.rxbus.ProgressWvActivity;
 
 /**
  * <pre>
@@ -20,6 +21,7 @@ import com.xiaokun.advance_practive.R;
  */
 public class AllViewsActivity extends AppCompatActivity implements View.OnClickListener {
     public Button mbutton35;
+    public Button mbutton46;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, AllViewsActivity.class);
@@ -35,7 +37,16 @@ public class AllViewsActivity extends AppCompatActivity implements View.OnClickL
 
     private void initView() {
         mbutton35 = findViewById(R.id.button35);
+        mbutton46 = findViewById(R.id.button46);
+
+        initListener(mbutton35, mbutton46);
         mbutton35.setOnClickListener(this);
+    }
+
+    private void initListener(View... views) {
+        for (View view : views) {
+            view.setOnClickListener(this);
+        }
     }
 
     @Override
@@ -43,6 +54,9 @@ public class AllViewsActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.button35:
                 ScrollViewActivity.start(this);
+                break;
+            case R.id.button46:
+                ProgressWvActivity.start(this);
                 break;
             default:
                 break;
