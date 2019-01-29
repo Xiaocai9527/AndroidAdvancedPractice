@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="color_ff4081">#FF4081</color>
+    <color name="color_ccc">#ccc</color>
+    <color name="color_33E574">#33E574</color>
+
 </resources>

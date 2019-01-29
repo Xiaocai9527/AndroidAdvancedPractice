@@ -8,7 +8,8 @@
 
     <declare-styleable name="ProgressWebView">
         <attr name="progressbar_height" format="dimension" />
-        <attr name="progressbar_color" format="color" />
+        <attr name="progressbar_bg_color" format="color" />
+        <attr name="progressbar_progress_color" format="color" />
     </declare-styleable>
 
 </resources>

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.example.view.ProgressWebView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/progress_wv"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:progressbar_bg_color="@color/color_ccc"
+    app:progressbar_height="3dp"
+    app:progressbar_progress_color="@color/color_33E574">
 
 
 </com.example.view.ProgressWebView>
