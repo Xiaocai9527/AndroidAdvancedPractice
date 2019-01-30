@@ -32,7 +32,7 @@ public class ProgressWebView extends FrameLayout {
     private Context mContext;
     private int DEFAULT_HEIGHT_DP = dpToPxInt(2);
     private int DEFALUT_BG_COLOR = R.color.color_ccc;
-    private int DEFALUT_BG_PROGRESS_COLOR = R.color.color_ff4081;
+    private int DEFALUT_BG_PROGRESS_COLOR = R.color.color_33E574;
 
     private int mProgressBarHeight;
     private int mProgressBarBgColor;

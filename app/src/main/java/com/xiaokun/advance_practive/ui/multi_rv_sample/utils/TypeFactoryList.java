@@ -14,6 +14,8 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeCHolder;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeDHolder;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeEHolder;
 
+import java.util.HashMap;
+
 /**
  * <pre>
  *      作者  ：肖坤
@@ -22,44 +24,52 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeEHolder;
  *      版本  ：1.0
  * </pre>
  */
-public class TypeFactoryList implements TypeFactory
-{
+public class TypeFactoryList implements TypeFactory {
     @Override
-    public int type(ItemA itemA)
-    {
+    public int type(ItemA itemA) {
         return TypeAHolder.LAYOUT;
     }
 
     @Override
-    public int type(ItemB itemB)
-    {
+    public int type(ItemB itemB) {
         return TypeBHolder.LAYOUT;
     }
 
     @Override
-    public int type(ItemC itemC)
-    {
+    public int type(ItemC itemC) {
         return TypeCHolder.LAYOUT;
     }
 
     @Override
-    public int type(ItemD itemD)
-    {
+    public int type(ItemD itemD) {
         return TypeDHolder.LAYOUT;
     }
 
     @Override
-    public int type(ItemE itemE)
-    {
+    public int type(ItemE itemE) {
         return TypeEHolder.LAYOUT;
     }
 
+    private HashMap<Integer, BaseMultiHoder> mHoderHashMap = new HashMap<>();
+
+    public void addTypeHolders(HashMap<Integer, BaseMultiHoder> hoderHashMap) {
+        mHoderHashMap.putAll(hoderHashMap);
+    }
+
+    public void addTypeHolder(BaseMultiHoder baseMultiHoder, int layoutId) {
+        mHoderHashMap.put(layoutId, baseMultiHoder);
+    }
+
     @Override
-    public BaseMultiHoder createViewHolder(View parent, int type)
-    {
+    public BaseMultiHoder createViewHolder(View parent, int type) {
         BaseMultiHoder baseMultiHoder = null;
-        switch (type)
-        {
+
+        if (mHoderHashMap != null) {
+
+        } else {
+
+        }
+        switch (type) {
             case TypeAHolder.LAYOUT:
                 baseMultiHoder = new TypeAHolder(parent);
                 break;

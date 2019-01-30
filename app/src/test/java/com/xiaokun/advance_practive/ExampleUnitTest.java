@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.stream.Stream;
 
 import static com.xiaokun.baselib.util.Utils.close;
@@ -112,6 +113,59 @@ public class ExampleUnitTest {
         if (!file3.exists()) {
             file3.mkdirs();
         }
+    }
+
+    @Test
+    public void generateDimen() {
+        File file = new File("D:\\AndroidStudioProjects\\app\\PDYongMaAndroid\\library.yongma\\src\\main\\res\\values\\dimen1.xml");
+
+        BufferedWriter bufferedWriter = null;
+//        BufferedReader bufferedReader = null;
+        FileOutputStream fileOutputStream = null;
+        FileWriter fileWriter = null;
+        try {
+//            bufferedReader = new BufferedReader(new FileReader(file));
+            bufferedWriter = new BufferedWriter(new FileWriter(file));
+//            fileWriter = new FileWriter(file);
+            String s = null;
+
+            bufferedWriter.write("<?xml version=\"1.0\" encoding=\"utf-8\"?><resources xmlns:tools=\"http://schemas.android.com/tools\">");
+
+            //<dimen name="dimen_24dp" tools:ignore="ResourceName">24dp</dimen>
+            //<dimen name="dimen_12sp" tools:ignore="ResourceName">12sp</dimen>
+            for (int i = 5; i < 40; i++) {
+                bufferedWriter.write("<dimen name=\"dimen_" + i + "sp\" tools:ignore=\"ResourceName\">" + i + "sp</dimen>");
+            }
+            bufferedWriter.write("</resources>");
+//            while ((s = bufferedReader.readLine()) != null) {
+//                bufferedWriter.write(s + " && ");
+//                fileWriter.write(s + " && ");
+//                System.out.println(s + " && ");
+//            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+//            close(bufferedReader);
+            close(bufferedWriter);
+            close(fileWriter);
+        }
+    }
+
+    @Test
+    public void hashMapTest() {
+        HashMap<Integer, String> hashMap = new HashMap<>();
+        hashMap.put(1, "111");
+
+        HashMap<Integer, String> hashMap1 = new HashMap<>();
+        hashMap1.put(2, "222");
+        hashMap1.put(3, "333");
+
+        hashMap.putAll(hashMap1);
+
+
+        System.out.println(hashMap.size());
     }
 
 }

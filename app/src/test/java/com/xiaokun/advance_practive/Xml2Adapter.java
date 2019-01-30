@@ -28,12 +28,13 @@ public class Xml2Adapter {
         String adapterPathDir = rootDir + adapterApp;
 
         //你的布局xml所在路径
-        File file = new File(xmlPathDir + "item_list_pic.xml");
+//        File file = new File(xmlPathDir + "item_list_pic.xml");
+        File file = new File("D:\\AndroidStudioProjects\\app\\PDYongMaAndroid\\library.yongma\\src\\main\\res\\layout\\item_loan_record_layout.xml");
         System.out.println(file.getPath());
         //你的Adapter的java类放在哪个包里
-        File out = new File(adapterPathDir);
+        File out = new File("D:\\AndroidStudioProjects\\app\\PDYongMaAndroid\\library.yongma\\src\\main\\java\\com\\peidou\\yongma\\ui\\repayment\\adapter\\");
         //你的Adapter的名字--不要加.java
-        String name = "TestAdapter6";
+        String name = "LoanRecordAdapter";
         initView(file, out, name);
     }
 

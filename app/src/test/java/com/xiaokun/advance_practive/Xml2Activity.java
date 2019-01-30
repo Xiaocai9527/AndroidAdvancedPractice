@@ -33,15 +33,15 @@ public class Xml2Activity {
         String xmlPathDir = rootDir + xmlApp;
         String activityPathDir = rootDir + activityApp;
 
-        xmlPathDir = "D:\\AndroidStudioProjects\\AndroidAdvancedPractice\\app\\src\\main\\res\\layout\\";
-        activityPathDir = "D:\\AndroidStudioProjects\\AndroidAdvancedPractice\\app\\src\\main\\java\\com\\xiaokun\\advance_practive\\ui\\unit_test\\";
+        xmlPathDir = "D:\\AndroidStudioProjects\\app\\PDYongMaAndroid\\library.yongma\\src\\main\\res\\layout\\activity_repay_result.xml";
+        activityPathDir = "D:\\AndroidStudioProjects\\app\\PDYongMaAndroid\\library.yongma\\src\\main\\java\\com\\peidou\\yongma\\ui\\repayment\\";
 
         //你的Activity布局xml所在路径
-        File file = new File(xmlPathDir + "activity_unit_test.xml");
+        File file = new File(xmlPathDir);
         //你的Activity的java类放在哪个包里
         File out = new File(activityPathDir);
         //你的Activity的名字--不要加.java
-        String name = "UnitTestActivity";
+        String name = "RepayResultActivity";
         initView(file, out, name);
     }
 

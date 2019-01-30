@@ -87,7 +87,7 @@ public class OkhttpHelper {
         return builder;
     }
 
-    public static OkHttpClient getOkhttpClient( Interceptor... interceptors) {
+    public static OkHttpClient getOkhttpClient(Interceptor... interceptors) {
         if (builder == null) {
             builder = getDefaultBuilder();
         }
@@ -99,7 +99,8 @@ public class OkhttpHelper {
 
     public static OkHttpClient getDefaultClient() {
         OkHttpClient.Builder builder = getDefaultBuilder();
-        builder.addInterceptor(new CookieInterceptor());
+        builder.addInterceptor(new CookieInterceptor())
+                .addNetworkInterceptor(BaseApplication.flipperOkhttpInterceptor);
         if (client == null) {
             client = builder.build();
         }
@@ -169,7 +170,6 @@ public class OkhttpHelper {
                 .retryOnConnectionFailure(true);
         return builder.build();
     }
-
 
 
 }
