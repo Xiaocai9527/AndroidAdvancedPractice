@@ -20,13 +20,13 @@ public class DiffCallback extends DiffUtil.Callback
 {
 
     private List<MultiItem> mOldDatas, mNewDatas;
-    private TypeFactory mTypeFactory;
+    private HolderFactory mHolderFactory;
 
-    public DiffCallback(List<MultiItem> oldDatas, List<MultiItem> newDatas, TypeFactory typeFactory)
+    public DiffCallback(List<MultiItem> oldDatas, List<MultiItem> newDatas, HolderFactory holderFactory)
     {
         mOldDatas = oldDatas;
         mNewDatas = newDatas;
-        mTypeFactory = typeFactory;
+        mHolderFactory = holderFactory;
     }
 
     @Override
@@ -54,9 +54,9 @@ public class DiffCallback extends DiffUtil.Callback
         MultiItem newItem = mNewDatas.get(newItemPosition);
         if (oldItem instanceof ItemA && newItem instanceof ItemA)
         {
-            int itemType = ((ItemA) oldItem).getItemType(mTypeFactory);
+            int itemType = ((ItemA) oldItem).getItemType();
             String title = ((ItemA) oldItem).getTitle();
-            int itemType1 = newItem.getItemType(mTypeFactory);
+            int itemType1 = newItem.getItemType();
             String title1 = ((ItemA) newItem).getTitle();
 
             if (!title.equals(title1) || itemType != itemType1)
@@ -66,12 +66,12 @@ public class DiffCallback extends DiffUtil.Callback
         }
         if (oldItem instanceof ItemB && newItem instanceof ItemB)
         {
-            int itemType = ((ItemB) oldItem).getItemType(mTypeFactory);
+            int itemType = ((ItemB) oldItem).getItemType();
             String detail = ((ItemB) oldItem).getDetail();
             String author = ((ItemB) oldItem).getAuthor();
             String date = ((ItemB) oldItem).getDate();
 
-            int itemType1 = newItem.getItemType(mTypeFactory);
+            int itemType1 = newItem.getItemType();
             String detail1 = ((ItemB) newItem).getDetail();
             String author1 = ((ItemB) newItem).getAuthor();
             String date1 = ((ItemB) newItem).getDate();

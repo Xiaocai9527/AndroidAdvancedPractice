@@ -2,7 +2,6 @@ package com.xiaokun.advance_practive.ui.multi_rv_sample.holder;
 
 import android.support.annotation.LayoutRes;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -11,7 +10,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.xiaokun.advance_practive.App;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemE;
-import com.xiaokun.baselib.util.Utils;
 
 /**
  * <pre>
@@ -40,11 +38,11 @@ public class TypeEHolder extends BaseMultiHoder<ItemE> {
 
     private void initView(View itemView) {
         mImg = itemView.findViewById(R.id.img);
-        int heightPixels = mImg.getContext().getResources().getDisplayMetrics().heightPixels;
-        heightPixels = heightPixels - 120 - 120 - Utils.getStatusBarHeight(mImg.getContext()) - Utils.getActionBarHeight(mImg.getContext());
-        ViewGroup.LayoutParams layoutParams = mImg.getLayoutParams();
-        layoutParams.height = heightPixels;
-        mImg.setLayoutParams(layoutParams);
+//        int heightPixels = mImg.getContext().getResources().getDisplayMetrics().heightPixels;
+//        heightPixels = heightPixels - 120 - 120 - Utils.getStatusBarHeight(mImg.getContext()) - Utils.getActionBarHeight(mImg.getContext());
+//        ViewGroup.LayoutParams layoutParams = mImg.getLayoutParams();
+//        layoutParams.height = heightPixels;
+//        mImg.setLayoutParams(layoutParams);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,6 +1,6 @@
 package com.xiaokun.advance_practive.ui.multi_rv_sample.entity;
 
-import com.xiaokun.advance_practive.ui.multi_rv_sample.utils.TypeFactory;
+import android.support.annotation.LayoutRes;
 
 /**
  * <pre>
@@ -10,9 +10,8 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.utils.TypeFactory;
  *      版本  ：1.0
  * </pre>
  */
-public interface MultiItem
-{
+public interface MultiItem {
 
-    int getItemType(TypeFactory typeFactory);
-
+    @LayoutRes
+    int getItemType();
 }

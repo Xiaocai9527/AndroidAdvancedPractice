@@ -1,6 +1,6 @@
 package com.xiaokun.advance_practive.ui.multi_rv_sample.entity;
 
-import com.xiaokun.advance_practive.ui.multi_rv_sample.utils.TypeFactory;
+import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeCHolder;
 
 /**
  * <pre>
@@ -55,8 +55,7 @@ public class ItemC implements MultiItem
     }
 
     @Override
-    public int getItemType(TypeFactory typeFactory)
-    {
-        return typeFactory.type(this);
+    public int getItemType() {
+        return TypeCHolder.LAYOUT;
     }
 }

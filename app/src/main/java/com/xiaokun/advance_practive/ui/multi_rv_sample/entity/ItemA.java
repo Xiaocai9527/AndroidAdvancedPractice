@@ -1,6 +1,6 @@
 package com.xiaokun.advance_practive.ui.multi_rv_sample.entity;
 
-import com.xiaokun.advance_practive.ui.multi_rv_sample.utils.TypeFactory;
+import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeAHolder;
 
 /**
  * <pre>
@@ -10,28 +10,23 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.utils.TypeFactory;
  *      版本  ：1.0
  * </pre>
  */
-public class ItemA implements MultiItem
-{
+public class ItemA implements MultiItem {
     private String title;
 
-    public ItemA(String title)
-    {
+    public ItemA(String title) {
         this.title = title;
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title)
-    {
+    public void setTitle(String title) {
         this.title = title;
     }
 
     @Override
-    public int getItemType(TypeFactory typeFactory)
-    {
-        return typeFactory.type(this);
+    public int getItemType() {
+        return TypeAHolder.LAYOUT;
     }
 }
