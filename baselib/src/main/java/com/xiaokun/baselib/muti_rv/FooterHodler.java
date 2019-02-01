@@ -1,16 +1,15 @@
-package com.xiaokun.advance_practive.ui.multi_rv_sample.holder;
+package com.xiaokun.baselib.muti_rv;
 
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.xiaokun.advance_practive.R;
-import com.xiaokun.advance_practive.ui.multi_rv_sample.MultiAdapter;
-import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.MultiItem;
 
-import static com.xiaokun.advance_practive.ui.multi_rv_sample.MultiAdapter.LOADING;
-import static com.xiaokun.advance_practive.ui.multi_rv_sample.MultiAdapter.LOAD_COMPLETE;
-import static com.xiaokun.advance_practive.ui.multi_rv_sample.MultiAdapter.LOAD_FAILED;
+import com.xiaokun.baselib.R;
+
+import static com.xiaokun.baselib.muti_rv.MultiAdapter.LOADING;
+import static com.xiaokun.baselib.muti_rv.MultiAdapter.LOAD_COMPLETE;
+import static com.xiaokun.baselib.muti_rv.MultiAdapter.LOAD_FAILED;
 
 
 /**
@@ -21,7 +20,7 @@ import static com.xiaokun.advance_practive.ui.multi_rv_sample.MultiAdapter.LOAD_
  *      版本  ：1.0
  * </pre>
  */
-public class FooterHoder extends BaseMultiHoder<MultiItem> {
+public class FooterHodler extends BaseFooterHodler{
     public static int TYPE_FOOTER = R.layout.footer_layout;
 
     private LinearLayout mLoading;
@@ -30,34 +29,13 @@ public class FooterHoder extends BaseMultiHoder<MultiItem> {
     private FrameLayout mFooterView;
     private MultiAdapter mMultiAdapter;
 
-    public FooterHoder(View itemView, MultiAdapter multiAdapter) {
+    public FooterHodler(View itemView, MultiAdapter multiAdapter) {
         super(itemView);
         initView(itemView);
         this.mMultiAdapter = multiAdapter;
     }
 
     @Override
-    public void bind(MultiItem multiItem) {
-
-    }
-
-    public void bindFooterHolder(int currentState) {
-        switch (currentState) {
-            case LOADING:
-                showLoad();
-                break;
-            case LOAD_COMPLETE:
-                showComplete();
-                break;
-            case LOAD_FAILED:
-                showFailed();
-                break;
-            default:
-
-                break;
-        }
-    }
-
     public void showComplete() {
         mFooterView.setVisibility(View.VISIBLE);
         mComplete.setVisibility(View.VISIBLE);
@@ -65,6 +43,7 @@ public class FooterHoder extends BaseMultiHoder<MultiItem> {
         mFailed.setVisibility(View.GONE);
     }
 
+    @Override
     public void showLoad() {
         mFooterView.setVisibility(View.VISIBLE);
         mLoading.setVisibility(View.VISIBLE);
@@ -72,6 +51,7 @@ public class FooterHoder extends BaseMultiHoder<MultiItem> {
         mFailed.setVisibility(View.GONE);
     }
 
+    @Override
     public void showFailed() {
         mFooterView.setVisibility(View.VISIBLE);
         mFailed.setVisibility(View.VISIBLE);
@@ -79,7 +59,12 @@ public class FooterHoder extends BaseMultiHoder<MultiItem> {
         mComplete.setVisibility(View.GONE);
     }
 
-    private void initView(View itemView) {
+    @Override
+    public int getLayoutRes() {
+        return R.layout.footer_layout;
+    }
+
+    protected void initView(View itemView) {
         mLoading = itemView.findViewById(R.id.loading);
         mComplete = itemView.findViewById(R.id.complete);
         mFailed = itemView.findViewById(R.id.failed);

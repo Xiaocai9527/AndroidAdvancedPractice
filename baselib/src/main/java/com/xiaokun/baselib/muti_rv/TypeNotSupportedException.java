@@ -1,4 +1,4 @@
-package com.xiaokun.advance_practive.ui.multi_rv_sample.utils;
+package com.xiaokun.baselib.muti_rv;
 
 /**
  * <pre>

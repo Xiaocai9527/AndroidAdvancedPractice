@@ -1,4 +1,4 @@
-package com.xiaokun.advance_practive.ui.multi_rv_sample.holder;
+package com.xiaokun.baselib.muti_rv;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,10 +11,9 @@ import android.view.View;
  *      版本  ：1.0
  * </pre>
  */
-public abstract class BaseMultiHoder<T> extends RecyclerView.ViewHolder
-{
-    public BaseMultiHoder(View itemView)
-    {
+public abstract class BaseMultiHodler<T> extends RecyclerView.ViewHolder {
+
+    public BaseMultiHodler(View itemView) {
         super(itemView);
     }
 

@@ -1,5 +1,8 @@
 package com.xiaokun.advance_practive.network.meizi;
 
+import com.xiaokun.advance_practive.R;
+import com.xiaokun.baselib.muti_rv.MultiItem;
+
 import java.util.List;
 
 /**
@@ -39,7 +42,7 @@ public class CategoryResEntity
         this.results = results;
     }
 
-    public static class ResultsBean
+    public static class ResultsBean implements MultiItem
     {
         /**
          * _id : 5976f07c421aa90ca3bb6b66
@@ -163,6 +166,11 @@ public class CategoryResEntity
         public void setImages(List<String> images)
         {
             this.images = images;
+        }
+
+        @Override
+        public int getItemType() {
+            return R.layout.item_other;
         }
     }
 }

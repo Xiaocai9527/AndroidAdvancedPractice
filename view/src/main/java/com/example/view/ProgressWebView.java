@@ -30,7 +30,6 @@ public class ProgressWebView extends FrameLayout {
 
     private static final String TAG = "ProgressWebView";
     private Context mContext;
-    private int DEFAULT_HEIGHT_DP = dpToPxInt(2);
     private int DEFALUT_BG_COLOR = R.color.color_ccc;
     private int DEFALUT_BG_PROGRESS_COLOR = R.color.color_33E574;
 
@@ -50,7 +49,7 @@ public class ProgressWebView extends FrameLayout {
         if (attrs != null) {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ProgressWebView);
             if (array != null) {
-                mProgressBarHeight = (int) array.getDimension(R.styleable.ProgressWebView_progressbar_height, DEFAULT_HEIGHT_DP);
+                mProgressBarHeight = (int) array.getDimension(R.styleable.ProgressWebView_progressbar_height, dpToPxInt(2));
                 mProgressBarBgColor = array.getColor(R.styleable.ProgressWebView_progressbar_bg_color,
                         ContextCompat.getColor(mContext, DEFALUT_BG_PROGRESS_COLOR));
                 mProgressBarProgressColor = array.getColor(R.styleable.ProgressWebView_progressbar_progress_color,

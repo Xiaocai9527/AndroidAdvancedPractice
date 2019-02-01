@@ -10,6 +10,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.xiaokun.advance_practive.App;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemD;
+import com.xiaokun.baselib.muti_rv.BaseMultiHodler;
 
 /**
  * <pre>
@@ -19,7 +20,7 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemD;
  *      版本  ：1.0
  * </pre>
  */
-public class TypeDHolder extends BaseMultiHoder<ItemD>
+public class TypeDHolder extends BaseMultiHodler<ItemD>
 {
 
     @LayoutRes

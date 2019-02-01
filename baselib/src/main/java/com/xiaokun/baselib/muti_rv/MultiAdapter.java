@@ -1,15 +1,11 @@
-package com.xiaokun.advance_practive.ui.multi_rv_sample;
+package com.xiaokun.baselib.muti_rv;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.MultiItem;
-import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.BaseMultiHoder;
-import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.FooterHoder;
-import com.xiaokun.advance_practive.ui.multi_rv_sample.utils.HolderFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +18,7 @@ import java.util.List;
  *      版本  ：1.0
  * </pre>
  */
-public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHoder> {
+public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHodler> {
 
     private static final String TAG = "MultiAdapter";
     public static final int LOADING = 110;
@@ -30,14 +26,17 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHoder> {
     public static final int LOAD_COMPLETE = 112;
     public int currentState = LOADING;
 
+    private Context mContext;
+    private RecyclerView mRecyclerView;
     private List<MultiItem> mData;
-    private BaseMultiHoder mHolder;
+    private BaseMultiHodler mHolder;
     private LoadFailedClickListener mLoadFailedClickListener;
     private HolderFactory mHolderFactory;
-
-    //private boolean mIsLoading = false;
-    private int PRE_VISIBLE = 2;
-    private boolean mIsShowFooter = true;
+    /**
+     * 默认没有足布局
+     */
+    private boolean mIsShowFooter = false;
+    private BaseFooterHodler mFooterHolder;
 
     public MultiAdapter(HolderFactory holderFactory) {
         mHolderFactory = holderFactory;
@@ -66,39 +65,45 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHoder> {
         this.mIsShowFooter = isShowFooter;
     }
 
-//    /**
-//     * 设置是否正在上拉加载
-//     *
-//     * @param isLoading
-//     */
-//    public void setLoading(boolean isLoading) {
-//        this.mIsLoading = isLoading;
-//    }
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
+    }
 
     @NonNull
     @Override
-    public BaseMultiHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-        if (viewType == FooterHoder.TYPE_FOOTER) {
-            return new FooterHoder(itemView, this);
+    public BaseMultiHodler onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        mContext = parent.getContext();
+        View itemView = LayoutInflater.from(mContext).inflate(viewType, parent, false);
+
+        if (mFooterHolder != null) {
+            if (mFooterHolder.getLayoutRes() == viewType) {
+                return mFooterHolder;
+            }
+        } else {
+            mFooterHolder = new FooterHodler(itemView, this);
+            if (FooterHodler.TYPE_FOOTER == viewType) {
+                return mFooterHolder;
+            }
         }
         return mHolderFactory.createViewHolder(itemView, viewType);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BaseMultiHoder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseMultiHodler holder, int position) {
         mHolder = holder;
         if (position < mData.size()) {
             holder.bind(mData.get(position));
-        } else if (position == mData.size() && holder instanceof FooterHoder) {
-            ((FooterHoder) holder).bindFooterHolder(currentState);
+        } else if (position == mData.size() && holder instanceof FooterHodler) {
+            mFooterHolder.bindFooterHolder(currentState);
         }
     }
 
     @Override
     public int getItemViewType(int position) {
         if (mIsShowFooter && position == mData.size()) {
-            return FooterHoder.TYPE_FOOTER;
+            return mFooterHolder.getLayoutRes();
         } else {
             return mData.get(position).getItemType();
         }
@@ -113,8 +118,20 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHoder> {
         }
     }
 
+    public void setFooterHolder(BaseFooterHodler footerHolder) {
+        mFooterHolder = footerHolder;
+    }
+
     public int getCurrentState() {
         return currentState;
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
+
+    public RecyclerView getRecyclerView() {
+        return mRecyclerView;
     }
 
     /**
@@ -122,8 +139,8 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHoder> {
      */
     public void loading() {
         currentState = LOADING;
-        if (mHolder instanceof FooterHoder) {
-            ((FooterHoder) mHolder).showLoad();
+        if (mFooterHolder != null) {
+            mFooterHolder.showLoad();
         }
     }
 
@@ -132,8 +149,8 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHoder> {
      */
     public void loadComplete() {
         currentState = LOAD_COMPLETE;
-        if (mHolder instanceof FooterHoder) {
-            ((FooterHoder) mHolder).showComplete();
+        if (mFooterHolder != null) {
+            mFooterHolder.showComplete();
         }
     }
 
@@ -142,8 +159,8 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHoder> {
      */
     public void loadFailed() {
         currentState = LOAD_FAILED;
-        if (mHolder instanceof FooterHoder) {
-            ((FooterHoder) mHolder).showFailed();
+        if (mFooterHolder != null) {
+            mFooterHolder.showFailed();
         }
     }
 
@@ -157,7 +174,6 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHoder> {
             int oldSize = getData().size();
             mData.addAll(multiItems);
             notifyItemRangeChanged(oldSize, mData.size());
-            //mIsLoading = false;
         }
     }
 
@@ -171,7 +187,6 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHoder> {
         if (position > 0 && position < mData.size()) {
             mData.add(multiItem);
             notifyItemInserted(position);
-            //mIsLoading = false;
         }
     }
 

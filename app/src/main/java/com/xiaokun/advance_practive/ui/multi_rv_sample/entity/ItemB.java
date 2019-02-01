@@ -1,6 +1,7 @@
 package com.xiaokun.advance_practive.ui.multi_rv_sample.entity;
 
 import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeBHolder;
+import com.xiaokun.baselib.muti_rv.MultiItem;
 
 /**
  * <pre>

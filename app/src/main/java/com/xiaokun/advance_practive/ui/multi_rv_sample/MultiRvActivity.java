@@ -14,6 +14,8 @@ import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,16 +27,18 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemB;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemC;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemD;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemE;
-import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.MultiItem;
-import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.BaseMultiHoder;
+import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.CustomFooterHolder;
+import com.xiaokun.baselib.muti_rv.MultiItem;
+import com.xiaokun.baselib.muti_rv.BaseMultiHodler;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeAHolder;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeBHolder;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeCHolder;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeDHolder;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeEHolder;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.utils.DiffCallback;
-import com.xiaokun.advance_practive.ui.multi_rv_sample.utils.HolderFactory;
-import com.xiaokun.advance_practive.ui.multi_rv_sample.utils.HolderFactoryList;
+import com.xiaokun.baselib.muti_rv.HolderFactory;
+import com.xiaokun.baselib.muti_rv.HolderFactoryList;
+import com.xiaokun.baselib.muti_rv.MultiAdapter;
 
 import org.reactivestreams.Publisher;
 
@@ -105,7 +109,7 @@ public class MultiRvActivity extends AppCompatActivity {
 
     private void initData() {
         mHolderFactory = HolderFactoryList.getInstance();
-        HashMap<Integer, Class<? extends BaseMultiHoder>> hashMap = new HashMap<>();
+        HashMap<Integer, Class<? extends BaseMultiHodler>> hashMap = new HashMap<>();
         hashMap.put(TypeAHolder.LAYOUT, TypeAHolder.class);
         hashMap.put(TypeBHolder.LAYOUT, TypeBHolder.class);
         hashMap.put(TypeCHolder.LAYOUT, TypeCHolder.class);
@@ -141,6 +145,15 @@ public class MultiRvActivity extends AppCompatActivity {
 
         mRecyvlerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyvlerView.setLayoutManager(mManager);
+
+        View item = LayoutInflater.from(this).inflate(R.layout.footer_layout, mRecyvlerView, false);
+        mMultiAdapter.setFooterHolder(new CustomFooterHolder(item, new CustomFooterHolder.FailedClickListener() {
+            @Override
+            public void onFailedClick() {
+                paginator.onNext(pageNumber);
+                mMultiAdapter.loading();
+            }
+        }));
         mRecyvlerView.setAdapter(mMultiAdapter);
     }
 
@@ -180,9 +193,7 @@ public class MultiRvActivity extends AppCompatActivity {
     }
 
     private Flowable<List<MultiItem>> dataFromNetword(final int page) {
-        if (page == 1) {
-            mMultiAdapter.loading();
-        }
+        mMultiAdapter.loading();
         return Flowable.just(true)
                 .delay(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())

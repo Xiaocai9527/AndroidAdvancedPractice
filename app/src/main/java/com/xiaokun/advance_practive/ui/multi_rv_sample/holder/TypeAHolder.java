@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.xiaokun.advance_practive.App;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemA;
+import com.xiaokun.baselib.muti_rv.BaseMultiHodler;
 
 /**
  * <pre>
@@ -17,7 +18,7 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemA;
  *      版本  ：1.0
  * </pre>
  */
-public class TypeAHolder extends BaseMultiHoder<ItemA>
+public class TypeAHolder extends BaseMultiHodler<ItemA>
 {
     @LayoutRes
     public static final int LAYOUT = R.layout.type_a_layout;

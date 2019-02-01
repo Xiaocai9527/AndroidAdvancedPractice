@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.xiaokun.advance_practive.App;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemB;
+import com.xiaokun.baselib.muti_rv.BaseMultiHodler;
 
 /**
  * <pre>
@@ -17,7 +18,7 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemB;
  *      版本  ：1.0
  * </pre>
  */
-public class TypeBHolder extends BaseMultiHoder<ItemB>
+public class TypeBHolder extends BaseMultiHodler<ItemB>
 {
 
     @LayoutRes

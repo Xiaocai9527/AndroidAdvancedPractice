@@ -4,7 +4,8 @@ import android.support.v7.util.DiffUtil;
 
 import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemA;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemB;
-import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.MultiItem;
+import com.xiaokun.baselib.muti_rv.HolderFactory;
+import com.xiaokun.baselib.muti_rv.MultiItem;
 
 import java.util.List;
 

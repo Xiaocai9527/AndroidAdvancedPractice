@@ -10,6 +10,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.xiaokun.advance_practive.App;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemE;
+import com.xiaokun.baselib.muti_rv.BaseMultiHodler;
 
 /**
  * <pre>
@@ -19,7 +20,7 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemE;
  *      版本  ：1.0
  * </pre>
  */
-public class TypeEHolder extends BaseMultiHoder<ItemE> {
+public class TypeEHolder extends BaseMultiHodler<ItemE> {
     @LayoutRes
     public static final int LAYOUT = R.layout.type_e_layout;
     private ImageView mImg;

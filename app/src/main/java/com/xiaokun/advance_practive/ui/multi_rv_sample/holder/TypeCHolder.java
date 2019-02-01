@@ -11,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.xiaokun.advance_practive.App;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemC;
+import com.xiaokun.baselib.muti_rv.BaseMultiHodler;
 
 /**
  * <pre>
@@ -20,7 +21,7 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.entity.ItemC;
  *      版本  ：1.0
  * </pre>
  */
-public class TypeCHolder extends BaseMultiHoder<ItemC>
+public class TypeCHolder extends BaseMultiHodler<ItemC>
 {
 
     @LayoutRes
