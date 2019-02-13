@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.view.ProgressWebView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/progress_wv"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="#FE4791"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.example.view.ProgressWebView
-        android:id="@+id/progress_wv"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view"
-        app:progressbar_bg_color="@color/color_ccc"
-        app:progressbar_height="3dp"
-        app:progressbar_progress_color="@color/color_33E574" />
-
-</android.support.constraint.ConstraintLayout>
+    android:layout_height="wrap_content" />

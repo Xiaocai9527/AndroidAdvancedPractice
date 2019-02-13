@@ -20,9 +20,9 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     private int visibleThreshold = 5;
     // The current offset index of data you have loaded
     private int currentPage = 1;
-    // The total number of items in the dataset after the last load
+    // The total number of items in the dataset after the last loadUrl
     private int previousTotalItemCount = 0;
-    // True if we are still waiting for the last set of data to load.
+    // True if we are still waiting for the last set of data to loadUrl.
     private boolean loading = true;
     // Sets the starting page index
     private int startingPageIndex = 1;
@@ -56,8 +56,8 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     }
 
     // This happens many times a second during a scroll, so be wary of the code you place here.
-    // We are given a few useful parameters to help us work out if we need to load some more data,
-    // but first we check if we are waiting for the previous load to finish.
+    // We are given a few useful parameters to help us work out if we need to loadUrl some more data,
+    // but first we check if we are waiting for the previous loadUrl to finish.
     @Override
     public void onScrolled(RecyclerView view, int dx, int dy) {
         int lastVisibleItemPosition = 0;

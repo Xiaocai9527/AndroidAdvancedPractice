@@ -3,7 +3,7 @@
     android:id="@+id/title_tv"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:background="#5555"
+    android:background="#cccccc"
     android:gravity="center_vertical"
     android:paddingLeft="15dp"
     android:text="标题"

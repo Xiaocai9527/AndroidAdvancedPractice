@@ -1,11 +1,14 @@
 package com.xiaokun.baselib.muti_rv;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.xiaokun.baselib.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +21,7 @@ import java.util.List;
  *      版本  ：1.0
  * </pre>
  */
-public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHodler> {
+public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHodler> implements StickHeaderItemDecoration.StickyHeaderInterface {
 
     private static final String TAG = "MultiAdapter";
     public static final int LOADING = 110;
@@ -26,12 +29,12 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHodler> {
     public static final int LOAD_COMPLETE = 112;
     public int currentState = LOADING;
 
-    private Context mContext;
-    private RecyclerView mRecyclerView;
-    private List<MultiItem> mData;
-    private BaseMultiHodler mHolder;
-    private LoadFailedClickListener mLoadFailedClickListener;
-    private HolderFactory mHolderFactory;
+    protected Context mContext;
+    protected RecyclerView mRecyclerView;
+    protected List<MultiItem> mData;
+    protected BaseMultiHodler mHolder;
+    protected LoadFailedClickListener mLoadFailedClickListener;
+    protected HolderFactory mHolderFactory;
     /**
      * 默认没有足布局
      */
@@ -226,6 +229,45 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHodler> {
         int oldSize = mData.size();
         mData.clear();
         notifyItemRangeRemoved(0, oldSize);
+    }
+
+    @LayoutRes
+    private int mHeaderLayoutId;
+
+    public void setHeaderLayout(@LayoutRes int headerLayoutId) {
+        mHeaderLayoutId = headerLayoutId;
+    }
+
+    @Override
+    public int getHeaderPositionForItem(int itemPosition) {
+        int headerPosition = 0;
+        do {
+            if (this.isHeader(itemPosition)) {
+                headerPosition = itemPosition;
+                break;
+            }
+            itemPosition -= 1;
+        } while (itemPosition >= 0);
+        return headerPosition;
+    }
+
+    @Override
+    public int getHeaderLayout(int headerPosition) {
+        return mData.get(headerPosition).getItemType();
+    }
+
+    @Override
+    public void bindHeaderData(View header, int headerPosition) {
+
+    }
+
+    @Override
+    public boolean isHeader(int itemPosition) {
+        if (mData.get(itemPosition).getItemType() == mHeaderLayoutId) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public interface LoadFailedClickListener {

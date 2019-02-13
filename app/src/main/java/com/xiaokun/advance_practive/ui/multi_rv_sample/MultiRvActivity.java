@@ -39,6 +39,7 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.utils.DiffCallback;
 import com.xiaokun.baselib.muti_rv.HolderFactory;
 import com.xiaokun.baselib.muti_rv.HolderFactoryList;
 import com.xiaokun.baselib.muti_rv.MultiAdapter;
+import com.xiaokun.baselib.muti_rv.StickHeaderItemDecoration;
 
 import org.reactivestreams.Publisher;
 
@@ -116,7 +117,7 @@ public class MultiRvActivity extends AppCompatActivity {
         hashMap.put(TypeDHolder.LAYOUT, TypeDHolder.class);
         hashMap.put(TypeEHolder.LAYOUT, TypeEHolder.class);
         ((HolderFactoryList) mHolderFactory).addTypeHolders(hashMap);
-        mMultiAdapter = new MultiAdapter(mHolderFactory);
+        mMultiAdapter = new StickHeaderAdapter(mHolderFactory);
         mMultiAdapter.isShowFooterView(true);
         mMultiAdapter.setLoadFailedClickListener(() -> paginator.onNext(pageNumber));
 
@@ -154,6 +155,8 @@ public class MultiRvActivity extends AppCompatActivity {
                 mMultiAdapter.loading();
             }
         }));
+        mMultiAdapter.setHeaderLayout(TypeAHolder.LAYOUT);
+        mRecyvlerView.addItemDecoration(new StickHeaderItemDecoration(mMultiAdapter));
         mRecyvlerView.setAdapter(mMultiAdapter);
     }
 

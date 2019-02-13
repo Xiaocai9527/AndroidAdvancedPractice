@@ -1,5 +1,6 @@
 package com.example.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
@@ -11,11 +12,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
@@ -38,6 +43,7 @@ public class ProgressWebView extends FrameLayout {
     private int mProgressBarProgressColor;
     private WebView mWebView;
     private ProgressBar mProgressBar;
+    private ProgressWebViewClient mWebViewClient;
 
     public ProgressWebView(@NonNull Context context) {
         this(context, null);
@@ -51,9 +57,9 @@ public class ProgressWebView extends FrameLayout {
             if (array != null) {
                 mProgressBarHeight = (int) array.getDimension(R.styleable.ProgressWebView_progressbar_height, dpToPxInt(2));
                 mProgressBarBgColor = array.getColor(R.styleable.ProgressWebView_progressbar_bg_color,
-                        ContextCompat.getColor(mContext, DEFALUT_BG_PROGRESS_COLOR));
-                mProgressBarProgressColor = array.getColor(R.styleable.ProgressWebView_progressbar_progress_color,
                         ContextCompat.getColor(mContext, DEFALUT_BG_COLOR));
+                mProgressBarProgressColor = array.getColor(R.styleable.ProgressWebView_progressbar_progress_color,
+                        ContextCompat.getColor(mContext, DEFALUT_BG_PROGRESS_COLOR));
                 array.recycle();
             }
         }
@@ -82,6 +88,7 @@ public class ProgressWebView extends FrameLayout {
         initWvDefault();
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void initWvDefault() {
         mWebView.getSettings().setJavaScriptEnabled(true);
 
@@ -98,6 +105,9 @@ public class ProgressWebView extends FrameLayout {
                 }
             }
         });
+
+        mWebViewClient = new ProgressWebViewClient();
+        mWebView.setWebViewClient(mWebViewClient);
     }
 
     /**
@@ -109,9 +119,24 @@ public class ProgressWebView extends FrameLayout {
         return mWebView;
     }
 
-    public void load(String url) {
+    public void loadUrl(String url) {
         if (!TextUtils.isEmpty(url) && mWebView != null) {
             mWebView.loadUrl(url);
+        }
+    }
+
+    public ProgressWebViewClient getWebViewClient() {
+        return mWebViewClient;
+    }
+
+    public void setWebViewClient(ProgressWebViewClient webViewClient) {
+        if (mWebView != null) {
+            if (webViewClient != null) {
+                mWebView.setWebViewClient(webViewClient);
+                mWebViewClient = webViewClient;
+            } else {
+                mWebView.setWebViewClient(mWebViewClient);
+            }
         }
     }
 
@@ -128,5 +153,18 @@ public class ProgressWebView extends FrameLayout {
         }
         return 0;
     }
+
+    /**
+     * 封装错误状态页面
+     */
+    class ProgressWebViewClient extends WebViewClient {
+
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+            super.onReceivedError(view, request, error);
+            Log.e(TAG, "error:" + error.toString());
+        }
+    }
+
 
 }

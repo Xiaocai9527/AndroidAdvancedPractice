@@ -76,7 +76,7 @@ public class DiskCache
     {
         if (Looper.myLooper() == Looper.getMainLooper())
         {
-            Log.w(TAG, "load bitmap from UI Thread, it's not recommended!");
+            Log.w(TAG, "loadUrl bitmap from UI Thread, it's not recommended!");
         }
         if (diskLruCache == null)
         {

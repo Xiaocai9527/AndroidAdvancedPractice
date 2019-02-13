@@ -79,7 +79,7 @@ public class FlatMap1Activity extends AppCompatActivity implements View.OnClickL
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(R.mipmap.ic_launcher);
 
-//        Glide.with(this).load(imgUrl).apply(requestOptions).into(mImageView);
+//        Glide.with(this).loadUrl(imgUrl).apply(requestOptions).into(mImageView);
 //        ImageLoader.init(this).displayImg(mImageView, imgUrl);
         ArtImageLoader.init(this).displayImg(imgUrl, mImageView);
 
