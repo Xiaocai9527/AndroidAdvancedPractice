@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 def androidRoot = rootProject.ext.android
+//apply plugin: 'com.xiaokun.plugin.publishApp'
 
 android {
     compileSdkVersion androidRoot.compileSdkVersion

@@ -14,44 +14,20 @@ buildscript {
             url "https://maven.google.com"
         }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+//        maven {
+//            url 'file:///C:/Users/mayn/Documents/localMaven/'
+//        }
 
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
-
+//        classpath 'com.xiaokun.plugin:publishApp:1.0.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
-//plugins {
-//    id "calces.appconfig" version "1.2.42"
-//}
-
 apply from: "config.gradle"
-
-//appConfig {
-//    debugEnable false
-//
-//    apps {
-//        app {
-//            mainActivity "com.xiaokun.httpexceptiondemo.ui.HomeActivity"
-//            applicationName = "com.xiaokun.httpexceptiondemo"
-//            modules ':baselib',
-//                    ':wanandroid'
-//        }
-//
-//        modules{
-//            baselib{
-//                name ':baselib'
-//            }
-//            wanandroid{
-//                name ':wanandroid'
-//            }
-//        }
-//
-//    }
-//}
 
 allprojects {
     repositories {
@@ -64,6 +40,9 @@ allprojects {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         // peidou的maven库
         maven { url "http://47.99.209.73:8011/repository/maven-releases/" }
+        maven {
+            url 'file:///C:/Users/mayn/Documents/localMaven'
+        }
     }
 }
 
