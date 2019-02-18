@@ -15,7 +15,7 @@ public class ResEntity1
     /**
      * Data : {"res":"返回成功 "}
      * Code : 1
-     * Message : ok
+     * PdMessage : ok
      */
 
     private DataBean Data;
@@ -77,7 +77,7 @@ public class ResEntity1
         return "ResEntity1{" +
                 "Data=" + Data +
                 ", Code=" + Code +
-                ", Message='" + Message + '\'' +
+                ", PdMessage='" + Message + '\'' +
                 '}';
     }
 }

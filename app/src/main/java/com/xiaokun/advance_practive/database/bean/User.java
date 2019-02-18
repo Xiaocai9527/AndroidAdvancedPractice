@@ -1,4 +1,4 @@
-package com.xiaokun.advance_practive.entity;
+package com.xiaokun.advance_practive.database.bean;
 
 /**
  * Created by 肖坤 on 2019/2/16.
@@ -9,7 +9,7 @@ package com.xiaokun.advance_practive.entity;
 
 public class User {
 
-    public int userId;
+    public long userId;
     public String nickName;
     public String phone;
     /**

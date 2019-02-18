@@ -9,7 +9,6 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.xiaokun.advance_practive.R;
-
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;

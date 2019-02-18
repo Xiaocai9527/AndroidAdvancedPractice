@@ -1,6 +1,7 @@
 package com.xiaokun.advance_practive.database.table;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -29,7 +30,7 @@ public class BaseTable {
 
     protected static String CREATE_TABLE = "";
 
-    public static String createTableSql(String tableName, HashMap<String, DataType> hashMap, String primaryKey, DataType dataType) {
+    protected static String createTableSql(String tableName, LinkedHashMap<String, DataType> hashMap, String primaryKey, DataType dataType) {
         CREATE_TABLE = "";
         CREATE_TABLE += "create table if not exists " + tableName + "(";
 

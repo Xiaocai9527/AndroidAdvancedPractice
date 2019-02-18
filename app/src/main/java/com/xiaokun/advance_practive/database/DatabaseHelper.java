@@ -6,12 +6,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.xiaokun.advance_practive.database.table.BaseTable;
-import com.xiaokun.advance_practive.database.table.ConversationBaseTable;
-import com.xiaokun.advance_practive.database.table.MessageBaseTable;
-import com.xiaokun.advance_practive.database.table.UserBaseTable;
+import com.xiaokun.advance_practive.database.table.ConversationTable;
+import com.xiaokun.advance_practive.database.table.MessageTable;
+import com.xiaokun.advance_practive.database.table.UserTable;
 import com.xiaokun.baselib.util.ContextHolder;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import static com.xiaokun.advance_practive.database.table.BaseTable.DataType.INTEGER;
 import static com.xiaokun.advance_practive.database.table.BaseTable.DataType.TEXT;
@@ -54,8 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-        db.execSQL(getUserSql());
+        db.execSQL(UserTable.getSql());
         Log.e(TAG, "用户表创建成功");
     }
 
@@ -63,39 +63,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         switch (oldVersion) {
             case 1:
-                db.execSQL(getUserSql());
+                db.execSQL(UserTable.getSql());
             case 2:
-                db.execSQL(getConversatioSql());
+                db.execSQL(ConversationTable.getSql());
             case 3:
-                db.execSQL(getMessageSql());
+                db.execSQL(MessageTable.getSql());
         }
-    }
-
-    private String getUserSql() {
-        HashMap<String, BaseTable.DataType> map = new HashMap<>();
-        map.put(UserBaseTable.NICKNAME, TEXT);
-        map.put(UserBaseTable.NAME, TEXT);
-        map.put(UserBaseTable.PHONE, TEXT);
-        map.put(UserBaseTable.GENDER, INTEGER);
-        return UserBaseTable.createTableSql(UserBaseTable.TABLE_NAME, map, UserBaseTable.ID, INTEGER);
-    }
-
-    private String getConversatioSql() {
-        HashMap<String, BaseTable.DataType> map = new HashMap<>();
-        map.put(ConversationBaseTable.AVATAR, TEXT);
-        map.put(ConversationBaseTable.TRANSFER, INTEGER);
-        map.put(ConversationBaseTable.NICKNAME, TEXT);
-        map.put(ConversationBaseTable.UPDATETIME, INTEGER);
-        map.put(ConversationBaseTable.HISTORY, INTEGER);
-        return ConversationBaseTable.createTableSql(ConversationBaseTable.TABLE_NAME, map, ConversationBaseTable.ID, INTEGER);
-    }
-
-    private String getMessageSql() {
-        HashMap<String, BaseTable.DataType> map = new HashMap<>();
-        map.put(MessageBaseTable.FROM, TEXT);
-        map.put(MessageBaseTable.TO, TEXT);
-        map.put(MessageBaseTable.TYPE, INTEGER);
-        map.put(MessageBaseTable.READ, INTEGER);
-        return MessageBaseTable.createTableSql(MessageBaseTable.TABLE_NAME, map, MessageBaseTable.ID, INTEGER);
     }
 }

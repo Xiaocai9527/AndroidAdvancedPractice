@@ -5,14 +5,18 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.database.DatabaseHelper;
+import com.xiaokun.advance_practive.database.dao.ConversationDao;
 import com.xiaokun.advance_practive.database.dao.UserDao;
-import com.xiaokun.advance_practive.entity.User;
+import com.xiaokun.advance_practive.database.bean.Conversation;
+import com.xiaokun.advance_practive.database.bean.User;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -24,6 +28,7 @@ import java.util.Random;
 
 public class DatabaseActivity extends AppCompatActivity {
 
+    private static final String TAG = "DatabaseActivity";
     private SQLiteDatabase mDb;
 
     public static void start(Context context) {
@@ -107,5 +112,35 @@ public class DatabaseActivity extends AppCompatActivity {
             }
         }
         System.out.println("/////以上为testRandom3()的测试///////");
+    }
+
+    public void addConversationDatas(View view) {
+        createDb();
+        Conversation conversation = new Conversation();
+        conversation.conversationId = testRandom1();
+        conversation.conversationType = 0;
+        conversation.conversationUserId = testRandom1();
+        conversation.history = 0;
+        conversation.lastMsgId = testRandom1();
+        conversation.transfer = 0;
+        boolean insert = ConversationDao.getInstance().insert(conversation);
+        Log.e(TAG, "addConversationDatas(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + insert);
+    }
+
+    public void queryCurrentUser(View view) {
+        createDb();
+        User user = UserDao.getInstance().queryCurrentUser();
+        Log.e(TAG, "queryCurrentUser(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" +
+                user.name + "," + user.nickName);
+    }
+
+    public void queryCurrentConversation(View view) {
+        createDb();
+        List<Conversation> conversations = ConversationDao.getInstance().queryAllConversations();
+        Log.e(TAG, "queryCurrentConversation(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + conversations.size());
+        for (Conversation conversation : conversations) {
+            Log.e(TAG, "queryCurrentConversation(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" +
+                    conversation.conversationId);
+        }
     }
 }

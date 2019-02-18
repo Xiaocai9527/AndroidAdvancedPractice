@@ -8,7 +8,7 @@ package com.xiaokun.advance_practive.database.table;
  * @date 2019/2/16
  */
 
-public class BookBaseTable extends BaseTable {
+public class BookTable extends BaseTable {
 
     /**
      * 表名
@@ -42,8 +42,6 @@ public class BookBaseTable extends BaseTable {
             PRICE + REAL_TYPE_SEP +
             PAGES + INTEGER_TYPE_SEP +
             NAME + TEXT_TYPE + ")";
-
-
 
 
 }

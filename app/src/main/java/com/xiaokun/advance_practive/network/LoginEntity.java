@@ -15,7 +15,7 @@ public class LoginEntity
     /**
      * Data : {"login":"登录成功"}
      * Code : 1
-     * Message : ok
+     * PdMessage : ok
      */
 
     private DataBean Data;

@@ -18,17 +18,39 @@
 
     <Button
         android:id="@+id/button2"
-        android:onClick="addBookDatas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="添加表数据" />
+        android:onClick="addBookDatas"
+        android:text="添加表数据"
+        android:visibility="gone" />
 
     <Button
-        android:onClick="addUserDatas"
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="addUserDatas"
         android:text="点击添加用户" />
+
+    <Button
+        android:id="@+id/button49"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="queryCurrentUser"
+        android:text="查询当前用户" />
+
+    <Button
+        android:id="@+id/button48"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="addConversationDatas"
+        android:text="点击添加会话数据" />
+
+    <Button
+        android:id="@+id/button50"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="queryCurrentConversation"
+        android:text="查询当前会话" />
 
 
 </LinearLayout>

@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.xiaokun.advance_practive.database.DatabaseHelper;
-import com.xiaokun.advance_practive.database.table.UserBaseTable;
-import com.xiaokun.advance_practive.entity.User;
+import com.xiaokun.advance_practive.database.table.UserTable;
+import com.xiaokun.advance_practive.database.bean.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +39,12 @@ public class UserDao {
     public boolean insert(User user) {
         if (delete()) {
             ContentValues values = new ContentValues();
-            values.put(UserBaseTable.ID, user.userId);
-            values.put(UserBaseTable.NAME, user.name);
-            values.put(UserBaseTable.NICKNAME, user.nickName);
-            values.put(UserBaseTable.PHONE, user.phone);
-            values.put(UserBaseTable.GENDER, user.gender);
-            long result = mDb.insert(UserBaseTable.TABLE_NAME, null, values);
+            values.put(UserTable.ID, user.userId);
+            values.put(UserTable.NAME, user.name);
+            values.put(UserTable.NICKNAME, user.nickName);
+            values.put(UserTable.PHONE, user.phone);
+            values.put(UserTable.GENDER, user.gender);
+            long result = mDb.insert(UserTable.TABLE_NAME, null, values);
             return result != -1;
         } else {
             Log.e(TAG, "数据库删除失败");
@@ -53,21 +53,21 @@ public class UserDao {
     }
 
     public boolean delete() {
-        int result = mDb.delete(UserBaseTable.TABLE_NAME, null, null);
+        int result = mDb.delete(UserTable.TABLE_NAME, null, null);
         return result != -1;
     }
 
     public User queryCurrentUser() {
-        Cursor cursor = mDb.query(UserBaseTable.TABLE_NAME, null,
+        Cursor cursor = mDb.query(UserTable.TABLE_NAME, null,
                 null, null, null, null, null);
         List<User> list = new ArrayList<>();
         while (cursor.moveToNext()) {
             User user = new User();
-            user.userId = cursor.getInt(UserBaseTable.ID_COLUMN_INDEX);
-            user.nickName = cursor.getString(UserBaseTable.NICKNAME_COLUMN_INDEX);
-            user.phone = cursor.getString(UserBaseTable.PHONE_COLUMN_INDEX);
-            user.gender = cursor.getInt(UserBaseTable.GENDER_COLUMN_INDEX);
-            user.name = cursor.getString(UserBaseTable.NAME_COLUMN_INDEX);
+            user.userId = cursor.getLong(UserTable.ID_COLUMN_INDEX);
+            user.nickName = cursor.getString(UserTable.NICKNAME_COLUMN_INDEX);
+            user.phone = cursor.getString(UserTable.PHONE_COLUMN_INDEX);
+            user.gender = cursor.getInt(UserTable.GENDER_COLUMN_INDEX);
+            user.name = cursor.getString(UserTable.NAME_COLUMN_INDEX);
             list.add(user);
         }
         cursor.close();
