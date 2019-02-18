@@ -80,11 +80,9 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHodler> implemen
         mContext = parent.getContext();
         View itemView = LayoutInflater.from(mContext).inflate(viewType, parent, false);
 
-        if (mFooterHolder != null) {
-            if (mFooterHolder.getLayoutRes() == viewType) {
-                return mFooterHolder;
-            }
-        } else {
+        if (mFooterHolder != null && mFooterHolder.getLayoutRes() == viewType) {
+            return mFooterHolder;
+        } else if (mFooterHolder == null && mIsShowFooter) {
             mFooterHolder = new FooterHodler(itemView, this);
             if (FooterHodler.TYPE_FOOTER == viewType) {
                 return mFooterHolder;

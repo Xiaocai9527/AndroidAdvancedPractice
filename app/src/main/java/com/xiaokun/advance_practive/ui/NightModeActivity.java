@@ -138,8 +138,6 @@ public class NightModeActivity extends AppCompatActivity {
         HolderFactoryList instance = HolderFactoryList.getInstance();
         new BaseMultiHodler<CategoryResEntity.ResultsBean>(LayoutInflater.from(this).inflate(NightModeHolder.TYPE_FOOTER, mNightRv, false)) {
 
-
-
             @Override
             public void bind(CategoryResEntity.ResultsBean multiItem) {
 
@@ -147,7 +145,7 @@ public class NightModeActivity extends AppCompatActivity {
         };
         instance.addTypeHolder(NightModeHolder.class, R.layout.item_other);
         mMultiAdapter = new MultiAdapter(instance);
-        mMultiAdapter.isShowFooterView(true);
+        mMultiAdapter.isShowFooterView(false);
         mNightRv.setAdapter(mMultiAdapter);
         mNightRv.addOnScrollListener(new EndlessRecyclerViewScrollListener(manager) {
             @Override
