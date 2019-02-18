@@ -5,17 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.xiaokun.advance_practive.database.table.BaseTable;
 import com.xiaokun.advance_practive.database.table.ConversationTable;
 import com.xiaokun.advance_practive.database.table.MessageTable;
 import com.xiaokun.advance_practive.database.table.UserTable;
 import com.xiaokun.baselib.util.ContextHolder;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
-import static com.xiaokun.advance_practive.database.table.BaseTable.DataType.INTEGER;
-import static com.xiaokun.advance_practive.database.table.BaseTable.DataType.TEXT;
 
 /**
  * Created by 肖坤 on 2019/2/16.
@@ -46,7 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    public static SQLiteDatabase getDatabase() {
+    public static synchronized SQLiteDatabase getDatabase() {
         if (mDb == null) {
             mDb = getInstance().getWritableDatabase();
         }
@@ -68,6 +61,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.execSQL(ConversationTable.getSql());
             case 3:
                 db.execSQL(MessageTable.getSql());
+        }
+    }
+
+    /**
+     * 不用的时候关闭掉,一般在onStop或者onDestroy方法中调用此方法
+     */
+    public static synchronized void closeDatabase() {
+        if (mDb != null) {
+            mDb.close();
         }
     }
 }

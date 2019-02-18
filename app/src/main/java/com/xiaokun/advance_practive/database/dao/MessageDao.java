@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.xiaokun.advance_practive.database.DatabaseHelper;
 import com.xiaokun.advance_practive.database.bean.PdMessage;
 import com.xiaokun.advance_practive.database.table.MessageTable;
-import com.xiaokun.advance_practive.database.table.UserTable;
 
 import java.util.List;
 
@@ -23,8 +22,17 @@ public class MessageDao {
 
     private SQLiteDatabase mDb;
 
-    public MessageDao() {
+    private MessageDao() {
         mDb = DatabaseHelper.getDatabase();
+
+    }
+
+    public static MessageDao getInstance() {
+        return MessageDaoHolder.sInstance;
+    }
+
+    private static class MessageDaoHolder {
+        private static final MessageDao sInstance = new MessageDao();
     }
 
     public boolean insertMsg(PdMessage pdMessage) {
@@ -48,22 +56,7 @@ public class MessageDao {
             return false;
         }
         for (PdMessage pdMessage : pdMessages) {
-            if (insertMsg(pdMessage)) {
-
-            }
-            ContentValues values = new ContentValues();
-            values.put(MessageTable.ID, pdMessage.imMsgId);
-            values.put(MessageTable.FROM, pdMessage.msgSender);
-            values.put(MessageTable.TO, pdMessage.msgReceiver);
-            values.put(MessageTable.TYPE, pdMessage.msgType);
-            values.put(MessageTable.READ, pdMessage.read);
-            values.put(MessageTable.CONVERSATION_ID, pdMessage.sessionId);
-            values.put(MessageTable.CONTENT, pdMessage.msgContent);
-            values.put(MessageTable.CHAT_TYPE, pdMessage.msgChatType.type);
-            values.put(MessageTable.DIRECTION, pdMessage.msgDirection.direction);
-            values.put(MessageTable.STATUS, pdMessage.msgStatus.status);
-            long result = mDb.insert(MessageTable.TABLE_NAME, null, values);
-            if (result == -1) {
+            if (!insertMsg(pdMessage)) {
                 return false;
             }
         }

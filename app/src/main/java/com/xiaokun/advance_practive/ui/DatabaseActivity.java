@@ -10,14 +10,17 @@ import android.view.View;
 
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.database.DatabaseHelper;
-import com.xiaokun.advance_practive.database.dao.ConversationDao;
-import com.xiaokun.advance_practive.database.dao.UserDao;
 import com.xiaokun.advance_practive.database.bean.Conversation;
+import com.xiaokun.advance_practive.database.bean.PdMessage;
 import com.xiaokun.advance_practive.database.bean.User;
+import com.xiaokun.advance_practive.database.dao.ConversationDao;
+import com.xiaokun.advance_practive.database.dao.MessageDao;
+import com.xiaokun.advance_practive.database.dao.UserDao;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
+import static com.xiaokun.baselib.util.Utils.testRandom1;
 
 /**
  * Created by 肖坤 on 2019/2/17.
@@ -60,7 +63,6 @@ public class DatabaseActivity extends AppCompatActivity {
                 "values(\"第二行代码\", \"郭霖\", \"100\", \"56\")");
     }
 
-
     public void addUserDatas(View view) {
         createDb();
         User user = new User();
@@ -70,48 +72,6 @@ public class DatabaseActivity extends AppCompatActivity {
         user.nickName = "小菜";
         user.name = "肖坤";
         UserDao.getInstance().insert(user);
-    }
-
-    //生成随机数
-    private int testRandom1() {
-        Random random = new Random();
-        for (int i = 0; i < 5; i++) {
-            System.out.println("random.nextInt()=" + random.nextInt());
-        }
-        System.out.println("/////以上为testRandom1()的测试///////");
-        return random.nextInt();
-    }
-
-
-    //在一定范围内生成随机数.
-    //比如此处要求在[0 - n)内生成随机数.
-    //注意:包含0不包含n
-    private void testRandom2() {
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            System.out.println("random.nextInt()=" + random.nextInt(20));
-        }
-        System.out.println("/////以上为testRandom2()的测试///////");
-    }
-
-
-    //在一定范围内生成不重复的随机数
-    //在testRandom2中生成的随机数可能会重复.
-    //在此处避免该问题
-    private void testRandom3() {
-        HashSet<Integer> integerHashSet = new HashSet<Integer>();
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            int randomInt = random.nextInt(20);
-            System.out.println("生成的randomInt=" + randomInt);
-            if (!integerHashSet.contains(randomInt)) {
-                integerHashSet.add(randomInt);
-                System.out.println("添加进HashSet的randomInt=" + randomInt);
-            } else {
-                System.out.println("该数字已经被添加,不能重复添加");
-            }
-        }
-        System.out.println("/////以上为testRandom3()的测试///////");
     }
 
     public void addConversationDatas(View view) {
@@ -135,6 +95,7 @@ public class DatabaseActivity extends AppCompatActivity {
     }
 
     public void queryCurrentConversation(View view) {
+        //837976333
         createDb();
         List<Conversation> conversations = ConversationDao.getInstance().queryAllConversations();
         Log.e(TAG, "queryCurrentConversation(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + conversations.size());
@@ -142,5 +103,70 @@ public class DatabaseActivity extends AppCompatActivity {
             Log.e(TAG, "queryCurrentConversation(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" +
                     conversation.conversationId);
         }
+    }
+
+    public void deleteCurrentConversation(View view) {
+        createDb();
+        boolean result = ConversationDao.getInstance().deleteById(837976333);
+        Log.e(TAG, "result:" + result);
+    }
+
+    public void addMsg(View view) {
+        createDb();
+        PdMessage msg = getMsg();
+        //-1316820833
+        Log.e(TAG, "msgId:" + msg.imMsgId);
+        MessageDao.getInstance().insertMsg(msg);
+    }
+
+    private PdMessage getMsg() {
+        PdMessage pdMessage = new PdMessage();
+        pdMessage.imMsgId = testRandom1();
+        pdMessage.tenantId = testRandom1();
+        pdMessage.businessId = testRandom1();
+        pdMessage.sessionId = testRandom1();
+        pdMessage.sendTime = System.currentTimeMillis();
+        pdMessage.msgType = 1;
+        pdMessage.msgSender = "肖坤";
+        pdMessage.msgReceiver = "小菜";
+        pdMessage.read = 0;
+        pdMessage.msgContent = "你好我是小菜";
+        pdMessage.msgChatType = PdMessage.PDAChatType.SINGLE;
+        pdMessage.msgDirection = PdMessage.PDADirection.SEND;
+        pdMessage.msgStatus = PdMessage.PDAMessageStatus.SUCCESS;
+        return pdMessage;
+    }
+
+
+    public void addMsgs(View view) {
+        createDb();
+        List<PdMessage> pdMessages = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            pdMessages.add(getMsg());
+        }
+        MessageDao.getInstance().insertMsgs(pdMessages);
+    }
+
+    public void updateMsg(View view) {
+        createDb();
+        PdMessage pdMessage = new PdMessage();
+        pdMessage.imMsgId = -1316820833;
+        pdMessage.tenantId = testRandom1();
+        pdMessage.businessId = testRandom1();
+        pdMessage.sessionId = testRandom1();
+        pdMessage.sendTime = System.currentTimeMillis();
+        pdMessage.msgType = 1;
+        pdMessage.msgSender = "肖坤-更新";
+        pdMessage.msgReceiver = "小菜-更新";
+        pdMessage.read = 0;
+        pdMessage.msgContent = "你好我是小菜-更新";
+        pdMessage.msgChatType = PdMessage.PDAChatType.SINGLE;
+        pdMessage.msgDirection = PdMessage.PDADirection.SEND;
+        pdMessage.msgStatus = PdMessage.PDAMessageStatus.SUCCESS;
+        MessageDao.getInstance().updateMsg(pdMessage);
+    }
+
+    public void queryMsg(View view) {
+
     }
 }

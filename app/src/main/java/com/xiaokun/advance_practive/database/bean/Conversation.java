@@ -21,5 +21,10 @@ public class Conversation {
     public int conversationType;
     //会话用户id
     public long conversationUserId;
+    //对方用户昵称
+    public String nickName;
+    //对方用户头像url
+    public String avatar;
+
 
 }

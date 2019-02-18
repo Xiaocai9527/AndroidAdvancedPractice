@@ -97,7 +97,8 @@ public class PdMessage {
         //
         SINGLE(1, "单聊"),
         GROUP(2, "群聊"),
-        CHAT_ROOM(3, "聊天室");
+        WECHAT(3, "公众号"),
+        CHAT_ROOM(4, "聊天室");
 
         public int type;
         public String desc;

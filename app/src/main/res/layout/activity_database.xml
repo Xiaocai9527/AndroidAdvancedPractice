@@ -52,5 +52,39 @@
         android:onClick="queryCurrentConversation"
         android:text="查询当前会话" />
 
+    <Button
+        android:id="@+id/button51"
+        android:onClick="deleteCurrentConversation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="删除当前会话" />
+
+    <Button
+        android:id="@+id/button52"
+        android:onClick="addMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="添加消息" />
+
+    <Button
+        android:id="@+id/button53"
+        android:onClick="queryMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="随机查询消息" />
+
+    <Button
+        android:id="@+id/button54"
+        android:onClick="updateMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="更新消息" />
+
+    <Button
+        android:onClick="addMsgs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="批量添加消息" />
+
 
 </LinearLayout>

@@ -35,6 +35,10 @@ public class ConversationTable extends BaseTable {
     public static final String CONVERSATION_TYPE = "conversation_type";
     //会话用户id
     public static final String CONVERSATION_USER_ID = "conversation_user_id";
+    //对方的用户昵称
+    public static final String NICK_NAME = "nick_name";
+    //对方的用户头像
+    public static final String AVATAR = "avatar";
 
     /**
      * 字段对应的columnIndex
@@ -45,6 +49,8 @@ public class ConversationTable extends BaseTable {
     public static final int LAST_MSG_ID_COLUMN_INDEX = 3;
     public static final int CONVERSATION_TYPE_COLUMN_INDEX = 4;
     public static final int CONVERSATION_USER_ID_COLUMN_INDEX = 5;
+    public static final int NICK_NAME_COLUMN_INDEX = 6;
+    public static final int AVATAR_COLUMN_INDEX = 7;
 
     public static LinkedHashMap<String, DataType> map = new LinkedHashMap<>();
 
@@ -54,6 +60,8 @@ public class ConversationTable extends BaseTable {
         map.put(ConversationTable.LAST_MSG_ID, INTEGER);
         map.put(ConversationTable.CONVERSATION_TYPE, TEXT);
         map.put(ConversationTable.CONVERSATION_USER_ID, INTEGER);
+        map.put(ConversationTable.NICK_NAME, TEXT);
+        map.put(ConversationTable.AVATAR, TEXT);
     }
 
     /**

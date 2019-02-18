@@ -65,6 +65,8 @@ public class ConversationDao {
             conversation.lastMsgId = cursor.getLong(ConversationTable.LAST_MSG_ID_COLUMN_INDEX);
             conversation.conversationType = cursor.getInt(ConversationTable.CONVERSATION_TYPE_COLUMN_INDEX);
             conversation.conversationUserId = cursor.getLong(ConversationTable.CONVERSATION_USER_ID_COLUMN_INDEX);
+            conversation.nickName = cursor.getString(ConversationTable.NICK_NAME_COLUMN_INDEX);
+            conversation.avatar = cursor.getString(ConversationTable.AVATAR_COLUMN_INDEX);
             conversations.add(conversation);
         }
         cursor.close();
