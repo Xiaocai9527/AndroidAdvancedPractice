@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.DatabaseActivity">
+
+    <Button
+        android:id="@+id/btn_create_book"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="createBook"
+        android:text="创建数据库并建表"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:onClick="addBookDatas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="添加表数据" />
+
+    <Button
+        android:onClick="addUserDatas"
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="点击添加用户" />
+
+
+</LinearLayout>
