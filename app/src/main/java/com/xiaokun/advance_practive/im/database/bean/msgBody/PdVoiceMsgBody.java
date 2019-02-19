@@ -1,4 +1,4 @@
-package com.xiaokun.advance_practive.database.bean;
+package com.xiaokun.advance_practive.im.database.bean.msgBody;
 
 /**
  * <pre>
@@ -8,8 +8,7 @@ package com.xiaokun.advance_practive.database.bean;
  *      版本  ：1.0
  * </pre>
  */
-public class PdTextMsgBody extends PdMsgBody {
-
+public class PdVoiceMsgBody extends PdFileMsgBody {
 
 
 }

@@ -1,13 +1,13 @@
-package com.xiaokun.advance_practive.database;
+package com.xiaokun.advance_practive.im.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.xiaokun.advance_practive.database.table.ConversationTable;
-import com.xiaokun.advance_practive.database.table.MessageTable;
-import com.xiaokun.advance_practive.database.table.UserTable;
+import com.xiaokun.advance_practive.im.database.table.ConversationTable;
+import com.xiaokun.advance_practive.im.database.table.MessageTable;
+import com.xiaokun.advance_practive.im.database.table.UserTable;
 import com.xiaokun.baselib.util.ContextHolder;
 
 /**

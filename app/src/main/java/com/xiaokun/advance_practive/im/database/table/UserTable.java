@@ -1,10 +1,10 @@
-package com.xiaokun.advance_practive.database.table;
+package com.xiaokun.advance_practive.im.database.table;
 
 
 import java.util.LinkedHashMap;
 
-import static com.xiaokun.advance_practive.database.table.BaseTable.DataType.INTEGER;
-import static com.xiaokun.advance_practive.database.table.BaseTable.DataType.TEXT;
+import static com.xiaokun.advance_practive.im.database.table.BaseTable.DataType.INTEGER;
+import static com.xiaokun.advance_practive.im.database.table.BaseTable.DataType.TEXT;
 
 /**
  * Created by 肖坤 on 2019/2/16.
@@ -57,7 +57,7 @@ public class UserTable extends BaseTable {
      * @return
      */
     public static String getSql() {
-        return createTableSql(TABLE_NAME, map, ID, INTEGER);
+        return createTableSql(TABLE_NAME, map, ID, TEXT);
     }
 
     /**

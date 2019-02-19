@@ -1,4 +1,4 @@
-package com.xiaokun.advance_practive.database.bean;
+package com.xiaokun.advance_practive.im.database.bean;
 
 /**
  * Created by 肖坤 on 2019/2/16.
@@ -9,7 +9,7 @@ package com.xiaokun.advance_practive.database.bean;
 
 public class User {
 
-    public long userId;
+    private long userId = 1;
     public String nickName;
     public String phone;
     /**
@@ -17,5 +17,13 @@ public class User {
      */
     public int gender;
     public String name;
+
+    public User() {
+        userId = 1;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
 
 }

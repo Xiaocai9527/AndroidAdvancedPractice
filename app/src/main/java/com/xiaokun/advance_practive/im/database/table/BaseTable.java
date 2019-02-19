@@ -1,4 +1,4 @@
-package com.xiaokun.advance_practive.database.table;
+package com.xiaokun.advance_practive.im.database.table;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -34,7 +34,12 @@ public class BaseTable {
         CREATE_TABLE = "";
         CREATE_TABLE += "create table if not exists " + tableName + "(";
 
-        CREATE_TABLE += primaryKey + getResultByType(dataType) + PRIMARY_KEY + AUTOINCREMENT + COMMA_SEP;
+        if (DataType.INTEGER == dataType) {
+            //只有整型时才自增
+            CREATE_TABLE += primaryKey + getResultByType(dataType) + PRIMARY_KEY + AUTOINCREMENT + COMMA_SEP;
+        } else {
+            CREATE_TABLE += primaryKey + getResultByType(dataType) + PRIMARY_KEY + COMMA_SEP;
+        }
 
         for (Map.Entry<String, DataType> entry : hashMap.entrySet()) {
             String key = entry.getKey();

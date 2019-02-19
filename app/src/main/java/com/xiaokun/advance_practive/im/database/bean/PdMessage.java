@@ -1,6 +1,7 @@
-package com.xiaokun.advance_practive.database.bean;
+package com.xiaokun.advance_practive.im.database.bean;
 
 import com.google.gson.Gson;
+import com.xiaokun.advance_practive.im.database.bean.msgBody.PdMsgBody;
 
 /**
  * <pre>
@@ -11,7 +12,7 @@ import com.google.gson.Gson;
  * </pre>
  */
 public class PdMessage {
-    public long imMsgId;
+    public String imMsgId;
     //租户id
     public long tenantId;
     public long businessId;
@@ -40,12 +41,12 @@ public class PdMessage {
     //消息内容
     public String msgContent;
     public PdMsgBody pdMsgBody;
-    //单聊-群聊-聊天室
-    public PDAChatType msgChatType;
+    //单聊-群聊-聊天室-公众号
+    public PDChatType msgChatType;
     //消息方向
-    public PDADirection msgDirection;
+    public PDDirection msgDirection;
     //消息状态
-    public PDAMessageStatus msgStatus;
+    public PDMessageStatus msgStatus;
 
     public void addBody(PdMsgBody pdMsgBody) {
         this.pdMsgBody = pdMsgBody;
@@ -56,7 +57,7 @@ public class PdMessage {
     /**
      * 消息方向
      */
-    public enum PDADirection {
+    public enum PDDirection {
         //
         SEND(1, "发送"),
         RECEIVE(2, "接收");
@@ -64,7 +65,7 @@ public class PdMessage {
         public int direction;
         public String desc;
 
-        PDADirection(int direction, String desc) {
+        PDDirection(int direction, String desc) {
             this.direction = direction;
             this.desc = desc;
         }
@@ -73,7 +74,7 @@ public class PdMessage {
     /**
      * 消息状态
      */
-    public enum PDAMessageStatus {
+    public enum PDMessageStatus {
         //
         INVAILD(0, "无法识别"),
         NEW(1, "新消息"),
@@ -84,7 +85,7 @@ public class PdMessage {
         public int status;
         public String desc;
 
-        PDAMessageStatus(int status, String desc) {
+        PDMessageStatus(int status, String desc) {
             this.status = status;
             this.desc = desc;
         }
@@ -93,7 +94,7 @@ public class PdMessage {
     /**
      * 消息聊天类型
      */
-    public enum PDAChatType {
+    public enum PDChatType {
         //
         SINGLE(1, "单聊"),
         GROUP(2, "群聊"),
@@ -103,15 +104,15 @@ public class PdMessage {
         public int type;
         public String desc;
 
-        PDAChatType(int type, String desc) {
+        PDChatType(int type, String desc) {
             this.type = type;
             this.desc = desc;
         }
     }
 
     private void a() {
-        PDADirection b = PDADirection.SEND;
-        if (b == PDADirection.SEND) {
+        PDDirection b = PDDirection.SEND;
+        if (b == PDDirection.SEND) {
 
         }
     }

@@ -1,4 +1,4 @@
-package com.xiaokun.advance_practive.database.bean;
+package com.xiaokun.advance_practive.im.database.bean;
 
 /**
  * <pre>
@@ -8,7 +8,7 @@ package com.xiaokun.advance_practive.database.bean;
  *      版本  ：1.0
  * </pre>
  */
-public class Conversation {
+public class PdConversation {
 
     public long conversationId;
     //是否转接
@@ -25,6 +25,7 @@ public class Conversation {
     public String nickName;
     //对方用户头像url
     public String avatar;
-
+    //对方用户im账号
+    public String imUserId;
 
 }

@@ -1,10 +1,10 @@
-package com.xiaokun.advance_practive.database.table;
+package com.xiaokun.advance_practive.im.database.table;
 
 
 import java.util.LinkedHashMap;
 
-import static com.xiaokun.advance_practive.database.table.BaseTable.DataType.INTEGER;
-import static com.xiaokun.advance_practive.database.table.BaseTable.DataType.TEXT;
+import static com.xiaokun.advance_practive.im.database.table.BaseTable.DataType.INTEGER;
+import static com.xiaokun.advance_practive.im.database.table.BaseTable.DataType.TEXT;
 
 /**
  * Created by 肖坤 on 2019/2/16.
@@ -24,6 +24,9 @@ public class ConversationTable extends BaseTable {
     /**
      * 表字段
      */
+    //对方的im账号(根据这个字段和会话类型字段来查会话)主键
+    public static final String TO_CHAT_USER_IM_ID = "to_chat_user_im_id";
+    //会话id,考虑到客户端和服务端都要创建会话,此字段不作为主键
     public static final String ID = "conversationid";
     //会话业务类型-普通/转接
     public static final String TRANSFER = "transfer";
@@ -40,21 +43,25 @@ public class ConversationTable extends BaseTable {
     //对方的用户头像
     public static final String AVATAR = "avatar";
 
+
     /**
      * 字段对应的columnIndex
      */
-    public static final int ID_COLUMN_INDEX = 0;
-    public static final int TRANSFER_COLUMN_INDEX = 1;
-    public static final int HISTORY_COLUMN_INDEX = 2;
-    public static final int LAST_MSG_ID_COLUMN_INDEX = 3;
-    public static final int CONVERSATION_TYPE_COLUMN_INDEX = 4;
-    public static final int CONVERSATION_USER_ID_COLUMN_INDEX = 5;
-    public static final int NICK_NAME_COLUMN_INDEX = 6;
-    public static final int AVATAR_COLUMN_INDEX = 7;
+    public static final int TO_CHAT_USER_IM_ID_COLUMN_INDEX = 0;
+    public static final int ID_COLUMN_INDEX = 1;
+    public static final int TRANSFER_COLUMN_INDEX = 2;
+    public static final int HISTORY_COLUMN_INDEX = 3;
+    public static final int LAST_MSG_ID_COLUMN_INDEX = 4;
+    public static final int CONVERSATION_TYPE_COLUMN_INDEX = 5;
+    public static final int CONVERSATION_USER_ID_COLUMN_INDEX = 6;
+    public static final int NICK_NAME_COLUMN_INDEX = 7;
+    public static final int AVATAR_COLUMN_INDEX = 8;
+
 
     public static LinkedHashMap<String, DataType> map = new LinkedHashMap<>();
 
     static {
+        map.put(ConversationTable.ID, INTEGER);
         map.put(ConversationTable.TRANSFER, INTEGER);
         map.put(ConversationTable.HISTORY, INTEGER);
         map.put(ConversationTable.LAST_MSG_ID, INTEGER);
@@ -70,7 +77,7 @@ public class ConversationTable extends BaseTable {
      * @return
      */
     public static String getSql() {
-        return createTableSql(TABLE_NAME, map, ID, INTEGER);
+        return createTableSql(TABLE_NAME, map, TO_CHAT_USER_IM_ID, TEXT);
     }
 
     /**

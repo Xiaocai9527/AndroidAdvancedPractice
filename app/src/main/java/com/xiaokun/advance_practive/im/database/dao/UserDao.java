@@ -1,13 +1,13 @@
-package com.xiaokun.advance_practive.database.dao;
+package com.xiaokun.advance_practive.im.database.dao;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.xiaokun.advance_practive.database.DatabaseHelper;
-import com.xiaokun.advance_practive.database.table.UserTable;
-import com.xiaokun.advance_practive.database.bean.User;
+import com.xiaokun.advance_practive.im.database.DatabaseHelper;
+import com.xiaokun.advance_practive.im.database.table.UserTable;
+import com.xiaokun.advance_practive.im.database.bean.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,22 +37,20 @@ public class UserDao {
     }
 
     public boolean insert(User user) {
-        if (delete()) {
-            ContentValues values = new ContentValues();
-            values.put(UserTable.ID, user.userId);
-            values.put(UserTable.NAME, user.name);
-            values.put(UserTable.NICKNAME, user.nickName);
-            values.put(UserTable.PHONE, user.phone);
-            values.put(UserTable.GENDER, user.gender);
-            long result = mDb.insert(UserTable.TABLE_NAME, null, values);
-            return result != -1;
-        } else {
-            Log.e(TAG, "数据库删除失败");
+        if (user == null) {
             return false;
         }
+        ContentValues values = new ContentValues();
+        values.put(UserTable.ID, user.getUserId());
+        values.put(UserTable.NAME, user.name);
+        values.put(UserTable.NICKNAME, user.nickName);
+        values.put(UserTable.PHONE, user.phone);
+        values.put(UserTable.GENDER, user.gender);
+        long result = mDb.replace(UserTable.TABLE_NAME, null, values);
+        return result != -1;
     }
 
-    public boolean delete() {
+    public boolean deleteAll() {
         int result = mDb.delete(UserTable.TABLE_NAME, null, null);
         return result != -1;
     }
@@ -63,7 +61,6 @@ public class UserDao {
         List<User> list = new ArrayList<>();
         while (cursor.moveToNext()) {
             User user = new User();
-            user.userId = cursor.getLong(UserTable.ID_COLUMN_INDEX);
             user.nickName = cursor.getString(UserTable.NICKNAME_COLUMN_INDEX);
             user.phone = cursor.getString(UserTable.PHONE_COLUMN_INDEX);
             user.gender = cursor.getInt(UserTable.GENDER_COLUMN_INDEX);

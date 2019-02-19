@@ -1,10 +1,10 @@
-package com.xiaokun.advance_practive.database.table;
+package com.xiaokun.advance_practive.im.database.table;
 
 
 import java.util.LinkedHashMap;
 
-import static com.xiaokun.advance_practive.database.table.BaseTable.DataType.INTEGER;
-import static com.xiaokun.advance_practive.database.table.BaseTable.DataType.TEXT;
+import static com.xiaokun.advance_practive.im.database.table.BaseTable.DataType.INTEGER;
+import static com.xiaokun.advance_practive.im.database.table.BaseTable.DataType.TEXT;
 
 /**
  * Created by 肖坤 on 2019/2/16.
@@ -64,10 +64,10 @@ public class MessageTable extends BaseTable {
     public static final int TYPE_COLUMN_INDEX = 3;
     public static final int READ_COLUMN_INDEX = 4;
     public static final int CONVERSATION_ID_COLUMN_INDEX = 5;
-    public static final int CONTENT_ID_COLUMN_INDEX = 6;
-    public static final int CHAT_TYPE_ID_COLUMN_INDEX = 7;
-    public static final int DIRECTION_ID_COLUMN_INDEX = 8;
-    public static final int STATUS_ID_COLUMN_INDEX = 9;
+    public static final int CONTENT_COLUMN_INDEX = 6;
+    public static final int CHAT_TYPE_COLUMN_INDEX = 7;
+    public static final int DIRECTION_COLUMN_INDEX = 8;
+    public static final int STATUS_COLUMN_INDEX = 9;
 
     public static LinkedHashMap<String, DataType> map = new LinkedHashMap<>();
 
@@ -89,7 +89,7 @@ public class MessageTable extends BaseTable {
      * @return
      */
     public static String getSql() {
-        return createTableSql(TABLE_NAME, map, ID, INTEGER);
+        return createTableSql(TABLE_NAME, map, ID, TEXT);
     }
 
     /**

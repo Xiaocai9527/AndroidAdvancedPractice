@@ -1,9 +1,9 @@
-package com.xiaokun.advance_practive.database.table;
+package com.xiaokun.advance_practive.im.database.table;
 
 import java.util.LinkedHashMap;
 
-import static com.xiaokun.advance_practive.database.table.BaseTable.DataType.INTEGER;
-import static com.xiaokun.advance_practive.database.table.BaseTable.DataType.TEXT;
+import static com.xiaokun.advance_practive.im.database.table.BaseTable.DataType.INTEGER;
+import static com.xiaokun.advance_practive.im.database.table.BaseTable.DataType.TEXT;
 
 /**
  * <pre>

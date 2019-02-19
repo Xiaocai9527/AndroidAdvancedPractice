@@ -1,12 +1,12 @@
-package com.xiaokun.advance_practive.database.dao;
+package com.xiaokun.advance_practive.im.database.dao;
 
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.xiaokun.advance_practive.database.DatabaseHelper;
-import com.xiaokun.advance_practive.database.bean.PdMessage;
-import com.xiaokun.advance_practive.database.table.MessageTable;
+import com.xiaokun.advance_practive.im.database.DatabaseHelper;
+import com.xiaokun.advance_practive.im.database.bean.PdMessage;
+import com.xiaokun.advance_practive.im.database.table.MessageTable;
 
 import java.util.List;
 
@@ -36,6 +36,9 @@ public class MessageDao {
     }
 
     public boolean insertMsg(PdMessage pdMessage) {
+        if (pdMessage == null) {
+            return false;
+        }
         ContentValues values = new ContentValues();
         values.put(MessageTable.ID, pdMessage.imMsgId);
         values.put(MessageTable.FROM, pdMessage.msgSender);
@@ -64,6 +67,9 @@ public class MessageDao {
     }
 
     public boolean updateMsg(PdMessage pdMessage) {
+        if (pdMessage == null) {
+            return false;
+        }
         ContentValues values = new ContentValues();
         values.put(MessageTable.ID, pdMessage.imMsgId);
         values.put(MessageTable.FROM, pdMessage.msgSender);
@@ -76,8 +82,20 @@ public class MessageDao {
         values.put(MessageTable.DIRECTION, pdMessage.msgDirection.direction);
         values.put(MessageTable.STATUS, pdMessage.msgStatus.status);
 
-        int result = mDb.update(MessageTable.TABLE_NAME, values, MessageTable.ID + "=?", new String[]{pdMessage.imMsgId + ""});
-        return result != -1;
+        int result = mDb.update(MessageTable.TABLE_NAME, values, MessageTable.ID + "=?", new String[]{pdMessage.imMsgId});
+        return result > 0;
+    }
+
+    public boolean deleteMsg(PdMessage pdMessage) {
+        if (pdMessage == null) {
+            return false;
+        }
+        return deleteMsgById(pdMessage.businessId);
+    }
+
+    public boolean deleteMsgById(long pdMessageId) {
+        int result = mDb.delete(MessageTable.TABLE_NAME, MessageTable.ID + "=?", new String[]{pdMessageId + ""});
+        return result != 0;
     }
 
 }

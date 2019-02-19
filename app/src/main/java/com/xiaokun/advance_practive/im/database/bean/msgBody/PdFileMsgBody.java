@@ -1,4 +1,4 @@
-package com.xiaokun.advance_practive.database.bean;
+package com.xiaokun.advance_practive.im.database.bean.msgBody;
 
 /**
  * <pre>

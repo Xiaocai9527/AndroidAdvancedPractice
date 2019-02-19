@@ -9,17 +9,21 @@ import android.util.Log;
 import android.view.View;
 
 import com.xiaokun.advance_practive.R;
-import com.xiaokun.advance_practive.database.DatabaseHelper;
-import com.xiaokun.advance_practive.database.bean.Conversation;
-import com.xiaokun.advance_practive.database.bean.PdMessage;
-import com.xiaokun.advance_practive.database.bean.User;
-import com.xiaokun.advance_practive.database.dao.ConversationDao;
-import com.xiaokun.advance_practive.database.dao.MessageDao;
-import com.xiaokun.advance_practive.database.dao.UserDao;
+import com.xiaokun.advance_practive.im.PdIMClient;
+import com.xiaokun.advance_practive.im.PdOptions;
+import com.xiaokun.advance_practive.im.database.DatabaseHelper;
+import com.xiaokun.advance_practive.im.database.bean.PdConversation;
+import com.xiaokun.advance_practive.im.database.bean.PdMessage;
+import com.xiaokun.advance_practive.im.database.bean.User;
+import com.xiaokun.advance_practive.im.database.dao.ConversationDao;
+import com.xiaokun.advance_practive.im.database.dao.MessageDao;
+import com.xiaokun.advance_practive.im.database.dao.UserDao;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.xiaokun.baselib.util.Utils.getRandomString;
+import static com.xiaokun.baselib.util.Utils.getTel;
 import static com.xiaokun.baselib.util.Utils.testRandom1;
 
 /**
@@ -43,6 +47,9 @@ public class DatabaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database);
+        PdOptions pdOptions = new PdOptions();
+        pdOptions.setAppKey("12345678");
+        PdIMClient.getInstance().init(this, pdOptions);
     }
 
     private void createDb() {
@@ -66,24 +73,28 @@ public class DatabaseActivity extends AppCompatActivity {
     public void addUserDatas(View view) {
         createDb();
         User user = new User();
-        user.userId = testRandom1();
         user.gender = 0;
-        user.phone = "13812341234";
-        user.nickName = "小菜";
+        user.phone = getTel();
+        user.nickName = getRandomString(2);
         user.name = "肖坤";
         UserDao.getInstance().insert(user);
     }
 
     public void addConversationDatas(View view) {
         createDb();
-        Conversation conversation = new Conversation();
-        conversation.conversationId = testRandom1();
-        conversation.conversationType = 0;
-        conversation.conversationUserId = testRandom1();
-        conversation.history = 0;
-        conversation.lastMsgId = testRandom1();
-        conversation.transfer = 0;
-        boolean insert = ConversationDao.getInstance().insert(conversation);
+        PdConversation pdConversation = new PdConversation();
+        //4FNTMPaP
+        pdConversation.imUserId = getRandomString(8);
+        pdConversation.imUserId = "4FNTMPaP";
+        pdConversation.conversationId = testRandom1();
+        pdConversation.conversationType = 0;
+        pdConversation.conversationUserId = testRandom1();
+        pdConversation.history = 0;
+        pdConversation.lastMsgId = testRandom1();
+        pdConversation.transfer = 0;
+        pdConversation.nickName = getRandomString(2);
+        pdConversation.avatar = "http://" + getRandomString(10);
+        boolean insert = ConversationDao.getInstance().insert(pdConversation);
         Log.e(TAG, "addConversationDatas(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + insert);
     }
 
@@ -97,11 +108,11 @@ public class DatabaseActivity extends AppCompatActivity {
     public void queryCurrentConversation(View view) {
         //837976333
         createDb();
-        List<Conversation> conversations = ConversationDao.getInstance().queryAllConversations();
-        Log.e(TAG, "queryCurrentConversation(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + conversations.size());
-        for (Conversation conversation : conversations) {
+        List<PdConversation> pdConversations = ConversationDao.getInstance().queryAllConversations();
+        Log.e(TAG, "queryCurrentConversation(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + pdConversations.size());
+        for (PdConversation pdConversation : pdConversations) {
             Log.e(TAG, "queryCurrentConversation(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" +
-                    conversation.conversationId);
+                    pdConversation.conversationId);
         }
     }
 
@@ -114,14 +125,14 @@ public class DatabaseActivity extends AppCompatActivity {
     public void addMsg(View view) {
         createDb();
         PdMessage msg = getMsg();
-        //-1316820833
+        //hsBLApo7
         Log.e(TAG, "msgId:" + msg.imMsgId);
         MessageDao.getInstance().insertMsg(msg);
     }
 
     private PdMessage getMsg() {
         PdMessage pdMessage = new PdMessage();
-        pdMessage.imMsgId = testRandom1();
+        pdMessage.imMsgId = getRandomString(8);
         pdMessage.tenantId = testRandom1();
         pdMessage.businessId = testRandom1();
         pdMessage.sessionId = testRandom1();
@@ -131,9 +142,9 @@ public class DatabaseActivity extends AppCompatActivity {
         pdMessage.msgReceiver = "小菜";
         pdMessage.read = 0;
         pdMessage.msgContent = "你好我是小菜";
-        pdMessage.msgChatType = PdMessage.PDAChatType.SINGLE;
-        pdMessage.msgDirection = PdMessage.PDADirection.SEND;
-        pdMessage.msgStatus = PdMessage.PDAMessageStatus.SUCCESS;
+        pdMessage.msgChatType = PdMessage.PDChatType.SINGLE;
+        pdMessage.msgDirection = PdMessage.PDDirection.SEND;
+        pdMessage.msgStatus = PdMessage.PDMessageStatus.SUCCESS;
         return pdMessage;
     }
 
@@ -150,7 +161,7 @@ public class DatabaseActivity extends AppCompatActivity {
     public void updateMsg(View view) {
         createDb();
         PdMessage pdMessage = new PdMessage();
-        pdMessage.imMsgId = -1316820833;
+        pdMessage.imMsgId = "hsBLApo7";
         pdMessage.tenantId = testRandom1();
         pdMessage.businessId = testRandom1();
         pdMessage.sessionId = testRandom1();
@@ -160,13 +171,33 @@ public class DatabaseActivity extends AppCompatActivity {
         pdMessage.msgReceiver = "小菜-更新";
         pdMessage.read = 0;
         pdMessage.msgContent = "你好我是小菜-更新";
-        pdMessage.msgChatType = PdMessage.PDAChatType.SINGLE;
-        pdMessage.msgDirection = PdMessage.PDADirection.SEND;
-        pdMessage.msgStatus = PdMessage.PDAMessageStatus.SUCCESS;
+        pdMessage.msgChatType = PdMessage.PDChatType.SINGLE;
+        pdMessage.msgDirection = PdMessage.PDDirection.SEND;
+        pdMessage.msgStatus = PdMessage.PDMessageStatus.SUCCESS;
         MessageDao.getInstance().updateMsg(pdMessage);
     }
 
     public void queryMsg(View view) {
 
+    }
+
+    public void sendMsg(View view) {
+        PdIMClient.getInstance().login("test7", "test7");
+
+        PdMessage pdMessage = new PdMessage();
+        pdMessage.imMsgId = "hsBLApo7";
+        pdMessage.tenantId = testRandom1();
+        pdMessage.businessId = testRandom1();
+        pdMessage.sessionId = testRandom1();
+        pdMessage.sendTime = System.currentTimeMillis();
+        pdMessage.msgType = 1;
+        pdMessage.msgSender = "肖坤-更新";
+        pdMessage.msgReceiver = "test6@peidou/iOS";
+        pdMessage.read = 0;
+        pdMessage.msgContent = "你好我是小菜-更新";
+        pdMessage.msgChatType = PdMessage.PDChatType.SINGLE;
+        pdMessage.msgDirection = PdMessage.PDDirection.SEND;
+        pdMessage.msgStatus = PdMessage.PDMessageStatus.NEW;
+        PdIMClient.getInstance().getChatManager().sendMessage(pdMessage);
     }
 }
