@@ -8,8 +8,11 @@ package com.xiaokun.advance_practive.im.database.bean.msgBody;
  *      版本  ：1.0
  * </pre>
  */
-public class PdTextMsgBody extends PdMsgBody {
-
+public class PdLocationMsgBody extends PdMsgBody {
+    //经度纬度
     public String content;
-
+    //位置详细描述
+    public String locationDetail;
+    //定位类型,高德/百度
+    public String mapType;
 }

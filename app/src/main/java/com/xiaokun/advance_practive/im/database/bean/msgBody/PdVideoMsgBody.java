@@ -8,8 +8,8 @@ package com.xiaokun.advance_practive.im.database.bean.msgBody;
  *      版本  ：1.0
  * </pre>
  */
-public class PdTextMsgBody extends PdMsgBody {
-
-    public String content;
+public class PdVideoMsgBody extends PdFileMsgBody {
+    //缩略图远程url
+    public String thumbnailRemoteUrl;
 
 }

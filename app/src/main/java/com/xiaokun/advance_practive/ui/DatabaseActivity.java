@@ -15,6 +15,7 @@ import com.xiaokun.advance_practive.im.database.DatabaseHelper;
 import com.xiaokun.advance_practive.im.database.bean.PdConversation;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.bean.User;
+import com.xiaokun.advance_practive.im.database.bean.msgBody.PdTextMsgBody;
 import com.xiaokun.advance_practive.im.database.dao.ConversationDao;
 import com.xiaokun.advance_practive.im.database.dao.MessageDao;
 import com.xiaokun.advance_practive.im.database.dao.UserDao;
@@ -182,8 +183,6 @@ public class DatabaseActivity extends AppCompatActivity {
     }
 
     public void sendMsg(View view) {
-        PdIMClient.getInstance().login("test7", "test7");
-
         PdMessage pdMessage = new PdMessage();
         pdMessage.imMsgId = "hsBLApo7";
         pdMessage.tenantId = testRandom1();
@@ -191,13 +190,21 @@ public class DatabaseActivity extends AppCompatActivity {
         pdMessage.sessionId = testRandom1();
         pdMessage.sendTime = System.currentTimeMillis();
         pdMessage.msgType = 1;
-        pdMessage.msgSender = "肖坤-更新";
+        pdMessage.msgSender = "test7";
         pdMessage.msgReceiver = "test6@peidou/iOS";
         pdMessage.read = 0;
         pdMessage.msgContent = "你好我是小菜-更新";
         pdMessage.msgChatType = PdMessage.PDChatType.SINGLE;
         pdMessage.msgDirection = PdMessage.PDDirection.SEND;
         pdMessage.msgStatus = PdMessage.PDMessageStatus.NEW;
+        PdTextMsgBody pdTextMsgBody = new PdTextMsgBody();
+        pdTextMsgBody.content = "你好我是小菜-更新";
+        pdMessage.pdMsgBody = pdTextMsgBody;
         PdIMClient.getInstance().getChatManager().sendMessage(pdMessage);
+    }
+
+    public void login(View view) {
+        PdIMClient.getInstance().login("test7", "test7");
+        PdIMClient.getInstance().getChatManager().addMessageListener();
     }
 }

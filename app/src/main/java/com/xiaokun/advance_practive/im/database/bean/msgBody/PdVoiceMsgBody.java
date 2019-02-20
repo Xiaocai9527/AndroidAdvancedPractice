@@ -9,6 +9,6 @@ package com.xiaokun.advance_practive.im.database.bean.msgBody;
  * </pre>
  */
 public class PdVoiceMsgBody extends PdFileMsgBody {
-
-
+    //语音时长
+    public String timeLength;
 }
