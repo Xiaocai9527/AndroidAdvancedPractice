@@ -44,7 +44,7 @@ public class MessageTable extends BaseTable {
     public static final String TYPE = "type";
     //是否已读
     public static final String READ = "read";
-    //会话id
+    //会话id-会话表的主键
     public static final String CONVERSATION_ID = "conversation_id";
     //消息内容主体
     public static final String CONTENT = "content";
@@ -76,7 +76,7 @@ public class MessageTable extends BaseTable {
         map.put(TO, TEXT);
         map.put(TYPE, INTEGER);
         map.put(READ, INTEGER);
-        map.put(CONVERSATION_ID, INTEGER);
+        map.put(CONVERSATION_ID, TEXT);
         map.put(CONTENT, TEXT);
         map.put(CHAT_TYPE, INTEGER);
         map.put(DIRECTION, INTEGER);
@@ -101,6 +101,6 @@ public class MessageTable extends BaseTable {
             TO + TEXT_TYPE_SEP +
             TYPE + INTEGER_TYPE_SEP +
             READ + INTEGER_TYPE +
-            CONVERSATION_ID + INTEGER_TYPE +
+            CONVERSATION_ID + TEXT_TYPE +
             ")";
 }

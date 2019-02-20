@@ -30,6 +30,10 @@ public class ImgElement extends BasePeidouElement {
         this.property = property;
     }
 
+    public String getProperty() {
+        return property;
+    }
+
     @Override
     public CharSequence toXML() {
         sb.append(getBeforeCommonXml());

@@ -1,9 +1,5 @@
 package com.xiaokun.advance_practive.im;
 
-import android.text.TextUtils;
-import android.util.Log;
-
-import com.facebook.stetho.common.LogUtil;
 import com.xiaokun.advance_practive.im.database.bean.PdConversation;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage.PDChatType;
@@ -29,16 +25,10 @@ import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.ExtensionElement;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.provider.ExtensionElementProvider;
-import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
-import org.jivesoftware.smack.util.MultiMap;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -68,23 +58,26 @@ public class PdChatManager {
         if (pdMessage == null) {
             return;
         }
+        sendMsg(generateMsg(pdMessage));
+    }
 
+    private Message generateMsg(PdMessage pdMessage) {
         Message message = new Message();
         message.setTo(pdMessage.msgReceiver);
+        message.setFrom(pdMessage.msgSender);
         message.setBody("单聊-" + getMsgType(pdMessage.msgType));
         message.setType(Message.Type.chat);
 
         RequestElement requestElement = new RequestElement();
         message.addExtension(requestElement);
         message.addExtension(getExtensionElement(pdMessage));
-
-        sendMsg(message);
+        return message;
     }
 
     /**
      * 初始化聊天消息监听
      */
-    public void addMessageListener() {
+    public void addMessageListener(PdMessageListener pdMessageListener) {
         ChatManager manager = ChatManager.getInstanceFor(connection);
         //设置信息的监听
         final ChatMessageListener messageListener = new ChatMessageListener() {
@@ -93,7 +86,7 @@ public class PdChatManager {
                 if (message == null) {
                     return;
                 }
-                parserMsg(message);
+                pdMessageListener.onMessageReceived(parserMsg(message));
             }
         };
         ChatManagerListener chatManagerListener = new ChatManagerListener() {
@@ -111,13 +104,32 @@ public class PdChatManager {
      *
      * @param message
      */
-    private void parserMsg(Message message) {
+    private PdMessage parserMsg(Message message) {
         List<ExtensionElement> extensions = message.getExtensions();
+        PdMessage pdMessage = new PdMessage();
+        pdMessage.msgSender = message.getTo();
+        pdMessage.msgReceiver = message.getFrom();
+        pdMessage.imMsgId = message.getStanzaId();
         for (ExtensionElement extension : extensions) {
             if (extension instanceof BasePeidouElement) {
-
+                if (extension instanceof TextElement) {
+                    PdTextMsgBody pdTextMsgBody = new PdTextMsgBody();
+                    pdTextMsgBody.content = ((TextElement) extension).getContent();
+                    pdMessage.pdMsgBody = pdTextMsgBody;
+                } else if (extension instanceof ImgElement) {
+                    PdImgMsgBody pdImgMsgBody = new PdImgMsgBody();
+                    pdImgMsgBody.remoteUrl = ((ImgElement) extension).getUrl();
+                    pdImgMsgBody.thumbnailRemoteUrl = ((ImgElement) extension).getProperty();
+                } else if (extension instanceof AudioElement) {
+                    PdVoiceMsgBody pdVoiceMsgBody = new PdVoiceMsgBody();
+                    pdVoiceMsgBody.remoteUrl = ((AudioElement) extension).getUrl();
+                    pdVoiceMsgBody.timeLength = ((AudioElement) extension).getProperty();
+                } else if (extension instanceof LocationElement) {
+                    // TODO: 2019/2/20 地图扩展
+                }
             }
         }
+        return pdMessage;
     }
 
     private BasePeidouElement getExtensionElement(PdMessage pdMessage) {

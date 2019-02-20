@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.im.PdIMClient;
+import com.xiaokun.advance_practive.im.PdMessageListener;
 import com.xiaokun.advance_practive.im.PdOptions;
 import com.xiaokun.advance_practive.im.database.DatabaseHelper;
 import com.xiaokun.advance_practive.im.database.bean.PdConversation;
@@ -205,6 +206,12 @@ public class DatabaseActivity extends AppCompatActivity {
 
     public void login(View view) {
         PdIMClient.getInstance().login("test7", "test7");
-        PdIMClient.getInstance().getChatManager().addMessageListener();
+        PdIMClient.getInstance().getChatManager().addMessageListener(new PdMessageListener() {
+            @Override
+            public void onMessageReceived(PdMessage pdMessage) {
+                Log.e(TAG, "to:" + pdMessage.msgReceiver + ";from:" + pdMessage.msgSender +
+                        ";content:" + ((PdTextMsgBody) pdMessage.pdMsgBody).content);
+            }
+        });
     }
 }

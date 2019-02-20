@@ -4,17 +4,11 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.xiaokun.advance_practive.im.element.TextElement;
-
-import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.provider.ExtensionElementProvider;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
@@ -96,7 +90,7 @@ public class PdIMClient {
     }
 
     /**
-     * 登录im
+     * 登录im,默认情况下smack会尝试重新连接,以防突然断开
      *
      * @param userName
      * @param password
@@ -123,6 +117,16 @@ public class PdIMClient {
                 Log.e(TAG, "login(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + "connect连接失败");
             }
         }
+    }
+
+    /**
+     * 退出im
+     */
+    public void logout() {
+        if (connection == null) {
+            return;
+        }
+        connection.disconnect();
     }
 
     public PdChatManager getChatManager() {
