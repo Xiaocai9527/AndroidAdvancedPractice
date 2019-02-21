@@ -89,7 +89,7 @@ public class DatabaseActivity extends AppCompatActivity {
         pdConversation.imUserId = getRandomString(8);
         pdConversation.imUserId = "4FNTMPaP";
         pdConversation.conversationId = testRandom1();
-        pdConversation.conversationType = 0;
+        pdConversation.conversationType = PdConversation.ConversationType.Single;
         pdConversation.conversationUserId = testRandom1();
         pdConversation.history = 0;
         pdConversation.lastMsgId = testRandom1();
@@ -191,8 +191,8 @@ public class DatabaseActivity extends AppCompatActivity {
         pdMessage.sessionId = testRandom1();
         pdMessage.sendTime = System.currentTimeMillis();
         pdMessage.msgType = 1;
-        pdMessage.msgSender = "test7";
-        pdMessage.msgReceiver = "test6@peidou/iOS";
+        pdMessage.msgSender = "test7@peidou/pd";
+        pdMessage.msgReceiver = "test8@peidou/pd";
         pdMessage.read = 0;
         pdMessage.msgContent = "你好我是小菜-更新";
         pdMessage.msgChatType = PdMessage.PDChatType.SINGLE;
@@ -205,12 +205,23 @@ public class DatabaseActivity extends AppCompatActivity {
     }
 
     public void login(View view) {
-        PdIMClient.getInstance().login("test7", "test7");
+        PdIMClient.getInstance().login("test7", "test7", new PdIMClient.LoginCallback() {
+            @Override
+            public void onSuccess() {
+                Log.e(TAG, "onSuccess(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + "登录成功");
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                Log.e(TAG, "onError(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" +
+                        code + ";msg:" + errorMsg);
+            }
+        });
         PdIMClient.getInstance().getChatManager().addMessageListener(new PdMessageListener() {
             @Override
             public void onMessageReceived(PdMessage pdMessage) {
                 Log.e(TAG, "to:" + pdMessage.msgReceiver + ";from:" + pdMessage.msgSender +
-                        ";content:" + ((PdTextMsgBody) pdMessage.pdMsgBody).content);
+                        ";content:");
             }
         });
     }

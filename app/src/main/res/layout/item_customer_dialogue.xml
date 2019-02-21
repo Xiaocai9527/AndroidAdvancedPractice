@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemview_cl"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_72dp"
+    android:background="@drawable/rv_item_select_bg">
+
+    <ImageView
+        android:id="@+id/chat_user_avatar"
+        android:layout_width="@dimen/dimen_48dp"
+        android:layout_height="@dimen/dimen_48dp"
+        android:layout_marginLeft="@dimen/dimen_16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_transfer"
+        android:layout_width="@dimen/dimen_36dp"
+        android:layout_height="@dimen/dimen_20dp"
+        android:background="@drawable/transfer_bg"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:text="转接"
+        android:textColor="@color/color_FFFFFF"
+        android:textSize="10sp"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="@id/chat_user_avatar" />
+
+    <TextView
+        android:id="@+id/unread_msg_num_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen_20dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:background="@drawable/ease_unread_count_bg"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textColor="@color/color_FFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="@id/chat_user_avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="99+" />
+
+    <TextView
+        android:id="@+id/chat_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_12dp"
+        android:layout_marginTop="@dimen/dimen_15dp"
+        android:ellipsize="end"
+        android:maxEms="7"
+        android:singleLine="true"
+        android:textColor="@color/color_0F1826"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@+id/chat_user_avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="一二三四五六七八九" />
+
+    <ImageView
+        android:id="@+id/customer_call_back_iv"
+        android:layout_width="@dimen/dimen_28dp"
+        android:layout_height="@dimen/dimen_28dp"
+        android:layout_marginRight="@dimen/dimen_14dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/last_msg_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:layout_marginRight="11dp"
+        android:minWidth="32dp"
+        android:textColor="@color/color_A9AFB8"
+        android:textSize="12sp"
+        app:layout_constraintRight_toLeftOf="@+id/customer_call_back_iv"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="昨天上午 09：00" />
+
+    <TextView
+        android:id="@+id/last_msg_tv"
+        android:layout_width="@dimen/dimen_0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/color_A9AFB8"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="@+id/chat_user_name"
+        app:layout_constraintRight_toRightOf="@+id/last_msg_time_tv"
+        app:layout_constraintTop_toBottomOf="@+id/chat_user_name"
+        tools:text="我今天早上吃过了我今天早上吃过了我今天早上吃过了我今天早上吃过了我今天早上吃过了" />
+
+    <View
+        android:id="@+id/dialogue_divide_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/dimen_12dp"
+        android:background="@color/color_ebebeb"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/chat_user_avatar"
+        app:layout_constraintRight_toRightOf="parent" />
+</android.support.constraint.ConstraintLayout>

@@ -14,9 +14,9 @@ import org.jivesoftware.smack.packet.ExtensionElement;
  */
 public abstract class BasePeidouElement implements ExtensionElement {
 
-    private String elementName = "mobilePeidou";
-    private String chatElementName = "mobileChat";
-    private String namespace = "";
+    protected String elementName = "mobilePeidou";
+    protected String chatElementName = "mobileChat";
+    protected String namespace = "";
 
     protected String escape = "\"";
 
@@ -41,6 +41,9 @@ public abstract class BasePeidouElement implements ExtensionElement {
         return namespace;
     }
 
+    public void setChatElementName(String chatElementName) {
+        this.chatElementName = chatElementName;
+    }
 
     protected StringBuilder sb = new StringBuilder();
 

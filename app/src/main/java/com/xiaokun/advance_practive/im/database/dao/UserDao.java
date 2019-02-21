@@ -46,6 +46,7 @@ public class UserDao {
         values.put(UserTable.NICKNAME, user.nickName);
         values.put(UserTable.PHONE, user.phone);
         values.put(UserTable.GENDER, user.gender);
+        values.put(UserTable.USER_IM_ID, user.userImId);
         long result = mDb.replace(UserTable.TABLE_NAME, null, values);
         return result != -1;
     }
@@ -65,6 +66,7 @@ public class UserDao {
             user.phone = cursor.getString(UserTable.PHONE_COLUMN_INDEX);
             user.gender = cursor.getInt(UserTable.GENDER_COLUMN_INDEX);
             user.name = cursor.getString(UserTable.NAME_COLUMN_INDEX);
+            user.userImId = cursor.getString(UserTable.USER_IM_ID_COLUMN_INDEX);
             list.add(user);
         }
         cursor.close();

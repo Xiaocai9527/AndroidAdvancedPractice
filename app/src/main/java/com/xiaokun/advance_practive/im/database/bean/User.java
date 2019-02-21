@@ -17,6 +17,8 @@ public class User {
      */
     public int gender;
     public String name;
+    //im账号
+    public String userImId;
 
     public User() {
         userId = 1;

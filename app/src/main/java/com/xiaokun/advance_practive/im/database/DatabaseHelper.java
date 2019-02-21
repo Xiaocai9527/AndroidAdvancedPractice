@@ -21,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DatabaseHelper";
     public static final String DB_NAME = "PdIm.db";
-    public static final int DB_VERSION = 4;
+    public static final int DB_VERSION = 1;
 
     private Context mContext;
     private static DatabaseHelper instance = null;
@@ -49,6 +49,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(UserTable.getSql());
+        db.execSQL(ConversationTable.getSql());
+        db.execSQL(MessageTable.getSql());
         Log.e(TAG, "用户表创建成功");
     }
 

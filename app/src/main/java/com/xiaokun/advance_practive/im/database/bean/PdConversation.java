@@ -18,7 +18,7 @@ public class PdConversation {
     //最后一条消息消息id
     public long lastMsgId;
     //单聊群聊
-    public int conversationType;
+    public ConversationType conversationType;
     //会话用户id
     public long conversationUserId;
     //对方用户昵称
@@ -27,5 +27,20 @@ public class PdConversation {
     public String avatar;
     //对方用户im账号
     public String imUserId;
+
+    public static enum ConversationType {
+        Single(1, "单聊"),
+        Group(2, "群聊"),
+        ChatRoom(3, "聊天室");
+
+        public int mType;
+        public String mDesc;
+
+        ConversationType(int type, String desc) {
+            mType = type;
+            mDesc = desc;
+        }
+
+    }
 
 }

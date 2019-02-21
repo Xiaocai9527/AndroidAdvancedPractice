@@ -3,6 +3,7 @@ package com.xiaokun.advance_practive.im;
 import com.xiaokun.advance_practive.im.element.AudioElement;
 import com.xiaokun.advance_practive.im.element.BasePeidouElement;
 import com.xiaokun.advance_practive.im.element.ImgElement;
+import com.xiaokun.advance_practive.im.element.ReceiptsElement;
 import com.xiaokun.advance_practive.im.element.TextElement;
 
 import org.jivesoftware.smack.SmackException;
@@ -35,6 +36,10 @@ public class Provider extends ExtensionElementProvider<BasePeidouElement> {
                     switch (name) {
                         case "mobileChat":
                             element = parserElement(parser);
+                            break;
+                        case ReceiptsElement.ELEMENT_NAME:
+                            element = new ReceiptsElement();
+                            ((ReceiptsElement) element).setMsgId(parser.getAttributeValue("", "msgid"));
                             break;
                     }
                     break;

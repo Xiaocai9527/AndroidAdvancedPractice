@@ -82,7 +82,7 @@ public class ConversationDao {
         values.put(ConversationTable.TRANSFER, pdConversation.transfer);
         values.put(ConversationTable.HISTORY, pdConversation.history);
         values.put(ConversationTable.LAST_MSG_ID, pdConversation.lastMsgId);
-        values.put(ConversationTable.CONVERSATION_TYPE, pdConversation.conversationType);
+        values.put(ConversationTable.CONVERSATION_TYPE, pdConversation.conversationType.mType);
         values.put(ConversationTable.CONVERSATION_USER_ID, pdConversation.conversationUserId);
         values.put(ConversationTable.NICK_NAME, pdConversation.nickName);
         values.put(ConversationTable.AVATAR, pdConversation.avatar);
@@ -97,7 +97,20 @@ public class ConversationDao {
         pdConversation.transfer = cursor.getInt(ConversationTable.TRANSFER_COLUMN_INDEX);
         pdConversation.history = cursor.getInt(ConversationTable.HISTORY_COLUMN_INDEX);
         pdConversation.lastMsgId = cursor.getLong(ConversationTable.LAST_MSG_ID_COLUMN_INDEX);
-        pdConversation.conversationType = cursor.getInt(ConversationTable.CONVERSATION_TYPE_COLUMN_INDEX);
+        switch (cursor.getInt(ConversationTable.CONVERSATION_TYPE_COLUMN_INDEX)) {
+            case 1:
+                pdConversation.conversationType = PdConversation.ConversationType.Single;
+                break;
+            case 2:
+                pdConversation.conversationType = PdConversation.ConversationType.Group;
+                break;
+            case 3:
+                pdConversation.conversationType = PdConversation.ConversationType.ChatRoom;
+                break;
+            default:
+
+                break;
+        }
         pdConversation.conversationUserId = cursor.getLong(ConversationTable.CONVERSATION_USER_ID_COLUMN_INDEX);
         pdConversation.nickName = cursor.getString(ConversationTable.NICK_NAME_COLUMN_INDEX);
         pdConversation.avatar = cursor.getString(ConversationTable.AVATAR_COLUMN_INDEX);
@@ -120,8 +133,10 @@ public class ConversationDao {
         Cursor cursor = mDb.rawQuery("select * from " + ConversationTable.TABLE_NAME + " where to_chat_user_im_id =?",
                 new String[]{toChatUserImId});
         if (cursor.moveToFirst()) {
+            cursor.close();
             return getConversationByCursor(cursor);
         } else {
+            cursor.close();
             return null;
         }
     }
@@ -130,10 +145,24 @@ public class ConversationDao {
         Cursor cursor = mDb.rawQuery("select * from " + ConversationTable.TABLE_NAME + " where to_chat_user_im_id =? and conversation_type =?",
                 new String[]{toChatUserImId, type + ""});
         if (cursor.moveToFirst()) {
+            cursor.close();
             return getConversationByCursor(cursor);
         } else {
+            cursor.close();
             return null;
         }
+    }
+
+    public List<PdConversation> queryConversationByType(PdConversation.ConversationType conversationType) {
+        List<PdConversation> pdConversations = new ArrayList<>();
+        Cursor cursor = mDb.rawQuery("select * from " + ConversationTable.TABLE_NAME + " where conversation_type =?",
+                new String[]{conversationType.mType + ""});
+        while (cursor.moveToNext()) {
+            pdConversations.add(getConversationByCursor(cursor));
+        }
+        cursor.close();
+        return pdConversations;
+
     }
 
 }

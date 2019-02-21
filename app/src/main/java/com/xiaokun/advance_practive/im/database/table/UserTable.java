@@ -21,7 +21,7 @@ public class UserTable extends BaseTable {
     public static final String TABLE_NAME = "user";
 
     /**
-     * 表字段
+     * 表字段-主键
      */
     public static final String ID = "userid";
     //昵称
@@ -32,6 +32,8 @@ public class UserTable extends BaseTable {
     public static final String GENDER = "gender";
     //真实姓名
     public static final String NAME = "name";
+    //im账号
+    public static final String USER_IM_ID = "user_im_id";
 
     /**
      * 字段对应的columnIndex
@@ -41,6 +43,7 @@ public class UserTable extends BaseTable {
     public static final int PHONE_COLUMN_INDEX = 2;
     public static final int GENDER_COLUMN_INDEX = 3;
     public static final int NAME_COLUMN_INDEX = 4;
+    public static final int USER_IM_ID_COLUMN_INDEX = 5;
 
     public static LinkedHashMap<String, DataType> map = new LinkedHashMap<>();
 
@@ -49,6 +52,7 @@ public class UserTable extends BaseTable {
         map.put(PHONE, TEXT);
         map.put(GENDER, INTEGER);
         map.put(NAME, TEXT);
+        map.put(USER_IM_ID, TEXT);
     }
 
     /**
@@ -57,7 +61,7 @@ public class UserTable extends BaseTable {
      * @return
      */
     public static String getSql() {
-        return createTableSql(TABLE_NAME, map, ID, TEXT);
+        return createTableSql(TABLE_NAME, map, ID, INTEGER);
     }
 
     /**

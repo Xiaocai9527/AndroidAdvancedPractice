@@ -1,8 +1,11 @@
 package com.xiaokun.advance_practive.im;
 
+import android.util.Log;
+
 import com.xiaokun.advance_practive.im.database.bean.PdConversation;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage.PDChatType;
+import com.xiaokun.advance_practive.im.database.bean.User;
 import com.xiaokun.advance_practive.im.database.bean.msgBody.PdImgMsgBody;
 import com.xiaokun.advance_practive.im.database.bean.msgBody.PdLocationMsgBody;
 import com.xiaokun.advance_practive.im.database.bean.msgBody.PdMsgBody;
@@ -10,22 +13,33 @@ import com.xiaokun.advance_practive.im.database.bean.msgBody.PdTextMsgBody;
 import com.xiaokun.advance_practive.im.database.bean.msgBody.PdVideoMsgBody;
 import com.xiaokun.advance_practive.im.database.bean.msgBody.PdVoiceMsgBody;
 import com.xiaokun.advance_practive.im.database.dao.ConversationDao;
+import com.xiaokun.advance_practive.im.database.dao.MessageDao;
+import com.xiaokun.advance_practive.im.database.dao.UserDao;
 import com.xiaokun.advance_practive.im.element.AudioElement;
 import com.xiaokun.advance_practive.im.element.BasePeidouElement;
 import com.xiaokun.advance_practive.im.element.ImgElement;
 import com.xiaokun.advance_practive.im.element.LocationElement;
+import com.xiaokun.advance_practive.im.element.ReceiptsElement;
 import com.xiaokun.advance_practive.im.element.RequestElement;
 import com.xiaokun.advance_practive.im.element.TextElement;
 import com.xiaokun.advance_practive.im.element.VideoElement;
 
+import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.StanzaListener;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.chat.ChatManager;
 import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.ExtensionElement;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Stanza;
+import org.jivesoftware.smack.sm.StreamManagementException;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
+import org.jivesoftware.smackx.receipts.DeliveryReceipt;
+import org.jivesoftware.smackx.receipts.DeliveryReceiptManager;
+import org.jivesoftware.smackx.receipts.DeliveryReceiptRequest;
+import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -86,7 +100,10 @@ public class PdChatManager {
                 if (message == null) {
                     return;
                 }
-                pdMessageListener.onMessageReceived(parserMsg(message));
+                PdMessage pdMessage = parserMsg(message);
+                if (!pdMessage.receipts) {
+                    pdMessageListener.onMessageReceived(pdMessage);
+                }
             }
         };
         ChatManagerListener chatManagerListener = new ChatManagerListener() {
@@ -107,25 +124,44 @@ public class PdChatManager {
     private PdMessage parserMsg(Message message) {
         List<ExtensionElement> extensions = message.getExtensions();
         PdMessage pdMessage = new PdMessage();
-        pdMessage.msgSender = message.getTo();
-        pdMessage.msgReceiver = message.getFrom();
+        pdMessage.msgSender = message.getFrom();
+        pdMessage.msgReceiver = message.getTo();
         pdMessage.imMsgId = message.getStanzaId();
+        pdMessage.msgStatus = PdMessage.PDMessageStatus.DELIVERING;
+        // TODO: 2019/2/21 单聊和其它的区分，这里只是只做单聊
+        pdMessage.msgChatType = PDChatType.SINGLE;
+
+        User user = UserDao.getInstance().queryCurrentUser();
+        if (user.userImId.equals(message.getFrom())) {
+            pdMessage.msgDirection = PdMessage.PDDirection.SEND;
+        } else {
+            pdMessage.msgDirection = PdMessage.PDDirection.RECEIVE;
+        }
+
         for (ExtensionElement extension : extensions) {
             if (extension instanceof BasePeidouElement) {
                 if (extension instanceof TextElement) {
                     PdTextMsgBody pdTextMsgBody = new PdTextMsgBody();
                     pdTextMsgBody.content = ((TextElement) extension).getContent();
                     pdMessage.pdMsgBody = pdTextMsgBody;
+                    pdMessage.msgType = PdMsgBody.PDMessageBodyType_TEXT;
                 } else if (extension instanceof ImgElement) {
                     PdImgMsgBody pdImgMsgBody = new PdImgMsgBody();
                     pdImgMsgBody.remoteUrl = ((ImgElement) extension).getUrl();
                     pdImgMsgBody.thumbnailRemoteUrl = ((ImgElement) extension).getProperty();
+                    pdMessage.msgType = PdMsgBody.PDMessageBodyType_IMAGE;
                 } else if (extension instanceof AudioElement) {
                     PdVoiceMsgBody pdVoiceMsgBody = new PdVoiceMsgBody();
                     pdVoiceMsgBody.remoteUrl = ((AudioElement) extension).getUrl();
                     pdVoiceMsgBody.timeLength = ((AudioElement) extension).getProperty();
+                    pdMessage.msgType = PdMsgBody.PDMessageBodyType_VOICE;
                 } else if (extension instanceof LocationElement) {
                     // TODO: 2019/2/20 地图扩展
+                } else if (extension instanceof ReceiptsElement) {
+                    //回执消息
+                    String msgId = ((ReceiptsElement) extension).getMsgId();
+                    MessageDao.getInstance().updateMsgStatusById(msgId);
+                    pdMessage.receipts = true;
                 }
             }
         }
@@ -255,15 +291,9 @@ public class PdChatManager {
         boolean isSend;
         try {
             ChatManager manager = ChatManager.getInstanceFor(connection);
-            Chat chat = manager.createChat(message.getTo(), new ChatMessageListener() {
-                @Override
-                public void processMessage(Chat chat, Message message) {
-                    // TODO: 2019/2/19 消息处理
-
-                }
-            });
+            Chat chat = manager.createChat(message.getTo());
+            MessageDao.getInstance().insertMsg(parserMsg(message));
             chat.sendMessage(message);
-            // TODO: 2019/2/19  插入数据库-会话,消息
             isSend = true;
         } catch (SmackException.NotConnectedException e) {
             e.printStackTrace();
@@ -321,6 +351,9 @@ public class PdChatManager {
         return pdConversation;
     }
 
+    public List<PdConversation> getConversationByType(PdConversation.ConversationType conversationType) {
+        return ConversationDao.getInstance().queryConversationByType(conversationType);
+    }
 
     /**
      * 打包成json字符串

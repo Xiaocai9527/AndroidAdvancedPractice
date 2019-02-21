@@ -47,6 +47,8 @@ public class PdMessage {
     public PDDirection msgDirection;
     //消息状态
     public PDMessageStatus msgStatus;
+    //是否回执消息
+    public boolean receipts;
 
     public void addBody(PdMsgBody pdMsgBody) {
         this.pdMsgBody = pdMsgBody;

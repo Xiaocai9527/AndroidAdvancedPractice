@@ -3,6 +3,7 @@ package com.xiaokun.advance_practive.im.database.dao;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 import com.xiaokun.advance_practive.im.database.DatabaseHelper;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
@@ -83,6 +84,22 @@ public class MessageDao {
         values.put(MessageTable.STATUS, pdMessage.msgStatus.status);
 
         int result = mDb.update(MessageTable.TABLE_NAME, values, MessageTable.ID + "=?", new String[]{pdMessage.imMsgId});
+        return result > 0;
+    }
+
+    /**
+     * 更新消息状态
+     *
+     * @param msgId
+     * @return
+     */
+    public boolean updateMsgStatusById(String msgId) {
+        if (TextUtils.isEmpty(msgId)) {
+            return false;
+        }
+        ContentValues values = new ContentValues();
+        values.put(MessageTable.STATUS, PdMessage.PDMessageStatus.SUCCESS.status);
+        int result = mDb.update(MessageTable.TABLE_NAME, values, MessageTable.ID + "=?", new String[]{msgId});
         return result > 0;
     }
 

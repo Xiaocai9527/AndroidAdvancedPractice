@@ -21,7 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="label,theme,android:allowBackup">
-        <activity android:name=".ui.DatabaseActivity">
+        <activity
+            android:name=".ui.DatabaseActivity"
+            android:label="登录">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -66,11 +68,17 @@
 
         </receiver>
         <service android:name=".ui.unit_test.MyService" />
+
         <activity android:name=".ui.view.AllViewsActivity" />
         <activity android:name=".ui.view.ScrollViewActivity" />
-        <activity android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
-            android:exported="true"/>
+        <activity
+            android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
+            android:exported="true" />
         <activity android:name=".ui.rxbus.ProgressWvActivity" />
+        <activity
+            android:name=".im.activity.ImConversationListActivity"
+            android:label="会话列表" />
+        <!--<activity android:name=".im.ImLoginActivity" />-->
         <!--<activity android:name=".ui.DatabaseActivity" />-->
     </application>
 
