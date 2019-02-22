@@ -1,5 +1,10 @@
 package com.xiaokun.advance_practive.im.util;
 
+import android.support.annotation.LayoutRes;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 /**
  * <pre>
  *      作者  ：肖坤
@@ -10,6 +15,7 @@ package com.xiaokun.advance_practive.im.util;
  */
 public class Utils {
 
-
-
+    public static View createView(@LayoutRes int layoutId, ViewGroup viewGroup) {
+        return LayoutInflater.from(viewGroup.getContext()).inflate(layoutId, viewGroup, false);
+    }
 }

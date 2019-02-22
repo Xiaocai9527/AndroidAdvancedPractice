@@ -3,11 +3,20 @@ package com.xiaokun.advance_practive.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.im.PdIMClient;
 import com.xiaokun.advance_practive.im.PdMessageListener;
@@ -16,12 +25,16 @@ import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.dao.ConversationDao;
 import com.xiaokun.advance_practive.im.database.dao.MessageDao;
 import com.xiaokun.advance_practive.im.entity.Conversation;
+import com.xiaokun.advance_practive.im.util.PdDateUtils;
+import com.xiaokun.baselib.muti_rv.BaseMultiHodler;
 import com.xiaokun.baselib.muti_rv.HolderFactoryList;
 import com.xiaokun.baselib.muti_rv.MultiAdapter;
 import com.xiaokun.baselib.muti_rv.MultiItem;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.xiaokun.advance_practive.im.util.Utils.createView;
 
 /**
  * <pre>
@@ -52,8 +65,38 @@ public class ImConversationListActivity extends AppCompatActivity implements PdM
 
     private void initView() {
         mRvConversationList = findViewById(R.id.rv_conversation_list);
-        HolderFactoryList instance = HolderFactoryList.getInstance();
-        instance.addTypeHolder(MyHolder.class, R.layout.item_customer_dialogue);
+        HolderFactoryList instance = HolderFactoryList.getInstance().addTypeHolder(new BaseMultiHodler<Conversation>(
+                createView(R.layout.item_customer_dialogue, mRvConversationList)) {
+            @Override
+            public void bind(Conversation conversation) {
+                setText(R.id.chat_user_name, conversation.nickName);
+                setText(R.id.last_msg_tv, conversation.msgContent);
+                setText(R.id.last_msg_time_tv, PdDateUtils.format(conversation.updateTime, "yyyy-MM-dd HH:mm"));
+                PdConversation pdConversation = PdIMClient.getInstance().getChatManager().getConversation(conversation.userImId);
+
+                if (pdConversation.getUnReadCount() > 0) {
+                    setVisible(R.id.unread_msg_num_tv, true);
+                } else {
+                    setVisible(R.id.unread_msg_num_tv, false);
+                }
+
+                setText(R.id.unread_msg_num_tv, pdConversation.getUnReadCount() + "");
+
+                Glide.with(mContext).load(conversation.url)
+                        .apply(RequestOptions.bitmapTransform(new CircleCrop())
+                                .placeholder(R.mipmap.ic_launcher)
+                                .error(R.mipmap.ic_launcher))
+                        .into(((ImageView) getView(R.id.chat_user_avatar)));
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(mContext, "点击进入会话窗口", Toast.LENGTH_SHORT).show();
+                        pdConversation.markAllMessagesAsRead();
+                    }
+                });
+            }
+        });
         mMultiAdapter = new MultiAdapter(instance);
 
         mMultiAdapter.addItems(getConversations());

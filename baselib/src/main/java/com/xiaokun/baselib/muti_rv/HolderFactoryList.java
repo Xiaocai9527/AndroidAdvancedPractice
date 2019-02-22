@@ -34,9 +34,11 @@ public class HolderFactoryList implements HolderFactory {
         mHoderHashMap.put(layoutId, classz);
     }
 
-    public void addTypeHolder(BaseMultiHodler hodler, int layoutId) {
-        Class<? extends BaseMultiHodler> hodlerClass = hodler.getClass();
-        addTypeHolder(hodlerClass, layoutId);
+    private BaseMultiHodler mHolder;
+
+    public HolderFactoryList addTypeHolder(BaseMultiHodler hodler) {
+        mHolder = hodler;
+        return this;
     }
 
     @Override
@@ -50,6 +52,8 @@ public class HolderFactoryList implements HolderFactory {
                     break;
                 }
             }
+        } else if (mHolder != null) {
+            return mHolder;
         } else {
             throw new IllegalArgumentException("需要添加holder");
         }

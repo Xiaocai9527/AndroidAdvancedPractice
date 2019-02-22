@@ -4,13 +4,17 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.util.Pair;
 
 import com.xiaokun.advance_practive.im.database.DatabaseHelper;
+import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.table.ConversationTable;
 import com.xiaokun.advance_practive.im.database.bean.PdConversation;
 import com.xiaokun.advance_practive.im.entity.Conversation;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -60,6 +64,109 @@ public class ConversationDao {
         }
         cursor.close();
         return pdConversations;
+    }
+
+    /**
+     * 查询所有普通会话
+     *
+     * @return
+     */
+    public List<PdConversation> queryAllNormalConversations() {
+        List<PdConversation> pdConversations = new ArrayList<>();
+        Cursor cursor = mDb.rawQuery("select * from " + ConversationTable.TABLE_NAME + " where " + ConversationTable.HISTORY + " =?", new String[]{"1"});
+        while (cursor.moveToNext()) {
+            pdConversations.add(getConversationByCursor(cursor));
+        }
+        cursor.close();
+        return pdConversations;
+    }
+
+    /**
+     * 查询已经降序排序的普通会话
+     *
+     * @return
+     */
+    public List<PdConversation> queryAllNormalConversationsSorted() {
+        List<Pair<Long, PdConversation>> sortList = new ArrayList<>();
+        Cursor cursor = mDb.rawQuery("select * from " + ConversationTable.TABLE_NAME + " where " +
+                ConversationTable.HISTORY + " =?", new String[]{"1"});
+
+        synchronized (cursor) {
+            while (cursor.moveToNext()) {
+                PdConversation conversationByCursor = getConversationByCursor(cursor);
+                PdMessage lastMsg = conversationByCursor.getLastMsg();
+                if (lastMsg != null) {
+                    long updateTime = lastMsg.updateTime;
+                    sortList.add(new Pair<>(updateTime, conversationByCursor));
+                }
+            }
+
+            try {
+                sortConversationByLastChatTime(sortList);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            cursor.close();
+        }
+
+        List<PdConversation> pdConversations = new ArrayList<>();
+        for (Pair<Long, PdConversation> conversationPair : sortList) {
+            pdConversations.add(conversationPair.second);
+        }
+        return pdConversations;
+    }
+
+    /**
+     * 查询已经降序排序的历史会话
+     *
+     * @return
+     */
+    public List<PdConversation> queryAllHistoryConversationsSorted() {
+        List<Pair<Long, PdConversation>> sortList = new ArrayList<>();
+        Cursor cursor = mDb.rawQuery("select * from " + ConversationTable.TABLE_NAME + " where " +
+                ConversationTable.HISTORY + " =?", new String[]{"2"});
+
+        synchronized (cursor) {
+            while (cursor.moveToNext()) {
+                PdConversation conversationByCursor = getConversationByCursor(cursor);
+                PdMessage lastMsg = conversationByCursor.getLastMsg();
+                if (lastMsg != null) {
+                    long updateTime = lastMsg.updateTime;
+                    sortList.add(new Pair<>(updateTime, conversationByCursor));
+                }
+            }
+
+            try {
+                sortConversationByLastChatTime(sortList);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            cursor.close();
+        }
+
+        List<PdConversation> pdConversations = new ArrayList<>();
+        for (Pair<Long, PdConversation> conversationPair : sortList) {
+            pdConversations.add(conversationPair.second);
+        }
+        return pdConversations;
+    }
+
+    private void sortConversationByLastChatTime(List<Pair<Long, PdConversation>> conversationList) {
+        Collections.sort(conversationList, new Comparator<Pair<Long, PdConversation>>() {
+            @Override
+            public int compare(final Pair<Long, PdConversation> con1, final Pair<Long, PdConversation> con2) {
+                if (con1.first.equals(con2.first)) {
+                    return 0;
+                } else if (con2.first.longValue() > con1.first.longValue()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+
+        });
     }
 
     /**
@@ -151,7 +258,7 @@ public class ConversationDao {
                 pdConversation.conversationType = PdConversation.ConversationType.ChatRoom;
                 break;
             default:
-
+                pdConversation.conversationType = PdConversation.ConversationType.Single;
                 break;
         }
         pdConversation.conversationUserId = cursor.getLong(ConversationTable.CONVERSATION_USER_ID_COLUMN_INDEX);

@@ -168,6 +168,37 @@ public class MessageDao {
         return pdMessages;
     }
 
+    /**
+     * 通过会话id查询所属这个会话的所有未读消息
+     *
+     * @param conversationId
+     * @return
+     */
+    public List<PdMessage> queryUnreadMsgsByConversationId(String conversationId) {
+        if (TextUtils.isEmpty(conversationId)) {
+            return null;
+        }
+        Cursor cursor = mDb.rawQuery("select * from " + MessageTable.TABLE_NAME + " where conversation_id =? and read =?",
+                new String[]{conversationId, "2"});
+        List<PdMessage> pdMessages = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            PdMessage messageByCursor = getMessageByCursor(cursor);
+            pdMessages.add(messageByCursor);
+        }
+        cursor.close();
+        return pdMessages;
+    }
+
+    public boolean updateMsgAsReadByMsgId(String imMsgId) {
+        if (TextUtils.isEmpty(imMsgId)) {
+            return false;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MessageTable.READ, PdMessage.PDRead.READ.mType);
+        mDb.update(MessageTable.TABLE_NAME, contentValues, MessageTable.READ + "=?", new String[]{imMsgId});
+        return false;
+    }
+
     private PdMessage getMessageByCursor(Cursor cursor) {
         PdMessage pdMessage = new PdMessage();
         pdMessage.imMsgId = cursor.getString(MessageTable.ID_COLUMN_INDEX);

@@ -1,5 +1,6 @@
 package com.xiaokun.advance_practive.im.database.bean;
 
+import com.xiaokun.advance_practive.im.database.dao.ConversationDao;
 import com.xiaokun.advance_practive.im.database.dao.MessageDao;
 
 import java.util.List;
@@ -40,22 +41,54 @@ public class PdConversation {
      * @return
      */
     public int getUnReadCount() {
-        List<PdMessage> pdMessages = MessageDao.getInstance().queryMsgsByConversationId(imUserId);
-        int count = 0;
-        for (PdMessage pdMessage : pdMessages) {
-            if (pdMessage.read == PdMessage.PDRead.UNREAD) {
-                count++;
-            }
-        }
-        return count;
+        List<PdMessage> pdMessages = MessageDao.getInstance().queryUnreadMsgsByConversationId(imUserId);
+        return pdMessages.size();
     }
 
+    /**
+     * 将所有未读消息置成已读
+     */
     public void markAllMessagesAsRead() {
-
-        List<PdMessage> pdMessages = MessageDao.getInstance().queryMsgsByConversationId(imUserId);
+        List<PdMessage> pdMessages = MessageDao.getInstance().queryUnreadMsgsByConversationId(imUserId);
         for (PdMessage pdMessage : pdMessages) {
             pdMessage.read = PdMessage.PDRead.READ;
         }
+    }
+
+    /**
+     * 当在聊天窗口监听接收消息时,调用此方法。条件是必须是当前的会话下
+     *
+     * @param imMsgId 消息id
+     */
+    public void markMessageAsRead(String imMsgId) {
+        MessageDao.getInstance().updateMsgAsReadByMsgId(imMsgId);
+    }
+
+    /**
+     * 获得最后一条消息
+     *
+     * @return
+     */
+    public PdMessage getLastMsg() {
+        return MessageDao.getInstance().queryMsgById(lastMsgId);
+    }
+
+    /**
+     * 查询已经降序排序的普通会话
+     *
+     * @return
+     */
+    public List<PdConversation> queryAllNormalConversationsSorted() {
+        return ConversationDao.getInstance().queryAllNormalConversationsSorted();
+    }
+
+    /**
+     * 查询已经降序排序的历史会话
+     *
+     * @return
+     */
+    public List<PdConversation> queryAllHistoryConversationsSorted() {
+        return ConversationDao.getInstance().queryAllHistoryConversationsSorted();
     }
 
     public enum HistoryType {
