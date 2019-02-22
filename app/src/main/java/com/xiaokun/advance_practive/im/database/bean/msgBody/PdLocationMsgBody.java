@@ -15,4 +15,9 @@ public class PdLocationMsgBody extends PdMsgBody {
     public String locationDetail;
     //定位类型,高德/百度
     public String mapType;
+
+    @Override
+    public int getMsgType() {
+        return PDMessageBodyType_LOCATION;
+    }
 }

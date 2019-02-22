@@ -54,6 +54,8 @@ public class MessageTable extends BaseTable {
     public static final String DIRECTION = "direction";
     //消息状态
     public static final String STATUS = "status";
+    //时间
+    public static final String UPDATE_TIME = "update_time";
 
     /**
      * 字段对应的columnIndex
@@ -68,6 +70,8 @@ public class MessageTable extends BaseTable {
     public static final int CHAT_TYPE_COLUMN_INDEX = 7;
     public static final int DIRECTION_COLUMN_INDEX = 8;
     public static final int STATUS_COLUMN_INDEX = 9;
+    public static final int UPDATE_TIME_COLUMN_INDEX = 10;
+
 
     public static LinkedHashMap<String, DataType> map = new LinkedHashMap<>();
 
@@ -81,6 +85,7 @@ public class MessageTable extends BaseTable {
         map.put(CHAT_TYPE, INTEGER);
         map.put(DIRECTION, INTEGER);
         map.put(STATUS, INTEGER);
+        map.put(UPDATE_TIME, INTEGER);
     }
 
     /**

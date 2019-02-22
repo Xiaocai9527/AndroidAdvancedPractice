@@ -12,4 +12,8 @@ public class PdTextMsgBody extends PdMsgBody {
 
     public String content;
 
+    @Override
+    public int getMsgType() {
+        return PDMessageBodyType_TEXT;
+    }
 }

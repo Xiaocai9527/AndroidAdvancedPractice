@@ -11,4 +11,9 @@ package com.xiaokun.advance_practive.im.database.bean.msgBody;
 public class PdVoiceMsgBody extends PdFileMsgBody {
     //语音时长
     public String timeLength;
+
+    @Override
+    public int getMsgType() {
+        return PDMessageBodyType_VOICE;
+    }
 }

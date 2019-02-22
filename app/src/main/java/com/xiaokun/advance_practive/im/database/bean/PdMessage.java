@@ -2,6 +2,7 @@ package com.xiaokun.advance_practive.im.database.bean;
 
 import com.google.gson.Gson;
 import com.xiaokun.advance_practive.im.database.bean.msgBody.PdMsgBody;
+import com.xiaokun.advance_practive.im.database.dao.UserDao;
 
 /**
  * <pre>
@@ -17,8 +18,8 @@ public class PdMessage {
     public long tenantId;
     public long businessId;
     //会话id
-    public long sessionId;
-    public long sendTime;
+    public String conversationId;
+    public long updateTime;
     /**
      * 1.文本消息
      * 2.图片消息
@@ -37,7 +38,7 @@ public class PdMessage {
     public String msgSender;
     public String msgReceiver;
     //是否已读
-    public int read;
+    public PDRead read;
     //消息内容
     public String msgContent;
     public PdMsgBody pdMsgBody;
@@ -50,10 +51,43 @@ public class PdMessage {
     //是否回执消息
     public boolean receipts;
 
+    /**
+     * 创建消息
+     *
+     * @param toUserName
+     * @param pdChatType
+     * @return
+     */
+    public static PdMessage createPdMessage(String toUserName, PdMessage.PDChatType pdChatType) {
+        PdMessage pdMessage = new PdMessage();
+        User user = UserDao.getInstance().queryCurrentUser();
+        pdMessage.msgReceiver = toUserName;
+        pdMessage.msgSender = user.userImId;
+        pdMessage.msgChatType = pdChatType;
+        pdMessage.msgDirection = PdMessage.PDDirection.SEND;
+        pdMessage.msgStatus = PdMessage.PDMessageStatus.NEW;
+        return pdMessage;
+    }
+
     public void addBody(PdMsgBody pdMsgBody) {
+        this.msgType = pdMsgBody.getMsgType();
         this.pdMsgBody = pdMsgBody;
         String json = new Gson().toJson(pdMsgBody);
-        msgContent = json;
+        this.msgContent = json;
+    }
+
+    public enum PDRead {
+        //
+        READ(1, "已读"),
+        UNREAD(2, "未读"),;
+
+        public int mType;
+        public String mDesc;
+
+        PDRead(int type, String desc) {
+            mType = type;
+            mDesc = desc;
+        }
     }
 
     /**

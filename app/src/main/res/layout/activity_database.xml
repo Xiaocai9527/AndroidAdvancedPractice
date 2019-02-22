@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.DatabaseActivity">
+    tools:context=".im.activity.DatabaseActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.DatabaseActivity">
+        tools:context=".im.activity.DatabaseActivity">
 
         <Button
             android:id="@+id/btn_create_book"

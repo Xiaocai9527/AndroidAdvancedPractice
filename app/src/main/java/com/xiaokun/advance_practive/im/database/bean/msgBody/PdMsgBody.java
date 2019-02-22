@@ -8,7 +8,7 @@ package com.xiaokun.advance_practive.im.database.bean.msgBody;
  *      版本  ：1.0
  * </pre>
  */
-public class PdMsgBody {
+public abstract class PdMsgBody {
 
     /**
      * 1.文本消息
@@ -38,4 +38,6 @@ public class PdMsgBody {
     public static final int PDMessageBodyType_NOTIFICATION = 11;
     public static final int PDMESSAGEBODYTYPE_KICK = 12;
 
+
+    public abstract int getMsgType();
 }

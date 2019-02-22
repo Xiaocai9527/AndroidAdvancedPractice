@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme"
         tools:replace="label,theme,android:allowBackup">
         <activity
-            android:name=".ui.DatabaseActivity"
+            android:name=".im.activity.ImLoginActivity"
             android:label="登录">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

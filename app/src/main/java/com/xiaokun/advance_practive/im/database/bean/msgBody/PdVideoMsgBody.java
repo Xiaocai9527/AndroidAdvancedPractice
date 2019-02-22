@@ -12,4 +12,8 @@ public class PdVideoMsgBody extends PdFileMsgBody {
     //缩略图远程url
     public String thumbnailRemoteUrl;
 
+    @Override
+    public int getMsgType() {
+        return PDMessageBodyType_VIDEO;
+    }
 }

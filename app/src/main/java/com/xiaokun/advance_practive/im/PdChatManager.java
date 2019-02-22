@@ -1,7 +1,5 @@
 package com.xiaokun.advance_practive.im;
 
-import android.util.Log;
-
 import com.xiaokun.advance_practive.im.database.bean.PdConversation;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage.PDChatType;
@@ -24,26 +22,22 @@ import com.xiaokun.advance_practive.im.element.RequestElement;
 import com.xiaokun.advance_practive.im.element.TextElement;
 import com.xiaokun.advance_practive.im.element.VideoElement;
 
-import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.StanzaListener;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.chat.ChatManager;
 import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.ExtensionElement;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.Stanza;
-import org.jivesoftware.smack.sm.StreamManagementException;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
-import org.jivesoftware.smackx.receipts.DeliveryReceipt;
-import org.jivesoftware.smackx.receipts.DeliveryReceiptManager;
-import org.jivesoftware.smackx.receipts.DeliveryReceiptRequest;
-import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 /**
  * <pre>
@@ -72,7 +66,7 @@ public class PdChatManager {
         if (pdMessage == null) {
             return;
         }
-        sendMsg(generateMsg(pdMessage));
+        sendMsg(generateMsg(pdMessage), pdMessage);
     }
 
     private Message generateMsg(PdMessage pdMessage) {
@@ -101,8 +95,20 @@ public class PdChatManager {
                     return;
                 }
                 PdMessage pdMessage = parserMsg(message);
+                //接收到的消息直接设置成功
+                pdMessage.msgStatus = PdMessage.PDMessageStatus.SUCCESS;
                 if (!pdMessage.receipts) {
-                    pdMessageListener.onMessageReceived(pdMessage);
+                    pdMessage.conversationId = pdMessage.imMsgId;
+                    savePdMessage(pdMessage);
+                    saveConversation(message, pdMessage);
+                    Flowable.just(pdMessage)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Consumer<PdMessage>() {
+                                @Override
+                                public void accept(PdMessage pdMessage) throws Exception {
+                                    pdMessageListener.onMessageReceived(pdMessage);
+                                }
+                            });
                 }
             }
         };
@@ -130,6 +136,8 @@ public class PdChatManager {
         pdMessage.msgStatus = PdMessage.PDMessageStatus.DELIVERING;
         // TODO: 2019/2/21 单聊和其它的区分，这里只是只做单聊
         pdMessage.msgChatType = PDChatType.SINGLE;
+        // TODO: 2019/2/22 这里的时间获取可能会有问题
+        pdMessage.updateTime = System.currentTimeMillis();
 
         User user = UserDao.getInstance().queryCurrentUser();
         if (user.userImId.equals(message.getFrom())) {
@@ -145,22 +153,27 @@ public class PdChatManager {
                     pdTextMsgBody.content = ((TextElement) extension).getContent();
                     pdMessage.pdMsgBody = pdTextMsgBody;
                     pdMessage.msgType = PdMsgBody.PDMessageBodyType_TEXT;
+                    pdMessage.msgContent = pdTextMsgBody.content;
                 } else if (extension instanceof ImgElement) {
                     PdImgMsgBody pdImgMsgBody = new PdImgMsgBody();
                     pdImgMsgBody.remoteUrl = ((ImgElement) extension).getUrl();
                     pdImgMsgBody.thumbnailRemoteUrl = ((ImgElement) extension).getProperty();
                     pdMessage.msgType = PdMsgBody.PDMessageBodyType_IMAGE;
+                    pdMessage.msgContent = toJson(pdImgMsgBody);
                 } else if (extension instanceof AudioElement) {
                     PdVoiceMsgBody pdVoiceMsgBody = new PdVoiceMsgBody();
                     pdVoiceMsgBody.remoteUrl = ((AudioElement) extension).getUrl();
                     pdVoiceMsgBody.timeLength = ((AudioElement) extension).getProperty();
                     pdMessage.msgType = PdMsgBody.PDMessageBodyType_VOICE;
+                    pdMessage.msgContent = toJson(pdVoiceMsgBody);
                 } else if (extension instanceof LocationElement) {
                     // TODO: 2019/2/20 地图扩展
                 } else if (extension instanceof ReceiptsElement) {
                     //回执消息
                     String msgId = ((ReceiptsElement) extension).getMsgId();
                     MessageDao.getInstance().updateMsgStatusById(msgId);
+                    //回执消息更新会话表取的是发送者的im账号
+                    ConversationDao.getInstance().updateLastMsgById(pdMessage.msgSender, msgId);
                     pdMessage.receipts = true;
                 }
             }
@@ -232,6 +245,8 @@ public class PdChatManager {
                 break;
             default:
                 type = "text";
+                element = new TextElement();
+                ((TextElement) element).setContent(((PdTextMsgBody) pdMessage.pdMsgBody).content);
                 break;
         }
         element.setNamespace(connection.getServiceName());
@@ -287,12 +302,14 @@ public class PdChatManager {
         return type;
     }
 
-    private boolean sendMsg(Message message) {
+    private boolean sendMsg(Message message, PdMessage pdMessage) {
         boolean isSend;
         try {
             ChatManager manager = ChatManager.getInstanceFor(connection);
             Chat chat = manager.createChat(message.getTo());
-            MessageDao.getInstance().insertMsg(parserMsg(message));
+
+            saveMessage(message);
+            saveConversation(message, pdMessage);
             chat.sendMessage(message);
             isSend = true;
         } catch (SmackException.NotConnectedException e) {
@@ -301,6 +318,45 @@ public class PdChatManager {
             isSend = false;
         }
         return isSend;
+    }
+
+    private void savePdMessage(PdMessage pdMessage) {
+        if (pdMessage.msgDirection == PdMessage.PDDirection.SEND) {
+            pdMessage.conversationId = pdMessage.msgReceiver;
+            pdMessage.read = PdMessage.PDRead.READ;
+        } else {
+            pdMessage.conversationId = pdMessage.msgSender;
+            pdMessage.read = PdMessage.PDRead.UNREAD;
+        }
+        MessageDao.getInstance().insertMsg(pdMessage);
+    }
+
+    private void saveMessage(Message message) {
+        PdMessage pdMessage = parserMsg(message);
+        if (pdMessage.msgDirection == PdMessage.PDDirection.SEND) {
+            pdMessage.conversationId = message.getTo();
+            pdMessage.read = PdMessage.PDRead.READ;
+        } else {
+            pdMessage.conversationId = message.getFrom();
+            pdMessage.read = PdMessage.PDRead.UNREAD;
+        }
+        MessageDao.getInstance().insertMsg(pdMessage);
+    }
+
+    private void saveConversation(Message message, PdMessage pdMessage) {
+        PdConversation pdConversation = new PdConversation();
+        if (pdMessage.msgDirection == PdMessage.PDDirection.SEND) {
+            pdConversation.imUserId = message.getTo();
+        } else {
+            pdConversation.imUserId = message.getFrom();
+        }
+        pdConversation.lastMsgId = message.getStanzaId();
+        pdConversation.conversationType = PdConversation.ConversationType.Single;
+        // TODO: 2019/2/22 这里默认是正常会话,将来是否转接后台返回来的字段来进行更新
+        pdConversation.transfer = PdConversation.TransferType.Normal;
+        // TODO: 2019/2/22 这个需要后台来判断是否是历史
+        pdConversation.history = PdConversation.HistoryType.Normal;
+        ConversationDao.getInstance().insert(pdConversation);
     }
 
     /**
@@ -354,6 +410,32 @@ public class PdChatManager {
     public List<PdConversation> getConversationByType(PdConversation.ConversationType conversationType) {
         return ConversationDao.getInstance().queryConversationByType(conversationType);
     }
+
+    private String toJson(PdMsgBody pdMsgBody) {
+        switch (pdMsgBody.getMsgType()) {
+            case PdMsgBody.PDMessageBodyType_IMAGE:
+                return toFileJson(((PdImgMsgBody) pdMsgBody).remoteUrl, ((PdImgMsgBody) pdMsgBody).thumbnailRemoteUrl);
+            case PdMsgBody.PDMessageBodyType_VOICE:
+                return toFileJson(((PdVoiceMsgBody) pdMsgBody).remoteUrl, ((PdVoiceMsgBody) pdMsgBody).timeLength);
+            default:
+
+                break;
+        }
+        return null;
+    }
+
+    private String toFileJson(String url, String property) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put("url", url);
+            object.put("property", property);
+            return object.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     /**
      * 打包成json字符串

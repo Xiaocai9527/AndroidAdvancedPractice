@@ -42,7 +42,8 @@ public class ConversationTable extends BaseTable {
     public static final String NICK_NAME = "nick_name";
     //对方的用户头像
     public static final String AVATAR = "avatar";
-
+    //未读消息数
+    public static final String UN_READ = "un_read";
 
     /**
      * 字段对应的columnIndex
@@ -56,7 +57,7 @@ public class ConversationTable extends BaseTable {
     public static final int CONVERSATION_USER_ID_COLUMN_INDEX = 6;
     public static final int NICK_NAME_COLUMN_INDEX = 7;
     public static final int AVATAR_COLUMN_INDEX = 8;
-
+    public static final int UN_READ_COLUMN_INDEX = 9;
 
     public static LinkedHashMap<String, DataType> map = new LinkedHashMap<>();
 
@@ -64,11 +65,12 @@ public class ConversationTable extends BaseTable {
         map.put(ConversationTable.ID, INTEGER);
         map.put(ConversationTable.TRANSFER, INTEGER);
         map.put(ConversationTable.HISTORY, INTEGER);
-        map.put(ConversationTable.LAST_MSG_ID, INTEGER);
+        map.put(ConversationTable.LAST_MSG_ID, TEXT);
         map.put(ConversationTable.CONVERSATION_TYPE, TEXT);
         map.put(ConversationTable.CONVERSATION_USER_ID, INTEGER);
         map.put(ConversationTable.NICK_NAME, TEXT);
         map.put(ConversationTable.AVATAR, TEXT);
+        map.put(ConversationTable.UN_READ, INTEGER);
     }
 
     /**

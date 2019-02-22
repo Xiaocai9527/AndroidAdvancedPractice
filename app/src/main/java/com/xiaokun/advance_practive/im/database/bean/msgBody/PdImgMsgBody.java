@@ -16,4 +16,8 @@ public class PdImgMsgBody extends PdFileMsgBody {
     //缩略图下载状态
     public PmDownloadStatus thumbnailDownloadStatus;
 
+    @Override
+    public int getMsgType() {
+        return PDMessageBodyType_IMAGE;
+    }
 }

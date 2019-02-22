@@ -13,13 +13,13 @@ import com.xiaokun.baselib.muti_rv.MultiItem;
  */
 public class Conversation implements MultiItem {
 
+    public String userImId;
     public boolean transfer;
     public boolean history;
     public String nickName;
     public String url;
     public String msgContent;
     public long updateTime;
-
 
     @Override
     public int getItemType() {

@@ -20,6 +20,11 @@ public class PdFileMsgBody extends PdMsgBody {
     //文件下载状态
     public PmDownloadStatus pmDownloadStatus;
 
+    @Override
+    public int getMsgType() {
+        return PDMessageBodyType_FILE;
+    }
+
     public static enum PmDownloadStatus {
         //
         DOWNLOADING(1, "下载中"),

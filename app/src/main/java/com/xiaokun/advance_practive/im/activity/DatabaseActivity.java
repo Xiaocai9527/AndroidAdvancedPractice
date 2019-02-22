@@ -1,4 +1,4 @@
-package com.xiaokun.advance_practive.ui;
+package com.xiaokun.advance_practive.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -91,9 +91,9 @@ public class DatabaseActivity extends AppCompatActivity {
         pdConversation.conversationId = testRandom1();
         pdConversation.conversationType = PdConversation.ConversationType.Single;
         pdConversation.conversationUserId = testRandom1();
-        pdConversation.history = 0;
-        pdConversation.lastMsgId = testRandom1();
-        pdConversation.transfer = 0;
+        pdConversation.history = PdConversation.HistoryType.Normal;
+        pdConversation.lastMsgId = getRandomString(8);
+        pdConversation.transfer = PdConversation.TransferType.Normal;
         pdConversation.nickName = getRandomString(2);
         pdConversation.avatar = "http://" + getRandomString(10);
         boolean insert = ConversationDao.getInstance().insert(pdConversation);
@@ -137,12 +137,12 @@ public class DatabaseActivity extends AppCompatActivity {
         pdMessage.imMsgId = getRandomString(8);
         pdMessage.tenantId = testRandom1();
         pdMessage.businessId = testRandom1();
-        pdMessage.sessionId = testRandom1();
-        pdMessage.sendTime = System.currentTimeMillis();
+        pdMessage.conversationId = getRandomString(8);
+        pdMessage.updateTime = System.currentTimeMillis();
         pdMessage.msgType = 1;
         pdMessage.msgSender = "肖坤";
         pdMessage.msgReceiver = "小菜";
-        pdMessage.read = 0;
+        pdMessage.read = PdMessage.PDRead.UNREAD;
         pdMessage.msgContent = "你好我是小菜";
         pdMessage.msgChatType = PdMessage.PDChatType.SINGLE;
         pdMessage.msgDirection = PdMessage.PDDirection.SEND;
@@ -166,12 +166,12 @@ public class DatabaseActivity extends AppCompatActivity {
         pdMessage.imMsgId = "hsBLApo7";
         pdMessage.tenantId = testRandom1();
         pdMessage.businessId = testRandom1();
-        pdMessage.sessionId = testRandom1();
-        pdMessage.sendTime = System.currentTimeMillis();
+        pdMessage.conversationId = getRandomString(8);
+        pdMessage.updateTime = System.currentTimeMillis();
         pdMessage.msgType = 1;
         pdMessage.msgSender = "肖坤-更新";
         pdMessage.msgReceiver = "小菜-更新";
-        pdMessage.read = 0;
+        pdMessage.read = PdMessage.PDRead.UNREAD;
         pdMessage.msgContent = "你好我是小菜-更新";
         pdMessage.msgChatType = PdMessage.PDChatType.SINGLE;
         pdMessage.msgDirection = PdMessage.PDDirection.SEND;
@@ -188,12 +188,12 @@ public class DatabaseActivity extends AppCompatActivity {
         pdMessage.imMsgId = "hsBLApo7";
         pdMessage.tenantId = testRandom1();
         pdMessage.businessId = testRandom1();
-        pdMessage.sessionId = testRandom1();
-        pdMessage.sendTime = System.currentTimeMillis();
+        pdMessage.conversationId = getRandomString(8);
+        pdMessage.updateTime = System.currentTimeMillis();
         pdMessage.msgType = 1;
         pdMessage.msgSender = "test7@peidou/pd";
         pdMessage.msgReceiver = "test8@peidou/pd";
-        pdMessage.read = 0;
+        pdMessage.read = PdMessage.PDRead.UNREAD;
         pdMessage.msgContent = "你好我是小菜-更新";
         pdMessage.msgChatType = PdMessage.PDChatType.SINGLE;
         pdMessage.msgDirection = PdMessage.PDDirection.SEND;

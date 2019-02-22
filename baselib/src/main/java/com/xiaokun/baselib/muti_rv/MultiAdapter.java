@@ -179,6 +179,19 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHodler> implemen
     }
 
     /**
+     * 设置新数据源
+     *
+     * @param multiItems
+     */
+    public void setNewItems(List<MultiItem> multiItems) {
+        if (multiItems != null && !multiItems.isEmpty()) {
+            mData.clear();
+            mData.addAll(multiItems);
+            notifyDataSetChanged();
+        }
+    }
+
+    /**
      * 添加单个指定位置数据源
      *
      * @param multiItem
