@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".im.activity.DatabaseActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".im.activity.DatabaseActivity">
+
+        <Button
+            android:id="@+id/btn_create_book"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="createBook"
+            android:text="创建数据库并建表"
+            tools:layout_editor_absoluteX="65dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="addBookDatas"
+            android:text="添加表数据"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="addUserDatas"
+            android:text="点击添加用户" />
+
+        <Button
+            android:id="@+id/button49"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="queryCurrentUser"
+            android:text="查询当前用户" />
+
+        <Button
+            android:id="@+id/button48"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="addConversationDatas"
+            android:text="点击添加会话数据" />
+
+        <Button
+            android:id="@+id/button50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="queryCurrentConversation"
+            android:text="查询当前会话" />
+
+        <Button
+            android:id="@+id/button51"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="deleteCurrentConversation"
+            android:text="删除当前会话" />
+
+        <Button
+            android:id="@+id/button52"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="addMsg"
+            android:text="添加消息" />
+
+        <Button
+            android:id="@+id/button53"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="queryMsg"
+            android:text="随机查询消息" />
+
+        <Button
+            android:id="@+id/button54"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="updateMsg"
+            android:text="更新消息" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="addMsgs"
+            android:text="批量添加消息" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="login"
+            android:text="登录" />
+
+        <Button
+            android:id="@+id/btn_send_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="sendMsg"
+            android:text="发送消息" />
+
+
+    </LinearLayout>
+</ScrollView>

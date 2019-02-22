@@ -18,4 +18,31 @@
 
     <color name="white">#ffffff</color>
 
+    <color name="color_FFB3CC">#FFB3CC</color>
+    <color name="color_80FFFFFF">#80FFFFFF</color>
+    <color name="color_FFFFFF">#FFFFFF</color>
+    <color name="color_7fffffff">#7fffffff</color>
+    <color name="color_FAFAFA">#FAFAFA</color>
+    <color name="color_0F1826">#0F1826</color>
+    <color name="color_FF4691">#FF4691</color>
+    <color name="color_A9AFB8">#A9AFB8</color>
+    <color name="color_222222">#222222</color>
+    <color name="color_f5f6fa">#f5f6fa</color>
+    <color name="color_990F1826">#990F1826</color>
+    <color name="color_EBEDF0">#EBEDF0</color>
+    <color name="color_3f0F1826">#3f0F1826</color>
+    <color name="color_bf0F1826">#bf0F1826</color>
+
+    <color name="color_F85C44">#F85C44</color>
+    <color name="color_F5F6FA">#F5F6FA</color>
+    <color name="color_424242">#424242</color>
+    <color name="color_ebebeb">#ebebeb</color>
+    <color name="color_F7F7F7">#F7F7F7</color>
+    <color name="color_d8d8d8">#d8d8d8</color>
+    <color name="color_B9BEC6">#B9BEC6</color>
+    <color name="color_EBEBEB">#EBEBEB</color>
+    <color name="color_66ffffff">#66ffffff</color>
+    <color name="color_66f000000">#66000000</color>
+    <color name="color_C9CED6">#C9CED6</color>
+
 </resources>

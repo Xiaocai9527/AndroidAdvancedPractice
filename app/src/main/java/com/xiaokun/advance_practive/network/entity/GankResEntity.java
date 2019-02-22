@@ -16,7 +16,7 @@ public class GankResEntity implements Serializable {
     /**
      * Data : [{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"},{"desc":"MusicLibrary-一个丰富的音频播放SDK","publishedAt":"2018-03-12T08:44:50.326Z","who":"lizixian"}]
      * Code : 1
-     * Message : ok
+     * PdMessage : ok
      */
 
     private int Code;

@@ -80,11 +80,9 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHodler> implemen
         mContext = parent.getContext();
         View itemView = LayoutInflater.from(mContext).inflate(viewType, parent, false);
 
-        if (mFooterHolder != null) {
-            if (mFooterHolder.getLayoutRes() == viewType) {
-                return mFooterHolder;
-            }
-        } else {
+        if (mFooterHolder != null && mFooterHolder.getLayoutRes() == viewType) {
+            return mFooterHolder;
+        } else if (mFooterHolder == null && mIsShowFooter) {
             mFooterHolder = new FooterHodler(itemView, this);
             if (FooterHodler.TYPE_FOOTER == viewType) {
                 return mFooterHolder;
@@ -177,6 +175,19 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHodler> implemen
             int oldSize = getData().size();
             mData.addAll(multiItems);
             notifyItemRangeChanged(oldSize, mData.size());
+        }
+    }
+
+    /**
+     * 设置新数据源
+     *
+     * @param multiItems
+     */
+    public void setNewItems(List<MultiItem> multiItems) {
+        if (multiItems != null && !multiItems.isEmpty()) {
+            mData.clear();
+            mData.addAll(multiItems);
+            notifyDataSetChanged();
         }
     }
 

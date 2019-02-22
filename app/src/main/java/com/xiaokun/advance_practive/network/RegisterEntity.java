@@ -14,7 +14,7 @@ public class RegisterEntity
     /**
      * Data : {"register":"注册成功"}
      * Code : 1
-     * Message : ok
+     * PdMessage : ok
      */
 
     private DataBean Data;

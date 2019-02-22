@@ -1,5 +1,6 @@
 package com.xiaokun.baselib.muti_rv;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
@@ -25,9 +26,11 @@ import com.chad.library.adapter.base.BaseViewHolder;
 public abstract class BaseMultiHodler<T> extends RecyclerView.ViewHolder {
 
     private final SparseArray<View> views;
+    public Context mContext;
 
     public BaseMultiHodler(View itemView) {
         super(itemView);
+        mContext = itemView.getContext();
         views = new SparseArray<>();
     }
 
@@ -43,7 +46,7 @@ public abstract class BaseMultiHodler<T> extends RecyclerView.ViewHolder {
     }
 
     public BaseMultiHodler setText(@IdRes int viewId, CharSequence value) {
-        TextView textView = (TextView) views.get(viewId);
+        TextView textView = getView(viewId);
         textView.setText(value);
         return this;
     }
