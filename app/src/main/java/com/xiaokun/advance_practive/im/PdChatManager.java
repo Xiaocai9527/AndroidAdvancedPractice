@@ -360,38 +360,6 @@ public class PdChatManager {
     }
 
     /**
-     * 发送一条消息
-     *
-     * @param type    消息类型
-     * @param msg     消息内容
-     * @param to_name 好友userJid
-     * @return
-     */
-    private boolean sendMsg(String type, String msg, String to_name) {
-        boolean isSend;
-        String json = toJson(msg, type);
-        try {
-            ChatManager manager = ChatManager.getInstanceFor(connection);
-            Chat chat = manager.createChat(to_name, new ChatMessageListener() {
-                @Override
-                public void processMessage(Chat chat, Message message) {
-                    // TODO: 2019/2/19 消息处理
-
-                }
-            });
-            chat.sendMessage(json);
-            // TODO: 2019/2/19  插入数据库-会话,消息
-            isSend = true;
-        } catch (SmackException.NotConnectedException e) {
-            e.printStackTrace();
-            //发送失败
-            isSend = false;
-        }
-        return isSend;
-    }
-
-
-    /**
      * 通过userId来查会话
      *
      * @param toChatUserImId

@@ -63,6 +63,11 @@ public class ExampleUnitTest {
     public void main() {
         System.out.println(str);
         System.out.println(111);
+
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("1", null);
+        System.out.println(hashMap.toString());
+        System.out.println(hashMap.get("1"));
     }
 
 

@@ -91,6 +91,20 @@ public class PdConversation {
         return ConversationDao.getInstance().queryAllHistoryConversationsSorted();
     }
 
+    /**
+     * 从数据库中分页获取消息条数
+     *
+     * @param pageNum  页码 (从1开始)
+     * @param pageSize 每页消息条数
+     * @return
+     */
+    public List<PdMessage> loadMsgs(int pageNum, int pageSize) {
+        if (pageNum < 1) {
+            return null;
+        }
+        return MessageDao.getInstance().loadMsgsPagination(imUserId, pageSize, (pageNum - 1) * pageSize);
+    }
+
     public enum HistoryType {
         //
         Normal(1, "普通会话"),

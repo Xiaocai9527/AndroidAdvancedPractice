@@ -37,6 +37,12 @@ public class MessageDao {
         private static final MessageDao sInstance = new MessageDao();
     }
 
+    /**
+     * 添加一条消息
+     *
+     * @param pdMessage
+     * @return
+     */
     public boolean insertMsg(PdMessage pdMessage) {
         if (pdMessage == null) {
             return false;
@@ -57,6 +63,12 @@ public class MessageDao {
         return result != -1;
     }
 
+    /**
+     * 添加多条消息
+     *
+     * @param pdMessages
+     * @return
+     */
     public boolean insertMsgs(List<PdMessage> pdMessages) {
         if (pdMessages == null) {
             return false;
@@ -69,6 +81,12 @@ public class MessageDao {
         return true;
     }
 
+    /**
+     * 更新一条消息
+     *
+     * @param pdMessage
+     * @return
+     */
     public boolean updateMsg(PdMessage pdMessage) {
         if (pdMessage == null) {
             return false;
@@ -121,6 +139,12 @@ public class MessageDao {
         return result > 0;
     }
 
+    /**
+     * 删除一条消息
+     *
+     * @param pdMessage
+     * @return
+     */
     public boolean deleteMsg(PdMessage pdMessage) {
         if (pdMessage == null) {
             return false;
@@ -128,11 +152,23 @@ public class MessageDao {
         return deleteMsgById(pdMessage.businessId);
     }
 
+    /**
+     * 删除一条消息
+     *
+     * @param pdMessageId
+     * @return
+     */
     public boolean deleteMsgById(long pdMessageId) {
         int result = mDb.delete(MessageTable.TABLE_NAME, MessageTable.ID + "=?", new String[]{pdMessageId + ""});
         return result != 0;
     }
 
+    /**
+     * 通过消息id来获取消息,通常是用来获取会话表中最后一条消息
+     *
+     * @param msgId
+     * @return
+     */
     public PdMessage queryMsgById(String msgId) {
         if (TextUtils.isEmpty(msgId)) {
             return null;
@@ -189,6 +225,32 @@ public class MessageDao {
         return pdMessages;
     }
 
+    /**
+     * 从表中分页获取数据
+     *
+     * @param conversationId
+     * @param limit
+     * @param offset
+     * @return
+     */
+    public List<PdMessage> loadMsgsPagination(String conversationId, int limit, int offset) {
+        Cursor cursor = mDb.rawQuery("select * from " + MessageTable.TABLE_NAME + " where conversation_id =?" +
+                " limit " + limit + " offset " + offset, new String[]{conversationId});
+        List<PdMessage> pdMessages = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            PdMessage messageByCursor = getMessageByCursor(cursor);
+            pdMessages.add(messageByCursor);
+        }
+        cursor.close();
+        return pdMessages;
+    }
+
+    /**
+     * 更新消息为已读
+     *
+     * @param imMsgId
+     * @return
+     */
     public boolean updateMsgAsReadByMsgId(String imMsgId) {
         if (TextUtils.isEmpty(imMsgId)) {
             return false;
