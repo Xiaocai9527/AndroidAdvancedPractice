@@ -52,6 +52,7 @@ public class PdConversation {
         List<PdMessage> pdMessages = MessageDao.getInstance().queryUnreadMsgsByConversationId(imUserId);
         for (PdMessage pdMessage : pdMessages) {
             pdMessage.read = PdMessage.PDRead.READ;
+            MessageDao.getInstance().updateMsg(pdMessage);
         }
     }
 
@@ -74,24 +75,6 @@ public class PdConversation {
     }
 
     /**
-     * 查询已经降序排序的普通会话
-     *
-     * @return
-     */
-    public List<PdConversation> queryAllNormalConversationsSorted() {
-        return ConversationDao.getInstance().queryAllNormalConversationsSorted();
-    }
-
-    /**
-     * 查询已经降序排序的历史会话
-     *
-     * @return
-     */
-    public List<PdConversation> queryAllHistoryConversationsSorted() {
-        return ConversationDao.getInstance().queryAllHistoryConversationsSorted();
-    }
-
-    /**
      * 从数据库中分页获取消息条数
      *
      * @param pageNum  页码 (从1开始)
@@ -103,6 +86,10 @@ public class PdConversation {
             return null;
         }
         return MessageDao.getInstance().loadMsgsPagination(imUserId, pageSize, (pageNum - 1) * pageSize);
+    }
+
+    public List<PdMessage> loadAllMsgsByConversationId(String toChatUserImId) {
+        return MessageDao.getInstance().queryMsgsByConversationId(toChatUserImId);
     }
 
     public enum HistoryType {

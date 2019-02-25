@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
 import com.xiaokun.advance_practive.im.database.DatabaseHelper;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;

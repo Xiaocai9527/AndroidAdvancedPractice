@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.xiaokun.advance_practive.R;
+import com.xiaokun.advance_practive.im.PdChatManager;
 import com.xiaokun.advance_practive.im.PdIMClient;
 import com.xiaokun.advance_practive.im.PdMessageListener;
 import com.xiaokun.advance_practive.im.database.bean.PdConversation;
@@ -26,6 +27,7 @@ import com.xiaokun.advance_practive.im.database.dao.ConversationDao;
 import com.xiaokun.advance_practive.im.database.dao.MessageDao;
 import com.xiaokun.advance_practive.im.entity.Conversation;
 import com.xiaokun.advance_practive.im.util.PdDateUtils;
+import com.xiaokun.advance_practive.im.util.Utils;
 import com.xiaokun.baselib.muti_rv.BaseMultiHodler;
 import com.xiaokun.baselib.muti_rv.HolderFactoryList;
 import com.xiaokun.baselib.muti_rv.MultiAdapter;
@@ -59,52 +61,34 @@ public class ImConversationListActivity extends AppCompatActivity implements PdM
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_im_conversation_list);
-        PdIMClient.getInstance().getChatManager().addMessageListener(this);
+
         initView();
     }
 
     private void initView() {
         mRvConversationList = findViewById(R.id.rv_conversation_list);
-        HolderFactoryList instance = HolderFactoryList.getInstance().addTypeHolder(new BaseMultiHodler<Conversation>(
-                createView(R.layout.item_customer_dialogue, mRvConversationList)) {
-            @Override
-            public void bind(Conversation conversation) {
-                setText(R.id.chat_user_name, conversation.nickName);
-                setText(R.id.last_msg_tv, conversation.msgContent);
-                setText(R.id.last_msg_time_tv, PdDateUtils.format(conversation.updateTime, "yyyy-MM-dd HH:mm"));
-                PdConversation pdConversation = PdIMClient.getInstance().getChatManager().getConversation(conversation.userImId);
 
-                if (pdConversation.getUnReadCount() > 0) {
-                    setVisible(R.id.unread_msg_num_tv, true);
-                } else {
-                    setVisible(R.id.unread_msg_num_tv, false);
-                }
-
-                setText(R.id.unread_msg_num_tv, pdConversation.getUnReadCount() + "");
-
-                Glide.with(mContext).load(conversation.url)
-                        .apply(RequestOptions.bitmapTransform(new CircleCrop())
-                                .placeholder(R.mipmap.ic_launcher)
-                                .error(R.mipmap.ic_launcher))
-                        .into(((ImageView) getView(R.id.chat_user_avatar)));
-
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(mContext, "点击进入会话窗口", Toast.LENGTH_SHORT).show();
-                        pdConversation.markAllMessagesAsRead();
-                    }
-                });
-            }
-        });
+        HolderFactoryList instance = HolderFactoryList.getInstance().addTypeHolder(MyHolder.class, R.layout.item_customer_dialogue);
         mMultiAdapter = new MultiAdapter(instance);
-
-        mMultiAdapter.addItems(getConversations());
         mRvConversationList.setAdapter(mMultiAdapter);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMultiAdapter.setNewItems(getConversations());
+        PdIMClient.getInstance().getChatManager().addMessageListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        PdIMClient.getInstance().getChatManager().removeMessageListener(this);
+    }
+
     private List<MultiItem> getConversations() {
-        List<PdConversation> pdConversations = ConversationDao.getInstance().queryConversations();
+
+        List<PdConversation> pdConversations = PdIMClient.getInstance().getChatManager().queryAllNormalConversationsSorted();
         List<Conversation> conversations = new ArrayList<>();
 
         for (PdConversation pdConversation : pdConversations) {
@@ -114,31 +98,18 @@ public class ImConversationListActivity extends AppCompatActivity implements PdM
             conversation.userImId = pdConversation.imUserId;
             conversation.history = pdConversation.history.mType == 2;
             conversation.transfer = pdConversation.transfer.mType == 2;
-            conversation.nickName = "小小";
+            conversation.nickName = pdConversation.imUserId;
             conversation.url = "https://ws1.sinaimg.cn/large/0065oQSqly1g0ajj4h6ndj30sg11xdmj.jpg";
             conversation.updateTime = pdMessage.updateTime;
             conversations.add(conversation);
         }
 
-        return transferList(conversations);
-    }
-
-    private <T> List<MultiItem> transferList(List<T> list) {
-        if (list == null) {
-            return null;
-        }
-        List<MultiItem> items = new ArrayList<>();
-
-        for (T t : list) {
-            MultiItem item = (MultiItem) t;
-            items.add(item);
-        }
-        return items;
+        return Utils.transferList(conversations);
     }
 
     @Override
     public void onMessageReceived(PdMessage pdMessage) {
-        Log.e(TAG, "onMessageReceived(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + pdMessage.msgSender);
+        Log.e(TAG, "onMessageReceived(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + pdMessage.msgContent);
         List<MultiItem> conversations = getConversations();
         mMultiAdapter.setNewItems(conversations);
     }

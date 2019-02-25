@@ -11,6 +11,7 @@ import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.table.MessageTable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -235,12 +236,14 @@ public class MessageDao {
      */
     public List<PdMessage> loadMsgsPagination(String conversationId, int limit, int offset) {
         Cursor cursor = mDb.rawQuery("select * from " + MessageTable.TABLE_NAME + " where conversation_id =?" +
-                " limit " + limit + " offset " + offset, new String[]{conversationId});
+                " order by update_time desc limit " + limit + " offset " + offset, new String[]{conversationId});
         List<PdMessage> pdMessages = new ArrayList<>();
         while (cursor.moveToNext()) {
             PdMessage messageByCursor = getMessageByCursor(cursor);
             pdMessages.add(messageByCursor);
         }
+        //反序一下
+        Collections.reverse(pdMessages);
         cursor.close();
         return pdMessages;
     }
@@ -257,8 +260,8 @@ public class MessageDao {
         }
         ContentValues contentValues = new ContentValues();
         contentValues.put(MessageTable.READ, PdMessage.PDRead.READ.mType);
-        mDb.update(MessageTable.TABLE_NAME, contentValues, MessageTable.READ + "=?", new String[]{imMsgId});
-        return false;
+        int result = mDb.update(MessageTable.TABLE_NAME, contentValues, MessageTable.ID + "=?", new String[]{imMsgId});
+        return result > 0;
     }
 
     private PdMessage getMessageByCursor(Cursor cursor) {

@@ -78,6 +78,7 @@
         <activity
             android:name=".im.activity.ImConversationListActivity"
             android:label="会话列表" />
+        <activity android:name=".im.activity.ImChatActivity" />
         <!--<activity android:name=".im.ImLoginActivity" />-->
         <!--<activity android:name=".ui.DatabaseActivity" />-->
     </application>

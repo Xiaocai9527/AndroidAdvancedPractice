@@ -52,8 +52,7 @@ public class MyHolder extends BaseMultiHodler<Conversation> {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "点击进入会话窗口", Toast.LENGTH_SHORT).show();
-                pdConversation.markAllMessagesAsRead();
+                ImChatActivity.start(mContext,conversation.userImId);
             }
         });
 

@@ -16,7 +16,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static com.xiaokun.baselib.util.Utils.close;
@@ -186,6 +188,18 @@ public class ExampleUnitTest {
 
 
         System.out.println(hashMap.size());
+    }
+
+    @Test
+    public void testList() {
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+
+        list.add(list.size(), "4");
+
+        System.out.println(list.toString());
     }
 
 }

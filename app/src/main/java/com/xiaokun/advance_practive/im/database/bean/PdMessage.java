@@ -52,6 +52,23 @@ public class PdMessage {
     public boolean receipts;
 
     /**
+     * 创建消息(默认单聊)
+     *
+     * @param toUserName
+     * @return
+     */
+    public static PdMessage createPdMessage(String toUserName) {
+        PdMessage pdMessage = new PdMessage();
+        User user = UserDao.getInstance().queryCurrentUser();
+        pdMessage.msgReceiver = toUserName;
+        pdMessage.msgSender = user.userImId;
+        pdMessage.msgChatType = PDChatType.SINGLE;
+        pdMessage.msgDirection = PdMessage.PDDirection.SEND;
+        pdMessage.msgStatus = PdMessage.PDMessageStatus.NEW;
+        return pdMessage;
+    }
+
+    /**
      * 创建消息
      *
      * @param toUserName

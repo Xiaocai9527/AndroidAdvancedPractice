@@ -179,6 +179,21 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHodler> implemen
     }
 
     /**
+     * 添加数据源,使用场景下拉加载
+     *
+     * @param multiItems
+     */
+    public void addStartItems(List<MultiItem> multiItems) {
+        if (multiItems != null && !multiItems.isEmpty()) {
+            int oldSize = getData().size();
+            mData.addAll(0, multiItems);
+            notifyItemRangeInserted(0, multiItems.size() - 1);
+            //notifyItemRangeChanged(0, multiItems.size() - 1);
+            //notifyDataSetChanged();
+        }
+    }
+
+    /**
      * 设置新数据源
      *
      * @param multiItems
@@ -198,10 +213,20 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHodler> implemen
      * @param position
      */
     public void addItem(MultiItem multiItem, int position) {
-        if (position > 0 && position < mData.size()) {
-            mData.add(multiItem);
+        if (position > 0 && position <= mData.size()) {
+            mData.add(position, multiItem);
             notifyItemInserted(position);
         }
+    }
+
+    /**
+     * 直接往最后添加一条数据
+     *
+     * @param multiItem
+     */
+    public void addItem(MultiItem multiItem) {
+        mData.add(getItemCount(), multiItem);
+        notifyItemInserted(getItemCount());
     }
 
     /**

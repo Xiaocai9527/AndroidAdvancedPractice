@@ -33,7 +33,11 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -47,7 +51,7 @@ import io.reactivex.functions.Consumer;
  *      版本  ：1.0
  * </pre>
  */
-public class PdChatManager {
+public class PdChatManager implements ChatMessageListener, ChatManagerListener {
 
     private static final String TAG = "PdChatManager";
     private XMPPTCPConnection connection;
@@ -82,44 +86,21 @@ public class PdChatManager {
         return message;
     }
 
+    private Chat mChat;
+
+    private Set<PdMessageListener> mPdMessageListeners = new HashSet<>();
+
     /**
      * 初始化聊天消息监听
      */
     public void addMessageListener(PdMessageListener pdMessageListener) {
+        mPdMessageListeners.add(pdMessageListener);
         ChatManager manager = ChatManager.getInstanceFor(connection);
-        //设置信息的监听
-        final ChatMessageListener messageListener = new ChatMessageListener() {
-            @Override
-            public void processMessage(Chat chat, Message message) {
-                if (message == null) {
-                    return;
-                }
-                PdMessage pdMessage = parserMsg(message);
-                //接收到的消息直接设置成功
-                pdMessage.msgStatus = PdMessage.PDMessageStatus.SUCCESS;
-                if (!pdMessage.receipts) {
-                    pdMessage.conversationId = pdMessage.imMsgId;
-                    savePdMessage(pdMessage);
-                    saveConversation(message, pdMessage);
-                    Flowable.just(pdMessage)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Consumer<PdMessage>() {
-                                @Override
-                                public void accept(PdMessage pdMessage) throws Exception {
-                                    pdMessageListener.onMessageReceived(pdMessage);
-                                }
-                            });
-                }
-            }
-        };
-        ChatManagerListener chatManagerListener = new ChatManagerListener() {
+        manager.addChatListener(this);
+    }
 
-            @Override
-            public void chatCreated(Chat chat, boolean arg1) {
-                chat.addMessageListener(messageListener);
-            }
-        };
-        manager.addChatListener(chatManagerListener);
+    public void removeMessageListener(PdMessageListener pdMessageListener) {
+        mPdMessageListeners.remove(pdMessageListener);
     }
 
     /**
@@ -379,6 +360,24 @@ public class PdChatManager {
         return ConversationDao.getInstance().queryConversationByType(conversationType);
     }
 
+    /**
+     * 查询已经降序排序的普通会话
+     *
+     * @return
+     */
+    public List<PdConversation> queryAllNormalConversationsSorted() {
+        return ConversationDao.getInstance().queryAllNormalConversationsSorted();
+    }
+
+    /**
+     * 查询已经降序排序的历史会话
+     *
+     * @return
+     */
+    public List<PdConversation> queryAllHistoryConversationsSorted() {
+        return ConversationDao.getInstance().queryAllHistoryConversationsSorted();
+    }
+
     private String toJson(PdMsgBody pdMsgBody) {
         switch (pdMsgBody.getMsgType()) {
             case PdMsgBody.PDMessageBodyType_IMAGE:
@@ -423,4 +422,33 @@ public class PdChatManager {
         return null;
     }
 
+    @Override
+    public void processMessage(Chat chat, Message message) {
+        if (message == null) {
+            return;
+        }
+        PdMessage pdMessage = parserMsg(message);
+        //接收到的消息直接设置成功
+        pdMessage.msgStatus = PdMessage.PDMessageStatus.SUCCESS;
+        if (!pdMessage.receipts) {
+            pdMessage.conversationId = pdMessage.imMsgId;
+            savePdMessage(pdMessage);
+            saveConversation(message, pdMessage);
+            Flowable.just(pdMessage)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<PdMessage>() {
+                        @Override
+                        public void accept(PdMessage pdMessage) throws Exception {
+                            for (PdMessageListener pdMessageListener : mPdMessageListeners) {
+                                pdMessageListener.onMessageReceived(pdMessage);
+                            }
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void chatCreated(Chat chat, boolean b) {
+        chat.addMessageListener(this);
+    }
 }

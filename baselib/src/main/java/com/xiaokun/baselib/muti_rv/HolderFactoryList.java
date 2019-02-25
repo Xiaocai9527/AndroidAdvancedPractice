@@ -26,25 +26,27 @@ public class HolderFactoryList implements HolderFactory {
     private HolderFactoryList() {
     }
 
-    public void addTypeHolders(HashMap<Integer, Class<? extends BaseMultiHodler>> hoderHashMap) {
+    public HolderFactoryList addTypeHolders(HashMap<Integer, Class<? extends BaseMultiHodler>> hoderHashMap) {
         mHoderHashMap.putAll(hoderHashMap);
+        return this;
     }
 
-    public void addTypeHolder(Class<? extends BaseMultiHodler> classz, int layoutId) {
+    /**
+     * 暂不支持添加内部类holder
+     *
+     * @param classz
+     * @param layoutId
+     * @return
+     */
+    public HolderFactoryList addTypeHolder(Class<? extends BaseMultiHodler> classz, int layoutId) {
         mHoderHashMap.put(layoutId, classz);
-    }
-
-    private BaseMultiHodler mHolder;
-
-    public HolderFactoryList addTypeHolder(BaseMultiHodler hodler) {
-        mHolder = hodler;
         return this;
     }
 
     @Override
     public BaseMultiHodler createViewHolder(View parent, int type) {
         BaseMultiHodler baseMultiHodler = null;
-        if (mHoderHashMap != null) {
+        if (mHoderHashMap != null && !mHoderHashMap.isEmpty()) {
             for (Map.Entry<Integer, Class<? extends BaseMultiHodler>> classEntry : mHoderHashMap.entrySet()) {
                 if (classEntry.getKey() == type) {
                     baseMultiHodler = (BaseMultiHodler) RefInvoke.createObject(classEntry.getValue(), View.class, parent);
@@ -52,8 +54,6 @@ public class HolderFactoryList implements HolderFactory {
                     break;
                 }
             }
-        } else if (mHolder != null) {
-            return mHolder;
         } else {
             throw new IllegalArgumentException("需要添加holder");
         }
