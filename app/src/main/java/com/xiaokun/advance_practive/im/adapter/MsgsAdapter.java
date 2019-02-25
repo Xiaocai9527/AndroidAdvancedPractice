@@ -1,17 +1,22 @@
 package com.xiaokun.advance_practive.im.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.litho.Diff;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
+import com.xiaokun.advance_practive.im.entity.Message;
 import com.xiaokun.advance_practive.im.entity.MsgItem;
 import com.xiaokun.baselib.muti_rv.BaseMultiHodler;
 import com.xiaokun.baselib.muti_rv.HolderFactory;
 import com.xiaokun.baselib.muti_rv.MultiAdapter;
 import com.xiaokun.baselib.muti_rv.MultiItem;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -61,6 +66,46 @@ public class MsgsAdapter extends MultiAdapter {
                     msgItem.getRightItemType() : msgItem.getLeftItemType();
         } else {
             throw new IllegalArgumentException("数据源需要实现MsgItem接口");
+        }
+    }
+
+    public void swapData(List<MsgItem> items) {
+        if (mData.isEmpty()) {
+            mData.addAll(items);
+            notifyDataSetChanged();
+        } else {
+            List<MsgItem> oldItems = new ArrayList<>((Collection<? extends MsgItem>) mData);
+            mData.addAll(items);
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return oldItems.size();
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return mData.size();
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    Message message = (Message) oldItems.get(oldItemPosition);
+                    Message message1 = (Message) mData.get(newItemPosition);
+                    return message.imMsgId.equals(message1.imMsgId);
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                    Message message = (Message) oldItems.get(oldItemPosition);
+                    Message message1 = (Message) mData.get(newItemPosition);
+                    return message.conversationId.equals(message1.conversationId) &&
+                            message.msgContent.equals(message1.msgContent) &&
+                            message.leftItemLayoutId == message1.leftItemLayoutId &&
+                            message.rightItemLayoutId == message1.rightItemLayoutId &&
+                            message.avatarUrl == message1.avatarUrl;
+                }
+            });
+            diffResult.dispatchUpdatesTo(this);
         }
     }
 }

@@ -202,4 +202,18 @@ public class ExampleUnitTest {
         System.out.println(list.toString());
     }
 
+    @Test
+    public void testList1() {
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        //验证
+        List<String> oldItems = new ArrayList<>(list);
+        list.add("4");
+
+        System.out.println(list.toString());
+        System.out.println(oldItems.toString());
+    }
+
 }
