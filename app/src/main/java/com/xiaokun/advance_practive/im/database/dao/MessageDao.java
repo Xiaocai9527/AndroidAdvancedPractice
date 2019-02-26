@@ -10,6 +10,8 @@ import com.xiaokun.advance_practive.im.database.DatabaseHelper;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.table.MessageTable;
 
+import org.jivesoftware.smack.packet.Message;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,7 +62,7 @@ public class MessageDao {
         values.put(MessageTable.DIRECTION, pdMessage.msgDirection.direction);
         values.put(MessageTable.STATUS, pdMessage.msgStatus.status);
         values.put(MessageTable.UPDATE_TIME, pdMessage.updateTime);
-        long result = mDb.insert(MessageTable.TABLE_NAME, null, values);
+        long result = mDb.replace(MessageTable.TABLE_NAME, null, values);
         return result != -1;
     }
 
@@ -263,6 +265,76 @@ public class MessageDao {
         int result = mDb.update(MessageTable.TABLE_NAME, contentValues, MessageTable.ID + "=?", new String[]{imMsgId});
         return result > 0;
     }
+
+    /**
+     * 更新消息发送失败状态
+     *
+     * @param message
+     */
+    public boolean updateMsgFailStatus(PdMessage message) {
+        if (message == null || TextUtils.isEmpty(message.imMsgId)) {
+            return false;
+        }
+        return updateMsgFailStatusById(message.imMsgId);
+    }
+
+    /**
+     * 更新消息发送失败状态
+     *
+     * @param msgId
+     */
+    public boolean updateMsgFailStatusById(String msgId) {
+        if (TextUtils.isEmpty(msgId)) {
+            return false;
+        }
+        ContentValues values = new ContentValues();
+        values.put(MessageTable.STATUS, PdMessage.PDMessageStatus.FAIL.status);
+        int result = mDb.update(MessageTable.TABLE_NAME, values, MessageTable.ID + "=?", new String[]{msgId});
+        return result > 0;
+    }
+
+    /**
+     * 更新消息发送成功状态
+     *
+     * @param message
+     */
+    public boolean updateMsgSucStatus(PdMessage message) {
+        if (message == null || TextUtils.isEmpty(message.imMsgId)) {
+            return false;
+        }
+        return updateMsgSucStatusById(message.imMsgId);
+    }
+
+    /**
+     * 更新消息发送成功状态
+     *
+     * @param msgId
+     */
+    public boolean updateMsgSucStatusById(String msgId) {
+        if (TextUtils.isEmpty(msgId)) {
+            return false;
+        }
+        ContentValues values = new ContentValues();
+        values.put(MessageTable.STATUS, PdMessage.PDMessageStatus.SUCCESS.status);
+        int result = mDb.update(MessageTable.TABLE_NAME, values, MessageTable.ID + "=?", new String[]{msgId});
+        return result > 0;
+    }
+
+    /**
+     * 获取所有发送中的消息
+     *
+     * @return
+     */
+    public List<PdMessage> getDeliverMsgs() {
+        Cursor cursor = mDb.rawQuery("select * from " + MessageTable.TABLE_NAME + " where status=?", new String[]{"2"});
+
+        List<PdMessage> pdMessages = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            pdMessages.add(getMessageByCursor(cursor));
+        }
+        return pdMessages;
+    }
+
 
     private PdMessage getMessageByCursor(Cursor cursor) {
         PdMessage pdMessage = new PdMessage();

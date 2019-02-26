@@ -216,4 +216,36 @@ public class ExampleUnitTest {
         System.out.println(oldItems.toString());
     }
 
+    @Test
+    public void testList2() {
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+
+        //验证
+        List<String> oldItems = new ArrayList<>();
+        oldItems.add("4");
+        oldItems.add("5");
+        oldItems.add("6");
+
+//        oldItems.addAll(0, list);
+        oldItems.addAll(list);
+        System.out.println(oldItems.toString());
+
+    }
+
+    @Test
+    public void testObject() {
+        String a = "1234";
+
+        modify(a);
+
+        System.out.println(a);
+    }
+
+    private void modify(String str) {
+        str += "5";
+    }
+
 }

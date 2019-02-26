@@ -12,4 +12,11 @@ import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 public interface PdMessageListener {
 
     void onMessageReceived(PdMessage pdMessage);
+
+    /**
+     * 回执消息,表示发送的消息成功送达
+     *
+     * @param msgId
+     */
+    void onReceiptsMessageReceived(String msgId);
 }

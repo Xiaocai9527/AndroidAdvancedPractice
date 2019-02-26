@@ -2,6 +2,8 @@ package com.xiaokun.advance_practive.im.activity;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -9,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.entity.Message;
+import com.xiaokun.advance_practive.im.util.IMEUtils;
 import com.xiaokun.baselib.muti_rv.BaseMultiHodler;
 
 /**
@@ -23,6 +26,12 @@ public class TextHolder extends BaseMultiHodler<Message> {
 
     public TextHolder(View itemView) {
         super(itemView);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMEUtils.hideSoftInput(v);
+            }
+        });
     }
 
     @Override
@@ -32,5 +41,12 @@ public class TextHolder extends BaseMultiHodler<Message> {
                 .placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher))
                 .into((ImageView) getView(R.id.iv_avatar));
+        getView(R.id.tv_text_content).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        setVisible(R.id.pb_status, message.msgStatus == PdMessage.PDMessageStatus.DELIVERING);
     }
 }

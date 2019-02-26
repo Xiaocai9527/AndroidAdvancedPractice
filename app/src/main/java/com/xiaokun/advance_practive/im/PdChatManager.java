@@ -1,5 +1,7 @@
 package com.xiaokun.advance_practive.im;
 
+import android.text.TextUtils;
+
 import com.xiaokun.advance_practive.im.database.bean.PdConversation;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage.PDChatType;
@@ -29,7 +31,9 @@ import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.ExtensionElement;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
+import org.jivesoftware.smackx.offline.OfflineMessageManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -66,11 +70,14 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
      *
      * @param pdMessage
      */
-    public void sendMessage(PdMessage pdMessage) {
+    public PdMessage sendMessage(PdMessage pdMessage) {
         if (pdMessage == null) {
-            return;
+            return pdMessage;
         }
-        sendMsg(generateMsg(pdMessage), pdMessage);
+        Message message = generateMsg(pdMessage);
+        pdMessage.imMsgId = message.getStanzaId();
+        sendMsg(message, pdMessage);
+        return pdMessage;
     }
 
     private Message generateMsg(PdMessage pdMessage) {
@@ -79,6 +86,11 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
         message.setFrom(pdMessage.msgSender);
         message.setBody("单聊-" + getMsgType(pdMessage.msgType));
         message.setType(Message.Type.chat);
+
+        //这里为了兼容发送正在发送中的消息
+        if (!TextUtils.isEmpty(pdMessage.imMsgId)) {
+            message.setStanzaId(pdMessage.imMsgId);
+        }
 
         RequestElement requestElement = new RequestElement();
         message.addExtension(requestElement);
@@ -153,8 +165,9 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
                     //回执消息
                     String msgId = ((ReceiptsElement) extension).getMsgId();
                     MessageDao.getInstance().updateMsgStatusById(msgId);
+                    pdMessage.imMsgId = msgId;
                     //回执消息更新会话表取的是发送者的im账号
-                    ConversationDao.getInstance().updateLastMsgById(pdMessage.msgSender, msgId);
+                    //ConversationDao.getInstance().updateLastMsgById(pdMessage.msgSender, msgId);
                     pdMessage.receipts = true;
                 }
             }
@@ -297,8 +310,13 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
             e.printStackTrace();
             //发送失败
             isSend = false;
+            //updateSendMsgFail(pdMessage);
         }
         return isSend;
+    }
+
+    private void updateSendMsgFail(PdMessage pdMessage) {
+        MessageDao.getInstance().updateMsgFailStatus(pdMessage);
     }
 
     private void savePdMessage(PdMessage pdMessage) {
@@ -403,7 +421,6 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
         return null;
     }
 
-
     /**
      * 打包成json字符串
      *
@@ -431,6 +448,7 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
         //接收到的消息直接设置成功
         pdMessage.msgStatus = PdMessage.PDMessageStatus.SUCCESS;
         if (!pdMessage.receipts) {
+            //非回执消息
             pdMessage.conversationId = pdMessage.imMsgId;
             savePdMessage(pdMessage);
             saveConversation(message, pdMessage);
@@ -441,6 +459,21 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
                         public void accept(PdMessage pdMessage) throws Exception {
                             for (PdMessageListener pdMessageListener : mPdMessageListeners) {
                                 pdMessageListener.onMessageReceived(pdMessage);
+                            }
+                        }
+                    });
+        } else {
+            //回执消息,通知消息已经发送成功
+            //1.更新数据库状态,绘制消息的发送者就是msgId。跟其他消息类型相反
+            MessageDao.getInstance().updateMsgSucStatusById(pdMessage.msgSender);
+            //2.通知ui界面发送成功
+            Flowable.just(pdMessage)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<PdMessage>() {
+                        @Override
+                        public void accept(PdMessage pdMessage) throws Exception {
+                            for (PdMessageListener pdMessageListener : mPdMessageListeners) {
+                                pdMessageListener.onReceiptsMessageReceived(pdMessage.imMsgId);
                             }
                         }
                     });

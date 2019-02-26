@@ -64,7 +64,7 @@ public class PdMessage {
         pdMessage.msgSender = user.userImId;
         pdMessage.msgChatType = PDChatType.SINGLE;
         pdMessage.msgDirection = PdMessage.PDDirection.SEND;
-        pdMessage.msgStatus = PdMessage.PDMessageStatus.NEW;
+        pdMessage.msgStatus = PdMessage.PDMessageStatus.DELIVERING;
         return pdMessage;
     }
 

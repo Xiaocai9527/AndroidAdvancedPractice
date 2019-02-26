@@ -76,8 +76,8 @@ public class ImConversationListActivity extends AppCompatActivity implements PdM
     @Override
     protected void onResume() {
         super.onResume();
-        mMultiAdapter.setNewItems(getConversations());
         PdIMClient.getInstance().getChatManager().addMessageListener(this);
+        mMultiAdapter.setNewItems(getConversations());
     }
 
     @Override
@@ -101,6 +101,7 @@ public class ImConversationListActivity extends AppCompatActivity implements PdM
             conversation.nickName = pdConversation.imUserId;
             conversation.url = "https://ws1.sinaimg.cn/large/0065oQSqly1g0ajj4h6ndj30sg11xdmj.jpg";
             conversation.updateTime = pdMessage.updateTime;
+            conversation.mPdMessage = pdMessage;
             conversations.add(conversation);
         }
 
@@ -110,6 +111,13 @@ public class ImConversationListActivity extends AppCompatActivity implements PdM
     @Override
     public void onMessageReceived(PdMessage pdMessage) {
         Log.e(TAG, "onMessageReceived(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + pdMessage.msgContent);
+        List<MultiItem> conversations = getConversations();
+        mMultiAdapter.setNewItems(conversations);
+    }
+
+    @Override
+    public void onReceiptsMessageReceived(String msgId) {
+        //回执消息-消息发送成功
         List<MultiItem> conversations = getConversations();
         mMultiAdapter.setNewItems(conversations);
     }

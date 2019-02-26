@@ -223,6 +223,11 @@ public class DatabaseActivity extends AppCompatActivity {
                 Log.e(TAG, "to:" + pdMessage.msgReceiver + ";from:" + pdMessage.msgSender +
                         ";content:");
             }
+
+            @Override
+            public void onReceiptsMessageReceived(String msgId) {
+
+            }
         });
     }
 }

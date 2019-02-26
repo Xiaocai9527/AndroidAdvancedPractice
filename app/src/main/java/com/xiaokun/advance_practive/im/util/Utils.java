@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.xiaokun.advance_practive.im.entity.Message;
 import com.xiaokun.baselib.muti_rv.MultiItem;
 
 import java.util.ArrayList;
@@ -36,4 +37,17 @@ public class Utils {
         }
         return items;
     }
+
+    public static List<Message> transferMultiItem(List<MultiItem> multiItems) {
+        if (multiItems == null) {
+            return null;
+        }
+        List<Message> messages = new ArrayList<>();
+
+        for (MultiItem multiItem : multiItems) {
+            messages.add(((Message) multiItem));
+        }
+        return messages;
+    }
+
 }

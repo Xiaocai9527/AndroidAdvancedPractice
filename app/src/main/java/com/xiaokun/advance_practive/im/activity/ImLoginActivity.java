@@ -13,9 +13,17 @@ import android.widget.Toast;
 
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.im.PdIMClient;
+import com.xiaokun.advance_practive.im.PdMessageListener;
 import com.xiaokun.advance_practive.im.PdOptions;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.bean.msgBody.PdTextMsgBody;
+
+import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smackx.offline.OfflineMessageManager;
+import org.json.JSONObject;
+
+import java.util.List;
 
 import static com.xiaokun.baselib.util.Utils.testRandom1;
 
@@ -27,7 +35,7 @@ import static com.xiaokun.baselib.util.Utils.testRandom1;
  *      版本  ：1.0
  * </pre>
  */
-public class ImLoginActivity extends AppCompatActivity {
+public class ImLoginActivity extends AppCompatActivity implements PdMessageListener {
 
     private static final String TAG = "ImLoginActivity";
 
@@ -36,6 +44,7 @@ public class ImLoginActivity extends AppCompatActivity {
     private EditText mEtReceiver;
     private Button mBtnSendMsg;
     private Button mBtnToList;
+    private PdMessage mPdMessage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +55,12 @@ public class ImLoginActivity extends AppCompatActivity {
         pdOptions.setAppKey("12345678");
         PdIMClient.getInstance().init(this, pdOptions);
         initView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PdIMClient.getInstance().getChatManager().addMessageListener(this);
     }
 
     private void initView() {
@@ -91,16 +106,27 @@ public class ImLoginActivity extends AppCompatActivity {
             return;
         }
 
-        PdMessage pdMessage = PdMessage.createPdMessage(name, PdMessage.PDChatType.SINGLE);
+        mPdMessage = PdMessage.createPdMessage(name, PdMessage.PDChatType.SINGLE);
         PdTextMsgBody pdTextMsgBody = new PdTextMsgBody();
         pdTextMsgBody.content = "你好我是小菜-更新";
-        pdMessage.pdMsgBody = pdTextMsgBody;
-        pdMessage.addBody(pdTextMsgBody);
+        mPdMessage.pdMsgBody = pdTextMsgBody;
+        mPdMessage.addBody(pdTextMsgBody);
 
-        PdIMClient.getInstance().getChatManager().sendMessage(pdMessage);
+        mPdMessage = PdIMClient.getInstance().getChatManager().sendMessage(mPdMessage);
     }
 
     public void toConversationListPage(View view) {
         ImConversationListActivity.start(ImLoginActivity.this);
+    }
+
+    @Override
+    public void onMessageReceived(PdMessage pdMessage) {
+
+    }
+
+    @Override
+    public void onReceiptsMessageReceived(String msgId) {
+        Log.e(TAG, "onReceiptsMessageReceived(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" +
+                "回执成功" + msgId);
     }
 }

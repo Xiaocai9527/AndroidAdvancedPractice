@@ -2,6 +2,7 @@ package com.xiaokun.advance_practive.im.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,13 +70,13 @@ public class MsgsAdapter extends MultiAdapter {
         }
     }
 
-    public void swapData(List<MsgItem> items) {
+    public void swapData(List<MultiItem> items) {
         if (mData.isEmpty()) {
             mData.addAll(items);
             notifyDataSetChanged();
         } else {
-            List<MsgItem> oldItems = new ArrayList<>((Collection<? extends MsgItem>) mData);
-            mData.addAll(items);
+            List<MultiItem> oldItems = new ArrayList<>(mData);
+            mData.addAll(0, items);
             DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
                 @Override
                 public int getOldListSize() {
@@ -91,6 +92,9 @@ public class MsgsAdapter extends MultiAdapter {
                 public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
                     Message message = (Message) oldItems.get(oldItemPosition);
                     Message message1 = (Message) mData.get(newItemPosition);
+                    if (TextUtils.isEmpty(message.imMsgId)) {
+                        return false;
+                    }
                     return message.imMsgId.equals(message1.imMsgId);
                 }
 

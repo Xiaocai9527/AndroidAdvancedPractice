@@ -1,6 +1,7 @@
 package com.xiaokun.advance_practive.im.entity;
 
 import com.xiaokun.advance_practive.R;
+import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.baselib.muti_rv.MultiItem;
 
 /**
@@ -20,6 +21,8 @@ public class Conversation implements MultiItem {
     public String url;
     public String msgContent;
     public long updateTime;
+
+    public PdMessage mPdMessage;
 
     @Override
     public int getItemType() {
