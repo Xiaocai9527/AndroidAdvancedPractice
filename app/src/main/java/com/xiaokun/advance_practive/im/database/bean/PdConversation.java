@@ -1,5 +1,7 @@
 package com.xiaokun.advance_practive.im.database.bean;
 
+import com.xiaokun.advance_practive.im.PdIMClient;
+import com.xiaokun.advance_practive.im.database.bean.msgBody.PdMsgBody;
 import com.xiaokun.advance_practive.im.database.dao.ConversationDao;
 import com.xiaokun.advance_practive.im.database.dao.MessageDao;
 
@@ -85,7 +87,15 @@ public class PdConversation {
         if (pageNum < 1) {
             return null;
         }
-        return MessageDao.getInstance().loadMsgsPagination(imUserId, pageSize, (pageNum - 1) * pageSize);
+        List<PdMessage> pdMessages = MessageDao.getInstance().loadMsgsPagination(imUserId, pageSize,
+                (pageNum - 1) * pageSize);
+
+        for (PdMessage pdMessage : pdMessages) {
+            PdMsgBody pdMsgBody = PdIMClient.parseJson(pdMessage.msgContent, pdMessage.msgType);
+            pdMessage.addBody(pdMsgBody);
+        }
+
+        return pdMessages;
     }
 
     public List<PdMessage> loadAllMsgsByConversationId(String toChatUserImId) {

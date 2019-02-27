@@ -1,16 +1,16 @@
 package com.xiaokun.advance_practive.im.activity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,14 +25,13 @@ import com.xiaokun.advance_practive.im.PdIMClient;
 import com.xiaokun.advance_practive.im.PdMessageListener;
 import com.xiaokun.advance_practive.im.adapter.MsgHolderFactoryList;
 import com.xiaokun.advance_practive.im.adapter.MsgsAdapter;
-import com.xiaokun.advance_practive.im.adapter.holder.ImageHolder;
 import com.xiaokun.advance_practive.im.adapter.holder.TextHolder;
 import com.xiaokun.advance_practive.im.database.bean.PdConversation;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.bean.msgBody.PdImgMsgBody;
-import com.xiaokun.advance_practive.im.database.bean.msgBody.PdMsgBody;
 import com.xiaokun.advance_practive.im.database.bean.msgBody.PdTextMsgBody;
 import com.xiaokun.advance_practive.im.entity.Message;
+import com.xiaokun.advance_practive.im.util.IMEUtils;
 import com.xiaokun.advance_practive.im.util.TextWatcherHelper;
 import com.xiaokun.advance_practive.im.util.Utils;
 import com.xiaokun.baselib.muti_rv.MultiItem;
@@ -43,14 +42,14 @@ import java.util.List;
 /**
  * <pre>
  *      作者  ：肖坤
- *      时间  ：2019/02/25
+ *      时间  ：2019/02/27
  *      描述  ：
  *      版本  ：1.0
  * </pre>
  */
-public class ImChatActivity extends AppCompatActivity implements View.OnClickListener, PdMessageListener {
+public class ImChatFragment extends Fragment implements View.OnClickListener, PdMessageListener {
 
-    private static final String TAG = "ImChatActivity";
+    private static final String TAG = "ImChatFragment";
 
     private static final String KEY_TO_CHAT_USER_ID = "TO_CHAT_USER_ID";
     //    private SwipeRefreshLayout mSwLayout;
@@ -60,58 +59,31 @@ public class ImChatActivity extends AppCompatActivity implements View.OnClickLis
     private PdConversation mConversation;
     private String mToChatUserImId;
     private MsgsAdapter mMsgsAdapter;
-    private KeyBoardLayout mKvLayout;
-//    private List<Message> mMessages = new ArrayList<>();
-
-    public static void start(Context context, String toChatUserId) {
-        Intent starter = new Intent(context, ImChatActivity.class);
-        starter.putExtra(KEY_TO_CHAT_USER_ID, toChatUserId);
-        context.startActivity(starter);
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_im_chat);
-        mToChatUserImId = getIntent().getStringExtra(KEY_TO_CHAT_USER_ID);
-
-        initView();
-
-        mConversation = PdIMClient.getInstance().getChatManager().getConversation(mToChatUserImId);
-        loadMsgs(mPageNum, mPageSize);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        PdIMClient.getInstance().getChatManager().addMessageListener(this);
-        mConversation.markAllMessagesAsRead();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        PdIMClient.getInstance().getChatManager().removeMessageListener(this);
-    }
-
     private int mPageNum = 1;
     private int mPageSize = 10;
 
-    private void initView() {
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View contentView = inflater.inflate(R.layout.activity_im_chat, container, false);
+
+        initView(contentView);
+
+        return contentView;
+    }
+
+    private void initView(View view) {
 //        mSwLayout = findViewById(R.id.sw_layout);
-        mRvMsg = findViewById(R.id.rv_msg);
-        mEtMsg = findViewById(R.id.et_msg);
-        mBtnSend = findViewById(R.id.btn_send);
-        mKvLayout = findViewById(R.id.kv_layout);
+        mRvMsg = view.findViewById(R.id.rv_msg);
+        mEtMsg = view.findViewById(R.id.et_msg);
+        mBtnSend = view.findViewById(R.id.btn_send);
 
-        mKvLayout.setEditViewIds(new int[]{R.id.et_msg});
-        mKvLayout.setFilterViews(new View[]{mEtMsg});
-
-        final ClassicsFooter footer = findViewById(R.id.footer);
+        final ClassicsFooter footer = view.findViewById(R.id.footer);
         View arrow = footer.findViewById(ClassicsFooter.ID_IMAGE_ARROW);
         arrow.setScaleY(-1);
 
-        final SmartRefreshLayout refreshLayout = findViewById(R.id.refreshLayout);
+        final SmartRefreshLayout refreshLayout = view.findViewById(R.id.refreshLayout);
         refreshLayout.setEnableRefresh(false);
         refreshLayout.setEnableAutoLoadMore(false);
         refreshLayout.setEnableNestedScroll(false);
@@ -154,19 +126,30 @@ public class ImChatActivity extends AppCompatActivity implements View.OnClickLis
 //                loadMsgs(mPageNum, mPageSize);
 //            }
 //        });
+        mRvMsg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMEUtils.hideSoftInput(v);
+            }
+        });
+
+        refreshLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMEUtils.hideSoftInput(v);
+            }
+        });
 
         MsgHolderFactoryList holder = MsgHolderFactoryList.getInstance()
-                .addTypeHolder(TextHolder.class, R.layout.item_text_receive_msg, R.layout.item_text_send_msg)
-                .addTypeHolder(ImageHolder.class, R.layout.item_img_receive_msg, R.layout.item_img_send_msg);
+                .addTypeHolder(TextHolder.class, R.layout.item_text_receive_msg, R.layout.item_text_send_msg);
         mMsgsAdapter = new MsgsAdapter(holder);
         mRvMsg.setAdapter(mMsgsAdapter);
-
     }
 
     private void loadMsgs(int pageNum, int pageSize) {
         List<PdMessage> pdMessages = mConversation.loadMsgs(pageNum, pageSize);
         if (pdMessages.isEmpty()) {
-            Toast.makeText(this, "没有更多消息了~", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "没有更多消息了~", Toast.LENGTH_SHORT).show();
             return;
         }
         List<Message> mMessages = new ArrayList<>();
@@ -251,48 +234,15 @@ public class ImChatActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onFailedMessageReceived(PdMessage pdMessage) {
-        //更新失败消息
-        if (pdMessage.imMsgId.equals(mToChatUserImId) || pdMessage.msgReceiver.equals(mToChatUserImId)
-                || pdMessage.msgSender.equals(mToChatUserImId)) {
-            List<MultiItem> data = mMsgsAdapter.getData();
-            List<Message> messages = Utils.transferMultiItem(data);
-            int index = -1;
-            Message updateMsg = null;
-            for (Message message : messages) {
-                if (message.imMsgId.equals(pdMessage.imMsgId)) {
-                    index = messages.indexOf(message);
-                    message.msgStatus = PdMessage.PDMessageStatus.FAIL;
-                    updateMsg = message;
-                    break;
-                }
-            }
-            if (index == -1) {
-                return;
-            }
-            mMsgsAdapter.updateItem(updateMsg, index);
-        }
+
     }
 
     private Message getMessage(PdMessage pdMessage) {
         Message message = new Message();
-        switch (pdMessage.msgType) {
-            case PdMsgBody.PDMessageBodyType_TEXT:
-                message.leftItemLayoutId = R.layout.item_text_receive_msg;
-                message.rightItemLayoutId = R.layout.item_text_send_msg;
-                break;
-            case PdMsgBody.PDMessageBodyType_IMAGE:
-                message.leftItemLayoutId = R.layout.item_img_receive_msg;
-                message.rightItemLayoutId = R.layout.item_img_send_msg;
-                break;
-            default:
-                message.leftItemLayoutId = R.layout.item_text_receive_msg;
-                message.rightItemLayoutId = R.layout.item_text_send_msg;
-                break;
-        }
-
+        message.leftItemLayoutId = R.layout.item_text_receive_msg;
+        message.rightItemLayoutId = R.layout.item_text_send_msg;
         message.msgDirection = pdMessage.msgDirection;
         message.msgStatus = pdMessage.msgStatus;
-        message.pdMsgBody = pdMessage.pdMsgBody;
         if (message.msgDirection == PdMessage.PDDirection.SEND) {
             message.avatarUrl = "https://ws1.sinaimg.cn/large/0065oQSqly1fytdr77urlj30sg10najf.jpg";
         } else {

@@ -45,7 +45,7 @@ public abstract class BasePeidouElement implements ExtensionElement {
         this.chatElementName = chatElementName;
     }
 
-    protected StringBuilder sb = new StringBuilder();
+    protected StringBuilder sb;
 
     @Override
     public abstract CharSequence toXML();

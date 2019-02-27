@@ -80,6 +80,7 @@
             android:label="会话列表" />
         <activity
             android:name=".im.activity.ImChatActivity"
+            android:label="会话窗口"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <!--<activity android:name=".im.ImLoginActivity" />-->
         <!--<activity android:name=".ui.DatabaseActivity" />-->

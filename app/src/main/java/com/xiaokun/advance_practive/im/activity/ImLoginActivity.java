@@ -16,16 +16,8 @@ import com.xiaokun.advance_practive.im.PdIMClient;
 import com.xiaokun.advance_practive.im.PdMessageListener;
 import com.xiaokun.advance_practive.im.PdOptions;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
+import com.xiaokun.advance_practive.im.database.bean.msgBody.PdImgMsgBody;
 import com.xiaokun.advance_practive.im.database.bean.msgBody.PdTextMsgBody;
-
-import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smackx.offline.OfflineMessageManager;
-import org.json.JSONObject;
-
-import java.util.List;
-
-import static com.xiaokun.baselib.util.Utils.testRandom1;
 
 /**
  * <pre>
@@ -45,6 +37,8 @@ public class ImLoginActivity extends AppCompatActivity implements PdMessageListe
     private Button mBtnSendMsg;
     private Button mBtnToList;
     private PdMessage mPdMessage;
+    private Button mBtnSendImgMsg;
+    private EditText mEtReceiver1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,11 +61,14 @@ public class ImLoginActivity extends AppCompatActivity implements PdMessageListe
         mEtUsername = findViewById(R.id.et_username);
         mEtPassword = findViewById(R.id.et_password);
         mEtReceiver = findViewById(R.id.et_receiver);
+        mEtReceiver1 = findViewById(R.id.et_receiver1);
         mEtUsername.setText("test7");
         mEtPassword.setText("test7");
         mEtReceiver.setText("test8@peidou/pd");
+        mEtReceiver1.setText("test8@peidou/pd");
         mBtnSendMsg = findViewById(R.id.btn_send_msg);
         mBtnToList = findViewById(R.id.btn_to_list);
+        mBtnSendImgMsg = findViewById(R.id.btn_send_img_msg);
     }
 
     public void loginIm(View view) {
@@ -86,6 +83,7 @@ public class ImLoginActivity extends AppCompatActivity implements PdMessageListe
                     Toast.makeText(ImLoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
                     mBtnSendMsg.setEnabled(true);
                     mBtnToList.setEnabled(true);
+                    mBtnSendImgMsg.setEnabled(true);
                 }
 
                 @Override
@@ -115,6 +113,23 @@ public class ImLoginActivity extends AppCompatActivity implements PdMessageListe
         mPdMessage = PdIMClient.getInstance().getChatManager().sendMessage(mPdMessage);
     }
 
+    public void sendImageMsg(View view) {
+        String name = mEtReceiver.getText().toString();
+        if (TextUtils.isEmpty(name)) {
+            Toast.makeText(this, "填写接收者", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mPdMessage = PdMessage.createPdMessage(name, PdMessage.PDChatType.SINGLE);
+        PdImgMsgBody pdImgMsgBody = new PdImgMsgBody();
+        pdImgMsgBody.remoteUrl = "https://ws1.sinaimg.cn/large/0065oQSqgy1fxno2dvxusj30sf10nqcm.jpg";
+        pdImgMsgBody.thumbnailRemoteUrl = "";
+        mPdMessage.pdMsgBody = pdImgMsgBody;
+        mPdMessage.addBody(pdImgMsgBody);
+
+        mPdMessage = PdIMClient.getInstance().getChatManager().sendMessage(mPdMessage);
+    }
+
     public void toConversationListPage(View view) {
         ImConversationListActivity.start(ImLoginActivity.this);
     }
@@ -128,5 +143,10 @@ public class ImLoginActivity extends AppCompatActivity implements PdMessageListe
     public void onReceiptsMessageReceived(String msgId) {
         Log.e(TAG, "onReceiptsMessageReceived(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" +
                 "回执成功" + msgId);
+    }
+
+    @Override
+    public void onFailedMessageReceived(PdMessage pdMessage) {
+
     }
 }

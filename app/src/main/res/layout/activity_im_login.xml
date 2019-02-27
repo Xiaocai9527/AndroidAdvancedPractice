@@ -47,10 +47,31 @@
             android:layout_height="wrap_content"
             android:enabled="false"
             android:onClick="sendMsg"
-            android:text="发送消息给" />
+            android:text="发送文本消息给" />
 
         <EditText
             android:id="@+id/et_receiver"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="填写接收者jid" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_send_img_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:onClick="sendImageMsg"
+            android:text="发送图片消息给" />
+
+        <EditText
+            android:id="@+id/et_receiver1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

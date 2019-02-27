@@ -1,4 +1,4 @@
-package com.xiaokun.advance_practive.im.activity;
+package com.xiaokun.advance_practive.im.adapter.holder;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -9,6 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.xiaokun.advance_practive.R;
 import com.xiaokun.advance_practive.im.PdIMClient;
+import com.xiaokun.advance_practive.im.activity.ImChatActivity;
 import com.xiaokun.advance_practive.im.database.bean.PdConversation;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.dao.ConversationDao;

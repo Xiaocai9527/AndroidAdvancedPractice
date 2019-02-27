@@ -26,8 +26,9 @@ public class ReceiptsElement extends BasePeidouElement {
 
     @Override
     public CharSequence toXML() {
+        sb = new StringBuilder();
         sb.append("<" + elementName + " xmlns=" + "\"" + namespace + "\"" + ">");
-        sb.append("<receipts " + " type=" + escape + getMsgType() + escape + " msgid=" + escape + msgId + escape + "/></" + elementName);
+        sb.append("<receipts " + " type=" + escape + getMsgType() + escape + " msgid=" + escape + msgId + escape + "/></" + elementName + ">");
         return sb.toString();
     }
 

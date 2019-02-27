@@ -3,40 +3,26 @@ package com.xiaokun.advance_practive.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.request.RequestOptions;
 import com.xiaokun.advance_practive.R;
-import com.xiaokun.advance_practive.im.PdChatManager;
 import com.xiaokun.advance_practive.im.PdIMClient;
 import com.xiaokun.advance_practive.im.PdMessageListener;
+import com.xiaokun.advance_practive.im.adapter.holder.MyHolder;
 import com.xiaokun.advance_practive.im.database.bean.PdConversation;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
-import com.xiaokun.advance_practive.im.database.dao.ConversationDao;
 import com.xiaokun.advance_practive.im.database.dao.MessageDao;
 import com.xiaokun.advance_practive.im.entity.Conversation;
-import com.xiaokun.advance_practive.im.util.PdDateUtils;
 import com.xiaokun.advance_practive.im.util.Utils;
-import com.xiaokun.baselib.muti_rv.BaseMultiHodler;
 import com.xiaokun.baselib.muti_rv.HolderFactoryList;
 import com.xiaokun.baselib.muti_rv.MultiAdapter;
 import com.xiaokun.baselib.muti_rv.MultiItem;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.xiaokun.advance_practive.im.util.Utils.createView;
 
 /**
  * <pre>
@@ -120,5 +106,10 @@ public class ImConversationListActivity extends AppCompatActivity implements PdM
         //回执消息-消息发送成功
         List<MultiItem> conversations = getConversations();
         mMultiAdapter.setNewItems(conversations);
+    }
+
+    @Override
+    public void onFailedMessageReceived(PdMessage pdMessage) {
+
     }
 }

@@ -102,11 +102,10 @@ public class MsgsAdapter extends MultiAdapter {
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
                     Message message = (Message) oldItems.get(oldItemPosition);
                     Message message1 = (Message) mData.get(newItemPosition);
-                    return message.conversationId.equals(message1.conversationId) &&
-                            message.msgContent.equals(message1.msgContent) &&
-                            message.leftItemLayoutId == message1.leftItemLayoutId &&
-                            message.rightItemLayoutId == message1.rightItemLayoutId &&
-                            message.avatarUrl == message1.avatarUrl;
+                    if (TextUtils.isEmpty(message.msgContent)) {
+                        return false;
+                    }
+                    return message.msgContent.equals(message1.msgContent);
                 }
             });
             diffResult.dispatchUpdatesTo(this);

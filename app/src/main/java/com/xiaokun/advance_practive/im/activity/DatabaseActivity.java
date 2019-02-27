@@ -228,6 +228,11 @@ public class DatabaseActivity extends AppCompatActivity {
             public void onReceiptsMessageReceived(String msgId) {
 
             }
+
+            @Override
+            public void onFailedMessageReceived(PdMessage pdMessage) {
+
+            }
         });
     }
 }

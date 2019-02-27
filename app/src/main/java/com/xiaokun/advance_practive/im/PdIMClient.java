@@ -375,7 +375,7 @@ public class PdIMClient implements ConnectionListener {
         return deliverMsg;
     }
 
-    private PdMsgBody parseJson(String json, int type) {
+    public static PdMsgBody parseJson(String json, int type) {
         if (type == PdMsgBody.PDMessageBodyType_TEXT) {
             PdTextMsgBody pdTextMsgBody = new PdTextMsgBody();
             pdTextMsgBody.content = json;

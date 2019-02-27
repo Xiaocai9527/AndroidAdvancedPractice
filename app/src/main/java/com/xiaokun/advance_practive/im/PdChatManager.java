@@ -31,21 +31,21 @@ import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.ExtensionElement;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
-import org.jivesoftware.smackx.offline.OfflineMessageManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 /**
  * <pre>
@@ -59,7 +59,8 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
 
     private static final String TAG = "PdChatManager";
     private XMPPTCPConnection connection;
-
+    //发送失败时间
+    private static final int FAILED_SEND_TIME_SECOND = 5;
 
     public PdChatManager(XMPPTCPConnection connection) {
         this.connection = connection;
@@ -306,6 +307,8 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
             saveConversation(message, pdMessage);
             chat.sendMessage(message);
             isSend = true;
+            //消息计时
+            timingMsg(pdMessage, FAILED_SEND_TIME_SECOND);
         } catch (SmackException.NotConnectedException e) {
             e.printStackTrace();
             //发送失败
@@ -315,10 +318,54 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
         return isSend;
     }
 
-    private void updateSendMsgFail(PdMessage pdMessage) {
-        MessageDao.getInstance().updateMsgFailStatus(pdMessage);
+    private HashMap<String, DisposableSubscriber> mMsgTimingHashMap = new HashMap<>();
+
+    private void timingMsg(PdMessage pdMessage, int failedSendTimeSecond) {
+        DisposableSubscriber<Long> disposableSubscriber = Flowable.interval(1, TimeUnit.SECONDS, Schedulers.io())
+                .take(failedSendTimeSecond)
+                .subscribeWith(new DisposableSubscriber<Long>() {
+
+                    @Override
+                    public void onNext(Long aLong) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        //1.结束的时候还没有后销毁此流表示这个消息发送失败
+                        updateSendMsgFail(pdMessage.imMsgId);
+                        //2.移除对象,防止hashmap过大占内存
+                        mMsgTimingHashMap.remove(pdMessage.imMsgId);
+                        //3.切换ui线程通知ui界面更改状态
+                        Flowable.just(pdMessage)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<PdMessage>() {
+                                    @Override
+                                    public void accept(PdMessage pdMessage) throws Exception {
+                                        for (PdMessageListener pdMessageListener : mPdMessageListeners) {
+                                            pdMessageListener.onFailedMessageReceived(pdMessage);
+                                        }
+                                    }
+                                });
+                    }
+                });
+        mMsgTimingHashMap.put(pdMessage.imMsgId, disposableSubscriber);
     }
 
+    private void updateSendMsgFail(String msgId) {
+        MessageDao.getInstance().updateMsgFailStatusById(msgId);
+    }
+
+    /**
+     * 更新消息表
+     *
+     * @param pdMessage
+     */
     private void savePdMessage(PdMessage pdMessage) {
         if (pdMessage.msgDirection == PdMessage.PDDirection.SEND) {
             pdMessage.conversationId = pdMessage.msgReceiver;
@@ -342,6 +389,12 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
         MessageDao.getInstance().insertMsg(pdMessage);
     }
 
+    /**
+     * 更新会话表
+     *
+     * @param message
+     * @param pdMessage
+     */
     private void saveConversation(Message message, PdMessage pdMessage) {
         PdConversation pdConversation = new PdConversation();
         if (pdMessage.msgDirection == PdMessage.PDDirection.SEND) {
@@ -445,38 +498,114 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
             return;
         }
         PdMessage pdMessage = parserMsg(message);
-        //接收到的消息直接设置成功
-        pdMessage.msgStatus = PdMessage.PDMessageStatus.SUCCESS;
         if (!pdMessage.receipts) {
             //非回执消息
+            //接收到的消息直接设置成功
+            pdMessage.msgStatus = PdMessage.PDMessageStatus.SUCCESS;
             pdMessage.conversationId = pdMessage.imMsgId;
+            //1.更新消息表
             savePdMessage(pdMessage);
+            //2.更新会话表
             saveConversation(message, pdMessage);
-            Flowable.just(pdMessage)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<PdMessage>() {
-                        @Override
-                        public void accept(PdMessage pdMessage) throws Exception {
-                            for (PdMessageListener pdMessageListener : mPdMessageListeners) {
-                                pdMessageListener.onMessageReceived(pdMessage);
-                            }
-                        }
-                    });
+            //3.通知ui界面接收消息
+            notifyMsgToUi(pdMessage);
         } else {
             //回执消息,通知消息已经发送成功
-            //1.更新数据库状态,绘制消息的发送者就是msgId。跟其他消息类型相反
-            MessageDao.getInstance().updateMsgSucStatusById(pdMessage.msgSender);
+            //1.更新数据库状态
+            updateMsgDbSuc(pdMessage.imMsgId);
             //2.通知ui界面发送成功
-            Flowable.just(pdMessage)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<PdMessage>() {
-                        @Override
-                        public void accept(PdMessage pdMessage) throws Exception {
-                            for (PdMessageListener pdMessageListener : mPdMessageListeners) {
-                                pdMessageListener.onReceiptsMessageReceived(pdMessage.imMsgId);
-                            }
+            notifyReceiptsMsgToUi(pdMessage);
+            //3.取消消息计时器
+            cancelMsgTiming(pdMessage.imMsgId);
+        }
+    }
+
+    /**
+     * 更新消息表此消息发送成功
+     *
+     * @param msgId
+     */
+    private void updateMsgDbSuc(String msgId) {
+        MessageDao.getInstance().updateMsgSucStatusById(msgId);
+    }
+
+    /**
+     * 通知消息到ui界面,切换到ui线程,并发送回执消息
+     *
+     * @param pdMessage
+     */
+    private void notifyMsgToUi(PdMessage pdMessage) {
+        Flowable.just(pdMessage)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<PdMessage>() {
+                    @Override
+                    public void accept(PdMessage pdMessage) throws Exception {
+                        //发送回执消息
+                        sendReceiptsMsg(pdMessage);
+                        for (PdMessageListener pdMessageListener : mPdMessageListeners) {
+                            pdMessageListener.onMessageReceived(pdMessage);
                         }
-                    });
+                    }
+                });
+    }
+
+    /**
+     * 通知回执消息到ui界面,切换到ui线程
+     *
+     * @param pdMessage
+     */
+    private void notifyReceiptsMsgToUi(PdMessage pdMessage) {
+        Flowable.just(pdMessage)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<PdMessage>() {
+                    @Override
+                    public void accept(PdMessage pdMessage) throws Exception {
+                        for (PdMessageListener pdMessageListener : mPdMessageListeners) {
+                            pdMessageListener.onReceiptsMessageReceived(pdMessage.imMsgId);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 取消消息定时器
+     *
+     * @param msgId 消息id
+     */
+    private void cancelMsgTiming(String msgId) {
+        DisposableSubscriber disposableSubscriber = mMsgTimingHashMap.get(msgId);
+        if (disposableSubscriber != null && !disposableSubscriber.isDisposed()) {
+            disposableSubscriber.dispose();
+        }
+    }
+
+    /**
+     * 发送回执消息表示接收成功
+     *
+     * @param pdMessage
+     */
+    private void sendReceiptsMsg(PdMessage pdMessage) {
+        Message message = new Message();
+        message.setTo(pdMessage.msgSender);
+        message.setFrom(pdMessage.msgReceiver);
+        message.setBody("单聊-" + getMsgType(pdMessage.msgType));
+        message.setType(Message.Type.chat);
+
+        //这里为了兼容发送正在发送中的消息
+        if (!TextUtils.isEmpty(pdMessage.imMsgId)) {
+            message.setStanzaId(pdMessage.imMsgId);
+        }
+
+        ReceiptsElement receiptsElement = new ReceiptsElement();
+        receiptsElement.setMsgId(pdMessage.imMsgId);
+        receiptsElement.setNamespace(connection.getServiceName());
+        message.addExtension(receiptsElement);
+        ChatManager manager = ChatManager.getInstanceFor(connection);
+        Chat chat = manager.createChat(message.getTo());
+        try {
+            chat.sendMessage(message);
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
         }
     }
 

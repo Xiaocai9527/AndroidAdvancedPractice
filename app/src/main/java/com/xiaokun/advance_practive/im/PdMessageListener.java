@@ -19,4 +19,11 @@ public interface PdMessageListener {
      * @param msgId
      */
     void onReceiptsMessageReceived(String msgId);
+
+    /**
+     * 发送失败消息回调,此回调只在会话窗口有效
+     *
+     * @param pdMessage
+     */
+    void onFailedMessageReceived(PdMessage pdMessage);
 }

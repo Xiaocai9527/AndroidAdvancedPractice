@@ -36,6 +36,7 @@ public class ImgElement extends BasePeidouElement {
 
     @Override
     public CharSequence toXML() {
+        sb = new StringBuilder();
         sb.append(getBeforeCommonXml());
         sb.append(" url=" + escape + url + escape + "property=" + escape + property + escape + lastXml);
         return sb.toString();

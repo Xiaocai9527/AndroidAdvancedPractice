@@ -40,6 +40,7 @@ public class TextElement extends BasePeidouElement {
 
     @Override
     public CharSequence toXML() {
+        sb = new StringBuilder();
         sb.append(getBeforeCommonXml());
         sb.append(" content=" + escape + content + escape + lastXml);
         return sb.toString();

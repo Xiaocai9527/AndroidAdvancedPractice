@@ -179,6 +179,20 @@ public class MultiAdapter extends RecyclerView.Adapter<BaseMultiHodler> implemen
     }
 
     /**
+     * 更新单个数据
+     *
+     * @param item
+     * @param index
+     */
+    public void updateItem(MultiItem item, int index) {
+        if (item == null || index < 0) {
+            return;
+        }
+        mData.set(index, item);
+        notifyItemChanged(index);
+    }
+
+    /**
      * 添加数据源,使用场景下拉加载
      *
      * @param multiItems

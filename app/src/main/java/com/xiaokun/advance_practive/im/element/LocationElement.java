@@ -46,6 +46,7 @@ public class LocationElement extends BasePeidouElement {
 
     @Override
     public CharSequence toXML() {
+        sb = new StringBuilder();
         sb.append(getBeforeCommonXml());
         sb.append(" url=" + escape + content + escape + "property=" + escape + property + escape + lastXml);
         return sb.toString();
