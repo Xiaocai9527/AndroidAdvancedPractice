@@ -167,6 +167,16 @@ public class MessageDao {
     }
 
     /**
+     * 删除所有消息
+     *
+     * @return
+     */
+    public boolean deleteAllMsg() {
+        int result = mDb.delete(MessageTable.TABLE_NAME, null, null);
+        return result > 0;
+    }
+
+    /**
      * 通过消息id来获取消息,通常是用来获取会话表中最后一条消息
      *
      * @param msgId

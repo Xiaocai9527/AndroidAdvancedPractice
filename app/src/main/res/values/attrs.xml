@@ -7,4 +7,12 @@
     <attr name="one_text_bg" format="reference|color"/>
     <attr name="two_text_bg" format="reference|color"/>
 
+    <declare-styleable name="ProgressView">
+        <attr name="ringWidth" format="dimension" />
+        <attr name="startAngle" format="float" />
+        <attr name="reachColor" format="color" />
+        <attr name="unReachColor" format="color" />
+        <attr name="progress" format="float" />
+    </declare-styleable>
+
 </resources>

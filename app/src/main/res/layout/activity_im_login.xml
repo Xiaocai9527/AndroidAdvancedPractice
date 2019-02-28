@@ -87,4 +87,11 @@
         android:onClick="toConversationListPage"
         android:text="跳转会话列表页面" />
 
+    <Button
+        android:id="@+id/button55"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="logout"
+        android:text="退出" />
+
 </LinearLayout>

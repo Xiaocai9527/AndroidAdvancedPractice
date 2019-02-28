@@ -34,4 +34,6 @@
     <dimen name="dimen_40dp">40dp</dimen>
     <dimen name="dimen_16dp">16dp</dimen>
     <dimen name="dimen_74dp">74dp</dimen>
+
+    <dimen name="panel_height">200dp</dimen>
 </resources>

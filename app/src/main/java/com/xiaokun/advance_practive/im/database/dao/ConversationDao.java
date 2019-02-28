@@ -280,6 +280,11 @@ public class ConversationDao {
         return result != 0;
     }
 
+    public boolean deleteAllConversation() {
+        int result = mDb.delete(ConversationTable.TABLE_NAME, null, null);
+        return result > 0;
+    }
+
     /**
      * 查询所有的会话
      *

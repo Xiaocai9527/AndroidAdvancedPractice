@@ -66,6 +66,10 @@ public class PdChatManager implements ChatMessageListener, ChatManagerListener {
         this.connection = connection;
     }
 
+    public void setConnection(XMPPTCPConnection connection) {
+        this.connection = connection;
+    }
+
     /**
      * 发送消息
      *

@@ -5,9 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.xiaokun.advance_practive.im.database.dao.ConversationDao;
+import com.xiaokun.advance_practive.im.database.dao.MessageDao;
 import com.xiaokun.advance_practive.im.database.table.ConversationTable;
 import com.xiaokun.advance_practive.im.database.table.MessageTable;
 import com.xiaokun.advance_practive.im.database.table.UserTable;
+import com.xiaokun.advance_practive.im.entity.Message;
 import com.xiaokun.baselib.util.ContextHolder;
 
 /**
@@ -32,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mContext = context;
     }
 
-    private static synchronized DatabaseHelper getInstance() {
+    public static synchronized DatabaseHelper getInstance() {
         if (instance == null) {
             instance = new DatabaseHelper(ContextHolder.getContext(), DB_NAME, null, DB_VERSION);
         }
@@ -73,5 +76,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (mDb != null) {
             mDb.close();
         }
+    }
+
+    /**
+     * 删除所有数据
+     */
+    public void deleteAllData() {
+        MessageDao.getInstance().deleteAllMsg();
+        ConversationDao.getInstance().deleteAllConversation();
     }
 }

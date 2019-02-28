@@ -18,12 +18,12 @@ public class BaseMsgHolder extends BaseMultiHodler<Message> {
 
     public BaseMsgHolder(View itemView) {
         super(itemView);
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IMEUtils.hideSoftInput(v);
-            }
-        });
+//        itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                IMEUtils.hideSoftInput(v);
+//            }
+//        });
     }
 
     @Override

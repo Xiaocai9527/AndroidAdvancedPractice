@@ -149,4 +149,10 @@ public class ImLoginActivity extends AppCompatActivity implements PdMessageListe
     public void onFailedMessageReceived(PdMessage pdMessage) {
 
     }
+
+    public void logout(View view) {
+        //退出
+        PdIMClient.getInstance().logout();
+
+    }
 }

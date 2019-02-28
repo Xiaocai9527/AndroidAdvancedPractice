@@ -36,13 +36,29 @@ public class MyHolder extends BaseMultiHodler<Conversation> {
     public void bind(Conversation conversation) {
         setText(R.id.chat_user_name, conversation.nickName);
 
-        // TODO: 2019/2/26 缺少发送失败的情况
+
+        switch (conversation.mPdMessage.msgType) {
+            case 1:
+                setText(R.id.last_msg_tv, conversation.msgContent);
+                break;
+            case 2:
+                setText(R.id.last_msg_tv, "[图片]");
+                break;
+            case 5:
+                setText(R.id.last_msg_tv, "[语音]");
+                break;
+            default:
+
+                break;
+        }
+
+
         if (conversation.mPdMessage.msgStatus == PdMessage.PDMessageStatus.SUCCESS) {
-            setText(R.id.last_msg_tv, conversation.msgContent);
             setText(R.id.last_msg_time_tv, PdDateUtils.format(conversation.updateTime, "yyyy-MM-dd HH:mm"));
-        } else {
-            setText(R.id.last_msg_tv, "<==" + conversation.msgContent);
+        } else if (conversation.mPdMessage.msgStatus == PdMessage.PDMessageStatus.DELIVERING) {
             setText(R.id.last_msg_time_tv, "正在发送中");
+        } else if (conversation.mPdMessage.msgStatus == PdMessage.PDMessageStatus.FAIL) {
+            setText(R.id.last_msg_time_tv, "发送失败");
         }
 
         PdConversation pdConversation = PdIMClient.getInstance().getChatManager().getConversation(conversation.userImId);

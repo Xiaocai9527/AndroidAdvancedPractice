@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.xiaokun.advance_practive.im.database.DatabaseHelper;
 import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.bean.User;
 import com.xiaokun.advance_practive.im.database.bean.msgBody.PdImgMsgBody;
@@ -37,7 +38,9 @@ import java.io.IOException;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -53,11 +56,17 @@ public class PdIMClient implements ConnectionListener {
     private static PdIMClient mPdIMClient = null;
     private Context mContext;
     private PdChatManager mPdChatManager;
-    private static final String SERVER_NAME = "peidou";//主机名
-    private static final String SERVER_IP = "192.168.1.12";//ip
-    private static final String SERVER_RESOURCE = "pd";//资源
-    private static final int PORT = 5222;//端口
+    //主机名
+    private static final String SERVER_NAME = "peidou";
+    //ip
+    private static final String SERVER_IP = "192.168.1.12";
+    //资源
+    private static final String SERVER_RESOURCE = "pd";
+    //端口
+    private static final int PORT = 5222;
     private XMPPTCPConnection connection;
+    private String mUserName;
+    private String mPassword;
     private PdOptions mPdOptions;
     private boolean mIsConnect;
 
@@ -83,50 +92,23 @@ public class PdIMClient implements ConnectionListener {
         // TODO: 2019/2/19 检验appkey合法性
 
         connection = getConnection();
-        conn(connection);
+        mPdChatManager = getChatManager();
         initProvider();
-        initNetworkListener();
-    }
-
-    private void conn(XMPPTCPConnection connection) {
-        Flowable.just(connection)
-                .observeOn(Schedulers.io())
-                .subscribe(new Consumer<XMPPTCPConnection>() {
-                    @Override
-                    public void accept(XMPPTCPConnection xmpptcpConnection) throws Exception {
-                        try {
-                            XMPPTCPConnection connect = (XMPPTCPConnection) connection.connect();
-                            mIsConnect = connect.isConnected();
-                        } catch (SmackException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (XMPPException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Log.e(TAG, "accept(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + throwable.getMessage());
-                    }
-                });
     }
 
     private void initProvider() {
         ProviderManager.addExtensionProvider("mobilePeidou", "peidou", new Provider());
     }
 
+    private NetworkChangeReceiver mNetworkChangeReceiver;
+
     private void initNetworkListener() {
         IntentFilter mIntentFilter = new IntentFilter();
         mIntentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
 
-        NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
+        mNetworkChangeReceiver = new NetworkChangeReceiver();
         mContext.registerReceiver(mNetworkChangeReceiver, mIntentFilter);
     }
-
-    private String mUserName;
-    private String mPassword;
 
     /**
      * 登录im,默认情况下smack会尝试重新连接,以防突然断开
@@ -143,41 +125,70 @@ public class PdIMClient implements ConnectionListener {
         if (TextUtils.isEmpty(mPdOptions.getAppkey())) {
             throw new IllegalArgumentException("请设置appkey");
         } else {
-            if (connection == null) {
-                throw new IllegalArgumentException("需要先初始化init方法");
-            }
-            if (mIsConnect) {
-                try {
-                    connection.login(userName, password);
-                    User user = new User();
-                    user.userImId = userName + "@" + connection.getConfiguration().getServiceName() +
-                            "/" + connection.getConfiguration().getResource();
-                    UserDao.getInstance().insert(user);
-                    loginCallback.onSuccess();
-                    sendDeliveringMsg();
-                    //登录成功后获取离线消息
-                    getOfflineMessage();
-                } catch (XMPPException e) {
-                    e.printStackTrace();
-                    loginCallback.onError(ErrorCode.XMPP_ERROR_CODE, e.getMessage());
-                    logout();
-                    conn(connection);
-                } catch (SmackException e) {
-                    e.printStackTrace();
-                    loginCallback.onError(ErrorCode.SMACK_ERROR_CODE, e.getMessage());
-                    logout();
-                    conn(connection);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    loginCallback.onError(ErrorCode.IO_ERROR_CODE, e.getMessage());
-                    logout();
-                    conn(connection);
-                }
-            } else {
-                loginCallback.onError(ErrorCode.CONNECT_ERROR_CODE, "connect连接失败");
-                conn(connection);
-            }
+            connection = null;
+            connection = getConnection();
+            mPdChatManager.setConnection(connection);
+            Flowable.just(connection)
+                    .observeOn(Schedulers.io())
+                    .map(new Function<XMPPTCPConnection, Boolean>() {
+                        @Override
+                        public Boolean apply(XMPPTCPConnection connection) throws Exception {
+                            XMPPTCPConnection connect = (XMPPTCPConnection) connection.connect();
+                            initNetworkListener();
+                            return connect.isConnected();
+                        }
+                    })
+                    .doOnNext(new Consumer<Boolean>() {
+                        @Override
+                        public void accept(Boolean aBoolean) throws Exception {
+                            if (aBoolean) {
+                                connection.login(userName, password);
+                                saveUserAndDeleteDb(userName);
+                                sendDeliveringMsg();
+                                //登录成功后获取离线消息
+                                getOfflineMessage();
+                            }
+                        }
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<Boolean>() {
+                        @Override
+                        public void accept(Boolean aBoolean) throws Exception {
+                            loginCallback.onSuccess();
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            if (throwable instanceof XMPPException) {
+                                loginCallback.onError(ErrorCode.XMPP_ERROR_CODE, throwable.getMessage());
+                            } else if (throwable instanceof SmackException) {
+                                loginCallback.onError(ErrorCode.SMACK_ERROR_CODE, throwable.getMessage());
+                            } else if (throwable instanceof IOException) {
+                                loginCallback.onError(ErrorCode.IO_ERROR_CODE, throwable.getMessage());
+                            } else {
+                                loginCallback.onError(ErrorCode.IO_ERROR_CODE, throwable.getMessage());
+                            }
+                        }
+                    });
         }
+    }
+
+    /**
+     * 保存登录用户,如果登录用户和之前保存的用户不一致，删除掉所有的表数据
+     *
+     * @param userName
+     */
+    private void saveUserAndDeleteDb(String userName) {
+        User user = new User();
+        user.userImId = userName + "@" + connection.getConfiguration().getServiceName() +
+                "/" + connection.getConfiguration().getResource();
+
+        User currentUser = UserDao.getInstance().queryCurrentUser();
+        if (!user.userImId.equals(currentUser.userImId)) {
+            //删除表数据
+            DatabaseHelper.getInstance().deleteAllData();
+        }
+        UserDao.getInstance().insert(user);
     }
 
     /**
@@ -188,6 +199,12 @@ public class PdIMClient implements ConnectionListener {
             return;
         }
         connection.disconnect();
+        try {
+            mContext.unregisterReceiver(mNetworkChangeReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Log.e(TAG, "logout(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + "退出连接");
     }
 
@@ -207,14 +224,15 @@ public class PdIMClient implements ConnectionListener {
     public void connectionClosed() {
         Log.e(TAG, "connectionClosed(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" +
                 "连接关闭");
-        //尝试重连
-        conn(connection);
     }
 
     @Override
     public void connectionClosedOnError(Exception e) {
         Log.e(TAG, "connectionClosedOnError(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" +
                 "连接关闭失败:" + e.getMessage());
+        //尝试重连
+        //conn(connection);
+        logout();
     }
 
     @Override
@@ -321,6 +339,7 @@ public class PdIMClient implements ConnectionListener {
             if (info == null || !info.isAvailable()) {
                 //有网络变没有网络
                 Toast.makeText(mContext, "当前没有网路", Toast.LENGTH_SHORT).show();
+                logout();
                 return;
             } else {
                 //无网络变有网络,重新连接、登录、找到数据库中还在发送状态的消息并send出去
@@ -339,7 +358,7 @@ public class PdIMClient implements ConnectionListener {
                             XMPPTCPConnection connect = (XMPPTCPConnection) connection.connect();
                             mIsConnect = connect.isConnected();
                             if (mIsConnect) {
-                                //connection.login(mUserName, mPassword);
+                                connection.login(mUserName, mPassword);
                                 sendDeliveringMsg();
                             }
                         } catch (SmackException e) {

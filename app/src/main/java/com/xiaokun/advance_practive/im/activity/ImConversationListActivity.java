@@ -97,19 +97,23 @@ public class ImConversationListActivity extends AppCompatActivity implements PdM
     @Override
     public void onMessageReceived(PdMessage pdMessage) {
         Log.e(TAG, "onMessageReceived(" + TAG + ".java:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ")" + pdMessage.msgContent);
-        List<MultiItem> conversations = getConversations();
-        mMultiAdapter.setNewItems(conversations);
+        updateList();
     }
 
     @Override
     public void onReceiptsMessageReceived(String msgId) {
         //回执消息-消息发送成功
-        List<MultiItem> conversations = getConversations();
-        mMultiAdapter.setNewItems(conversations);
+        updateList();
     }
 
     @Override
     public void onFailedMessageReceived(PdMessage pdMessage) {
+        updateList();
+    }
 
+
+    private void updateList() {
+        List<MultiItem> conversations = getConversations();
+        mMultiAdapter.setNewItems(conversations);
     }
 }

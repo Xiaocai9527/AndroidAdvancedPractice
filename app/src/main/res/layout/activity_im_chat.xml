@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.xiaokun.advance_practive.im.activity.KeyBoardLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<cn.dreamtobe.kpswitch.widget.KPSwitchRootLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/kv_layout"
@@ -21,61 +21,40 @@
 
     <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/refreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:descendantFocusability="beforeDescendants"
-        android:scaleY="-1"
-        app:srlEnableAutoLoadMore="false"
-        app:srlEnableNestedScrolling="false"
-        app:srlEnableRefresh="false">
+    <include layout="@layout/view_message_list" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_msg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp"
-            android:fadeScrollbars="false"
-            android:scaleY="-1"
-            android:scrollbars="none"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            tools:itemCount="1"
-            tools:listitem="@layout/item_text_send_msg" />
+    <include layout="@layout/layout_send_message_bar" />
 
-        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
-            android:id="@+id/footer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleY="-1"
-            app:srlTextPulling="下拉加载更多" />
+    <!--<android.support.constraint.ConstraintLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="@dimen/dimen_40dp">-->
 
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    <!--<EditText-->
+    <!--android:id="@+id/et_msg"-->
+    <!--android:layout_width="@dimen/dimen_0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:hint="请输入"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintRight_toLeftOf="@id/btn_send" />-->
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_40dp">
+    <!--<Button-->
+    <!--android:id="@+id/btn_send"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:enabled="false"-->
+    <!--android:text="发送"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintRight_toRightOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-        <EditText
-            android:id="@+id/et_msg"
-            android:layout_width="@dimen/dimen_0dp"
-            android:layout_height="match_parent"
-            android:hint="请输入"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/btn_send" />
+    <!--</android.support.constraint.ConstraintLayout>-->
 
-        <Button
-            android:id="@+id/btn_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="发送"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <cn.dreamtobe.kpswitch.widget.KPSwitchPanelLinearLayout
+        android:id="@+id/panel_root"
+        style="@style/Panel"
+        android:visibility="gone">
 
-    </android.support.constraint.ConstraintLayout>
+        <include layout="@layout/merge_panel_content" />
+    </cn.dreamtobe.kpswitch.widget.KPSwitchPanelLinearLayout>
 
-</com.xiaokun.advance_practive.im.activity.KeyBoardLayout>
+</cn.dreamtobe.kpswitch.widget.KPSwitchRootLinearLayout>
