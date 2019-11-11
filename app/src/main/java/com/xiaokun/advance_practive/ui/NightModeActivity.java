@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jaeger.library.StatusBarUtil;
 import com.xiaokun.advance_practive.R;
@@ -22,9 +23,9 @@ import com.xiaokun.advance_practive.colorful.setter.ViewGroupSetter;
 import com.xiaokun.advance_practive.ui.adapter.NightModeHolder;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.EndlessRecyclerViewScrollListener;
 import com.xiaokun.baselib.muti_rv.BaseMultiHodler;
-import com.xiaokun.baselib.muti_rv.HolderFactoryList;
+import com.xiaokun.baselib.muti_rv.HolderFactory;
+import com.xiaokun.baselib.muti_rv.HolderFactoryHelper;
 import com.xiaokun.baselib.muti_rv.MultiAdapter;
-import com.xiaokun.baselib.muti_rv.MultiItem;
 import com.xiaokun.baselib.muti_rv.MultiUtils;
 import com.xiaokun.baselib.network.OkhttpHelper;
 import com.xiaokun.baselib.network.RetrofitHelper;
@@ -33,13 +34,11 @@ import com.xiaokun.advance_practive.network.meizi.CategoryResEntity;
 import com.xiaokun.baselib.rx.BaseObserver;
 import com.xiaokun.baselib.rx.transform.RxSchedulers;
 import com.xiaokun.baselib.rx.util.RxManager;
-import com.xiaokun.advance_practive.ui.adapter.NightModeAdapter;
 import com.xiaokun.baselib.util.OffsetDecoration;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import okhttp3.OkHttpClient;
+
+import static com.xiaokun.advance_practive.network.meizi.CategoryResEntity.*;
 
 /**
  * Created by 肖坤 on 2018/4/30.
@@ -135,16 +134,25 @@ public class NightModeActivity extends AppCompatActivity {
         mNightRv.setLayoutManager(manager);
 
 
-        HolderFactoryList instance = HolderFactoryList.getInstance();
-        new BaseMultiHodler<CategoryResEntity.ResultsBean>(LayoutInflater.from(this).inflate(NightModeHolder.TYPE_FOOTER, mNightRv, false)) {
+//        HolderFactoryHelper instance = HolderFactoryHelper.getInstance();
+//        instance.addTypeHolder(NightModeHolder.class, R.layout.item_other);
+//        mMultiAdapter = new MultiAdapter(instance);
 
+
+        mMultiAdapter = HolderFactoryHelper.getInstance().addHolder(new BaseMultiHodler<ResultsBean>(
+                LayoutInflater.from(this).inflate(R.layout.item_other, mNightRv, false)) {
             @Override
-            public void bind(CategoryResEntity.ResultsBean multiItem) {
+            public void bind(ResultsBean multiItem) {
+                TextView mCategoryDesc = itemView.findViewById(R.id.category_desc);
+                TextView mCategoryAuthor = itemView.findViewById(R.id.category_author);
+                TextView mCategoryDate = itemView.findViewById(R.id.category_date);
 
+                mCategoryAuthor.setText(multiItem.getWho());
+                mCategoryDate.setText(multiItem.getPublishedAt());
+                mCategoryDesc.setText(multiItem.getDesc());
             }
-        };
-        instance.addTypeHolder(NightModeHolder.class, R.layout.item_other);
-        mMultiAdapter = new MultiAdapter(instance);
+        }).createAdapter();
+
         mMultiAdapter.isShowFooterView(false);
         mNightRv.setAdapter(mMultiAdapter);
         mNightRv.addOnScrollListener(new EndlessRecyclerViewScrollListener(manager) {

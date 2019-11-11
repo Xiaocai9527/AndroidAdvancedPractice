@@ -15,18 +15,20 @@ import java.util.Map;
  *      版本  ：1.0
  * </pre>
  */
-public class HolderFactoryList implements HolderFactory {
+public class HolderFactoryHelper implements HolderFactory {
+
+    private BaseMultiHodler mBaseMultiHodler;
 
     private HashMap<Integer, Class<? extends BaseMultiHodler>> mHoderHashMap = new HashMap<>();
 
-    public static HolderFactoryList getInstance() {
-        return new HolderFactoryList();
+    public static HolderFactoryHelper getInstance() {
+        return new HolderFactoryHelper();
     }
 
-    private HolderFactoryList() {
+    private HolderFactoryHelper() {
     }
 
-    public HolderFactoryList addTypeHolders(HashMap<Integer, Class<? extends BaseMultiHodler>> hoderHashMap) {
+    public HolderFactoryHelper addTypeHolders(HashMap<Integer, Class<? extends BaseMultiHodler>> hoderHashMap) {
         mHoderHashMap.putAll(hoderHashMap);
         return this;
     }
@@ -38,9 +40,18 @@ public class HolderFactoryList implements HolderFactory {
      * @param layoutId
      * @return
      */
-    public HolderFactoryList addTypeHolder(Class<? extends BaseMultiHodler> classz, int layoutId) {
+    public HolderFactoryHelper addTypeHolder(Class<? extends BaseMultiHodler> classz, int layoutId) {
         mHoderHashMap.put(layoutId, classz);
         return this;
+    }
+
+    public HolderFactoryHelper addHolder(BaseMultiHodler baseMultiHodler) {
+        mBaseMultiHodler = baseMultiHodler;
+        return this;
+    }
+
+    public MultiAdapter createAdapter() {
+        return new MultiAdapter(this);
     }
 
     @Override
@@ -54,6 +65,10 @@ public class HolderFactoryList implements HolderFactory {
                     break;
                 }
             }
+        } else if (mBaseMultiHodler != null) {
+            Class[] pareTypes = new Class[]{mBaseMultiHodler.getClass().getEnclosingClass(), View.class};
+            Object[] pareValues = new Object[]{parent.getContext(), parent};
+            baseMultiHodler = (BaseMultiHodler) RefInvoke.createObject(mBaseMultiHodler.getClass(), pareTypes, pareValues);
         } else {
             throw new IllegalArgumentException("需要添加holder");
         }

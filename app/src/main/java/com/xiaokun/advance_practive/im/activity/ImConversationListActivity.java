@@ -17,7 +17,7 @@ import com.xiaokun.advance_practive.im.database.bean.PdMessage;
 import com.xiaokun.advance_practive.im.database.dao.MessageDao;
 import com.xiaokun.advance_practive.im.entity.Conversation;
 import com.xiaokun.advance_practive.im.util.Utils;
-import com.xiaokun.baselib.muti_rv.HolderFactoryList;
+import com.xiaokun.baselib.muti_rv.HolderFactoryHelper;
 import com.xiaokun.baselib.muti_rv.MultiAdapter;
 import com.xiaokun.baselib.muti_rv.MultiItem;
 
@@ -54,7 +54,7 @@ public class ImConversationListActivity extends AppCompatActivity implements PdM
     private void initView() {
         mRvConversationList = findViewById(R.id.rv_conversation_list);
 
-        HolderFactoryList instance = HolderFactoryList.getInstance().addTypeHolder(MyHolder.class, R.layout.item_customer_dialogue);
+        HolderFactoryHelper instance = HolderFactoryHelper.getInstance().addTypeHolder(MyHolder.class, R.layout.item_customer_dialogue);
         mMultiAdapter = new MultiAdapter(instance);
         mRvConversationList.setAdapter(mMultiAdapter);
     }

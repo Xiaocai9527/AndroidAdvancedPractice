@@ -37,7 +37,7 @@ import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeDHolder;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.holder.TypeEHolder;
 import com.xiaokun.advance_practive.ui.multi_rv_sample.utils.DiffCallback;
 import com.xiaokun.baselib.muti_rv.HolderFactory;
-import com.xiaokun.baselib.muti_rv.HolderFactoryList;
+import com.xiaokun.baselib.muti_rv.HolderFactoryHelper;
 import com.xiaokun.baselib.muti_rv.MultiAdapter;
 import com.xiaokun.baselib.muti_rv.StickHeaderItemDecoration;
 
@@ -109,14 +109,14 @@ public class MultiRvActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        mHolderFactory = HolderFactoryList.getInstance();
+        mHolderFactory = HolderFactoryHelper.getInstance();
         HashMap<Integer, Class<? extends BaseMultiHodler>> hashMap = new HashMap<>();
         hashMap.put(TypeAHolder.LAYOUT, TypeAHolder.class);
         hashMap.put(TypeBHolder.LAYOUT, TypeBHolder.class);
         hashMap.put(TypeCHolder.LAYOUT, TypeCHolder.class);
         hashMap.put(TypeDHolder.LAYOUT, TypeDHolder.class);
         hashMap.put(TypeEHolder.LAYOUT, TypeEHolder.class);
-        ((HolderFactoryList) mHolderFactory).addTypeHolders(hashMap);
+        ((HolderFactoryHelper) mHolderFactory).addTypeHolders(hashMap);
         mMultiAdapter = new StickHeaderAdapter(mHolderFactory);
         mMultiAdapter.isShowFooterView(true);
         mMultiAdapter.setLoadFailedClickListener(() -> paginator.onNext(pageNumber));
