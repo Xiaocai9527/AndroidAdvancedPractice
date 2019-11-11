@@ -1,0 +1,155 @@
+连接usb
+adb tcpip 5555
+断开usb
+adb connect 172.27.35.4
+
+查看当前activity
+adb shell dumpsys activity | findstr "mFocusedActivity"
+
+adb shell dumpsys "window windows | grep -E 'mCurrentFocus|mFocusedApp'"
+
+adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'
+
+'grep' 不是内部或外部命令，也不是可运行的程序
+解决方法：将logcat | grep START用双引号引起来，即adb shell “logcat | grep START”。
+
+查看所有activity
+adb shell dumpsys activity activities
+
+查看当前外网ip
+curl -L tool.lu/ip
+
+adb forward tcp:8080 tcp:8080
+
+跳转setting页面：
+adb -e shell am start com.android.settings/com.android.settings.Settings   -e指定无线连接
+adb shell am start com.android.settings/com.android.settings.Settings    不指定-e指数据线连接
+
+启动MainActivity页面：
+adb shell am start com.yuntongxun.hardware.youhui/com.yuntongxun.youhui.MainActivity
+
+adb shell am start -a android.intent.action.MAIN  -c android.intent.category.HOME -f 0x10200000
+
+返回桌面
+adb shell am start -a android.intent.action.MAIN  -c android.intent.category.HOME
+
+连接设备ip：
+adb connect 192.168.1.105
+
+跳转home：
+adb shell am start -a android.intent.action.MAIN  -c android.intent.category.HOME
+
+返回按键：
+adb shell input keyevent 4 
+
+拉取日志：
+adb pull  /sdcard/hardware/output/2019-05-28.log
+adb pull  /sdcard/hardware/output
+
+adb push：
+adb push E:\android\ProjectSpaces\AndroidStudioProjects\google-access-helper /sdcard/ 
+
+查看手机目录：
+1.adb shell
+2.ls 查看目录
+3.cd /sdcard/   进入到sd卡目录
+#cd system/sd/data //进入系统内指定文件夹
+#ls //列表显示当前文件夹内容
+#rm -r xxx //删除名字为xxx的文件夹及其里面的所有文件
+#rm xxx //删除文件xxx
+#rmdir xxx //删除xxx的文件夹
+4.adb shell rename 原文件名  新文件名
+5.adb shell退出  exit
+
+查看设备ip地址：
+adb shell netcfg
+
+当连接多个设备时，指定某一设备：
+adb -s deviceId shell netcfg
+
+发送广播：
+adb shell am broadcast -a com.android.test --es test_string "this is test string" --ei test_int 100 --ez test_boolean true
+adb shell am broadcast -a voice_test --ei voice 0
+
+屏幕截图
+adb shell screencap -p /sdcard/sc.png
+adb pull /sdcard/sc.png
+
+跳转到桌面：
+adb shell am start -a android.intent.action.MAIN  -c android.intent.category.HOME
+
+卸载容视：
+adb uninstall com.yuntongxun.hardware.rongshi
+
+启动容视：
+adb shell am start -n com.yuntongxun.hardware.rongshi/com.yuntongxun.youhui.newui.LauncherUIT
+
+跳转到设置页面：
+adb shell am start -n com.yuntongxun.hardware.rongshi/com.yuntongxun.youhui.newui.InnerTestActicity
+
+常用模拟按键：
+菜单键：   adb shell input keyevent 82
+Home键：adb shell input keyevent 3
+返回键：   adb shell input keyevent 4
+增加音量：adb shell input keyevent 24
+降低音量：adb shell input keyevent 25
+静音：       adb shell input keyevent 164
+
+焦点处于某文本框时，
+输入文本：adb shell input text  https://119.18.192.175
+adb shell input text  https://app.yomeeting.com
+
+焦点处于按钮
+模拟点击： adb shell input press
+
+安装app流程：
+08/11 15:20:29: Launching app
+$ adb push E:\android\ProjectSpaces\AndroidStudioProjects\hardware_device_demo\hardware_demo\app\build\outputs\apk\debug\app-debug.apk /data/local/tmp/com.yuntongxun.hardware.rongshi
+$ adb shell pm install -t -r "/data/local/tmp/com.yuntongxun.hardware.rongshi"
+	pkg: /data/local/tmp/com.yuntongxun.hardware.rongshi
+Success
+APK installed in 14 s 67 ms
+$ adb shell am start -n "com.yuntongxun.hardware.rongshi/com.yuntongxun.youhui.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
+
+监控cpu 内存：
+adb shell top -m 5
+
+查看应用信息：
+adb shell dumpsys package com.yuntongxun.hardware.rongshi
+
+查看相机信息：
+adb shell dumpsys media.camera
+
+合并jar包：
+ant -buildfile build.xml
+
+生成头文件：
+E:\android\ProjectSpaces\StudioProjects\IMPlusAndroidSDK\yuntx_plugin_im\src\main\java>javah -encoding utf-8 -jni com.yuntongxun.ecsdk.core.jni.IGroupNative
+
+adb授权示例：
+adb shell pm grant com.yuntongxun.kuailiaoa android.permission.READ_PHONE_STATE
+
+cygwin查找信令层版本：
+strings /cygdrive/e/谷歌下载/YTX_Android_Full_SDK_v5.4.13t3/YTX_Android_Full_SDK_v5.4.13t3/armeabi/libserphone.so | grep ytx_ccpsdk
+
+adb 打开关闭wifi
+adb shell su
+svc wifi enable/disable
+
+//dvm最大可用内存
+adb shell getprop | grep dalvik.vm.heapsize
+adb shell "getprop | grep dalvik.vm.heapsize"
+
+//单个程序限制最大可用内存
+adb shell getprop|grep heapgrowthlimit
+adb shell "getprop|grep heapgrowthlimit"
+
+//查看app内存使用情况
+adb shell dumpsys meminfo 包名
+
+
+
+
+
+
+
