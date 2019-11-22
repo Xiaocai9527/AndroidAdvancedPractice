@@ -3,6 +3,21 @@
 //然后任意位置新建build.gradle文件，打开cmd cd到当前文件目录下
 //执行gradle相关命令即可
 
+//groovy语法跟java很类似，以下是常用的一些区别
+
+//字符串
+//groovy语法，字符串可以用'' "" ，区别是单引号就是单纯的字符串，双引号里面可以有变量运算，利用${a+b}这样
+//groovy中，定义变量使用def，不需要显示指定变量类型，每行代码后不需要分号，当然加分号也不会报错
+
+//闭包
+//groovy中，有闭包概念 定义方法为 a ={int a -> println a} ，大括号+参数+箭头符号+输出语句
+//其中参数可以不用显示指定类型，如果没有显示指定参数，默认会给一个it参数，不传递默认为null
+
+//集合list和map
+
+
+
+
 task hello
 
 hello.doFirst{
@@ -56,8 +71,12 @@ int hello3(msg){
 }
 
 //闭包
-def closure = { int i,String s ->
-	println "$d, 我是闭包1"
+def closure = { int i,int s ->
+	println "求和:${i+s}"
+}
+
+def closure4 = {int i,int i2 ->
+	println "相乘:${i*i2}"
 }
 
 def closure1 = {i,s ->
@@ -67,6 +86,19 @@ def closure1 = {i,s ->
 def closure3 = {
 	println "$d, 我是闭包3"
 }
+
+//闭包如果不传参数，会默认一个隐藏参数，不传递默认为null
+def closure5 = {
+	println "$it,我才是最后的胜利者"
+}
+
+
+
+println closure(100,39)
+println closure4(8,8)
+println closure5('chousb')
+println closure5()
+
 
 task test3 {
 	closure3()
