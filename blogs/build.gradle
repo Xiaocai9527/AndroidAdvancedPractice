@@ -107,6 +107,18 @@ task test3 {
 
 
 
+//groovy 列表集合
+def test4 = [100,'hello',true]
+println test4[0]
+println test4[1]
+test4[1] = 'world'
+println test4[1]
+test4 << 200
+println test4.size
+println test4[3]
+
+
+
 
 
 

@@ -50,3 +50,14 @@ fatal signal 11：空指针出错。在多线程环境下，由于对象在另�
 
 ctrl+shift+A，全局搜索Kotlin Compiler ，设置target jvm version 为1.8，然后gradle重新构建工程。
 
+### 8.AGPBI: {"kind":"error","text":"Program type already present: cn.tee3.avd.AVDEngine$5","sources":[{}],"tool":"D8"}
+
+clean一下
+
+### 9.Minimum supported Gradle version is 5.4.1.
+
+两种可能：
+
+1.本机项目中的gradle版本比较低，修改一下gradle.properties文件中的url地址
+
+2.本机设置的gradle环境变量，版本地较低，重置设置一下新版本即可。
