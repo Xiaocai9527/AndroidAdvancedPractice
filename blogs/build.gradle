@@ -1,0 +1,80 @@
+//这是练习gradle groovy语法的demo
+//首先需要下载gradle，我们Android开发者一定是有下载gradle版本的，给gradle设置环境变量
+//然后任意位置新建build.gradle文件，打开cmd cd到当前文件目录下
+//执行gradle相关命令即可
+
+task hello
+
+hello.doFirst{
+	println 'hello first do it'
+	hello1()
+}
+
+
+task world 
+
+world.doLast{
+	println 'last do it '
+}
+
+task test {
+	description "你好"
+	group '测试demo'
+	doLast{
+		println '欢迎你'
+	}
+}
+
+def a = 1
+def b = 'hello world'
+def int c = 1;
+
+def d = "a=${a},b=$b"
+
+println d
+
+task test2{
+	hello3(d)
+}
+
+def hello1(){
+	println('hello world')
+	return 1
+}
+
+
+int hello2(msg){
+	println(msg)
+
+	return 1
+}
+
+int hello3(msg){
+	println msg
+	return 1
+	println 'done'
+}
+
+//闭包
+def closure = { int i,String s ->
+	println "$d, 我是闭包1"
+}
+
+def closure1 = {i,s ->
+	println "i, 我是闭包$s"
+}
+
+def closure3 = {
+	println "$d, 我是闭包3"
+}
+
+task test3 {
+	closure3()
+	closure1(100,'哈皮')
+}
+
+
+
+
+
+
