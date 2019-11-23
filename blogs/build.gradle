@@ -7,7 +7,12 @@
 
 //字符串
 //groovy语法，字符串可以用'' "" ，区别是单引号就是单纯的字符串，双引号里面可以有变量运算，利用${a+b}这样
+
+//变量
 //groovy中，定义变量使用def，不需要显示指定变量类型，每行代码后不需要分号，当然加分号也不会报错
+
+//方法
+//groovy中，定义方法也使用def，不需要指定返回值，也可以不适用return关键字
 
 //闭包
 //groovy中，有闭包概念 定义方法为 a ={int a -> println a} ，大括号+参数+箭头符号+输出语句
@@ -40,6 +45,7 @@ task test {
 	}
 }
 
+println '\n开始字符串测试:'
 def a = 1
 def b = 'hello world'
 def int c = 1;
@@ -70,6 +76,7 @@ int hello3(msg){
 	println 'done'
 }
 
+println '\n开始闭包测试:'
 //闭包
 def closure = { int i,int s ->
 	println "求和:${i+s}"
@@ -105,9 +112,8 @@ task test3 {
 	closure1(100,'哈皮')
 }
 
-
-
-//groovy 列表集合
+//groovy list
+println '\n开始list测试:'
 def test4 = [100,'hello',true]
 println test4[0]
 println test4[1]
@@ -116,6 +122,95 @@ println test4[1]
 test4 << 200
 println test4.size
 println test4[3]
+test4 << 500
+println test4[1..4]//访问第二个到第四个元素
+println test4[-1]//访问倒数第一个元素
+
+println '\n遍历集合:'
+test4.each{
+	println it
+}
+
+//groovy map
+println '\n开始map测试:'
+def map1 = ['width':1080,'height':720]
+println map1.getClass().name
+println '获取map中的值，两种方式：1.使用中括号[]；2.使用.key方式'
+println map1['width']
+println map1.height
+println "width:${map1['width']}"
+println "height:${map1.height}"
+println 'map循环遍历:'
+map1.each{
+	println "Key:${it.key},Value:${it.value}"
+}
+
+//groovy 方法特点：
+println '\n开始groovy方法测试:'
+
+//1.调用方法时，括号是可以省略的
+method1(1,2)
+method1 1,2
+println "获取较大值:${method2(10,4)}"
+
+def method1(int a,int b){
+	println "求和：${a+b}"
+}
+
+//2.retrun是可以不用写的，但是建议加上
+def method2(int a,int b){
+	if(a>b){
+		a
+	}else{
+		b
+	}
+}
+
+//3.代码块是可以作为参数传递的，其实就是闭包，由一段被大括号包围的代码
+//以list遍历为例子来看闭包的演化
+//a.首先将{代码块}作为参数传入each方法中
+test4.each({println it})
+//b.groovy规定，如果方法的最后一个参数是闭包，可以放到方法外面
+test4.each(){
+	println it
+}
+//c.然后方法可以省略
+test4.each{
+	println it
+}
+
+//groovy javabean
+println '\n开始groovy javabean测试:'
+
+class Person{
+	private String name
+	
+	public int getAge(){
+		12
+	}
+}
+
+def p = new Person()
+println "名字是：${p.name}"
+p.name = '李四'
+println "名字是：${p.name}"
+
+//其次，如果设置了setter/getter方法，也可以直接.属性
+println "${p.name}的年龄是:${p.age}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
