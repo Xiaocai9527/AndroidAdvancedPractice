@@ -61,3 +61,9 @@ clean一下
 1.本机项目中的gradle版本比较低，修改一下gradle.properties文件中的url地址
 
 2.本机设置的gradle环境变量，版本地较低，重置设置一下新版本即可。
+
+### 10.Android项目中manifest中的package和build中的application id区别
+
+package应用于源代码和R类中
+
+applicationId作用应用的唯一标识包名
