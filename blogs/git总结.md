@@ -269,12 +269,19 @@ git show commitId
 ### git tag 给某个版本打标签
 
 ```gas
+# tag意义在于能够快速定位版本commit，方便后续回退
 # 在当前commit创建标签
 git tag  v1.1.2
 # 删除本地标签
 git tag -d v2.5.3
+# 删除远程标签
+git push origin :refs/tags/v1.1.2
+# 查看tag信息
+git show v1.1.2
 # 标签推送到远程主机
 git push origin v1.1.2
+# 新建一个分支，指向某个tag
+git checkout -b develop v1.1.2_develop
 ```
 
 
