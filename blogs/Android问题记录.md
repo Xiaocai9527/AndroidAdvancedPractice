@@ -67,3 +67,9 @@ clean一下
 package应用于源代码和R类中
 
 applicationId作用应用的唯一标识包名
+
+### 11.JNI DETECTED ERROR IN APPLICATION: use of deleted weak global reference 0xb21519fb
+
+### 12.JNI DETECTED ERROR IN APPLICATION: use of invalid jobject
+
+ 记一下jni环境下使用得数据类型必须是jni得数据类型,不能直接传入msg，需要转换成jstring类型，否则会报JNI DETECTED ERROR IN APPLICATION: use of invalid jobject错误

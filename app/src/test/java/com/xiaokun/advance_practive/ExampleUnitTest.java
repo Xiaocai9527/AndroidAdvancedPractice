@@ -248,4 +248,34 @@ public class ExampleUnitTest {
         str += "5";
     }
 
+    int num = 10;
+
+    @Test
+    public void testConcurrencyThread() {
+        for (int i = 0; i < 10; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    doSomething();
+                }
+
+                private void doSomething() {
+                    System.out.println(Thread.currentThread().getName() + " do in work thread");
+                    reduceNum();
+                }
+
+                private synchronized void reduceNum() {
+                    num = num - 1;
+                    System.out.println(Thread.currentThread().getName() + " num:" + num);
+                    if (num == 0) {
+                        System.out.println("last thread execute finish");
+                    }
+                }
+            }).start();
+        }
+
+        //System.out.println("do in main thread");
+
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.xiaokun.advance_practive.ui.fragment_nest;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,12 @@ import com.xiaokun.baselib.config.Constants;
 import com.xiaokun.baselib.rx.util.RxBus3;
 
 import java.util.Stack;
+
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.functions.Consumer;
 
 /**
  * <pre>
@@ -42,6 +49,7 @@ public class FragmentNestActivity extends AppCompatActivity implements View.OnCl
         context.startActivity(starter);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
