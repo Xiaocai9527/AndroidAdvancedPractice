@@ -248,11 +248,11 @@ public class ExampleUnitTest {
         str += "5";
     }
 
-    int num = 10;
+    int num = 1000;
 
     @Test
     public void testConcurrencyThread() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1000; i++) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
