@@ -23,6 +23,10 @@ git commit -m  "提交的信息"
 ```gas
 git fetch upstream
 git rebase upstream/enterprise_wechat
+
+# 如果有冲突，先手动修复冲突文件
+git add 冲突文件
+git rebase --continue
 ```
 
 
