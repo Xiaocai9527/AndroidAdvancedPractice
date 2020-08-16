@@ -1,5 +1,7 @@
 package com.xiaokun.advance_practive;
 
+import android.text.format.DateUtils;
+
 import com.xiaokun.advance_practive.artimgloader.ArtImageLoader;
 import com.xiaokun.advance_practive.network.entity.GankResEntity;
 
@@ -16,7 +18,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
@@ -277,5 +281,91 @@ public class ExampleUnitTest {
         //System.out.println("do in main thread");
 
     }
+
+    @Test
+    public void testWait() {
+        System.out.println(testb());
+    }
+
+    private Object mLock = new Object();
+
+    private synchronized boolean testb() {
+        final boolean[] test = new boolean[1];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                    test[0] = true;
+                    synchronized (mLock) {
+                        mLock.notify();
+                        System.out.println("start notify");
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        System.out.println("start wait");
+        try {
+            synchronized (mLock) {
+                mLock.wait();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("end: " + test[0]);
+        return test[0];
+    }
+
+    @Test
+    public void testTime() {
+
+        long day = 24 * 60 * 60 * 1000;
+
+        System.out.println(day);
+
+        String time = msecToTime(75400000);
+
+        System.out.println(time);
+    }
+
+
+    private String msecToTime(long time) {
+        String timeStr = null;
+        int hour = 0;
+        int minute = 0;
+        int second = 0;
+        if (time <= 0) {
+            return "00:00:00";
+        } else {
+            second = (int) (time / 1000);
+            minute = second / 60;
+            if (second < 60) {
+                timeStr = "00:00:" + unitFormat(second);
+            } else if (minute < 60) {
+                second = second % 60;
+                timeStr = "00:" + unitFormat(minute) + ":" + unitFormat(second);
+            } else {// 数字>=3600 000的时候
+                hour = minute / 60;
+                minute = minute % 60;
+                second = second - hour * 3600 - minute * 60;
+                timeStr = unitFormat(hour) + ":" + unitFormat(minute) + ":" + unitFormat(second);
+            }
+        }
+        return timeStr;
+    }
+
+    private String unitFormat(int value) {
+        String retStr = null;
+        if (value >= 0 && value < 10) {
+            retStr = "0" + Integer.toString(value);
+        } else {
+            retStr = "" + value;
+        }
+        return retStr;
+    }
+
+
 
 }
