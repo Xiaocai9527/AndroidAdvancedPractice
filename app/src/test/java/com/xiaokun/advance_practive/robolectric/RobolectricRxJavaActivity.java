@@ -1,5 +1,6 @@
 package com.xiaokun.advance_practive.robolectric;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.xiaokun.advance_practive.BuildConfig;
@@ -11,6 +12,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
+
+import java.util.Formatter;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
@@ -66,6 +69,14 @@ public class RobolectricRxJavaActivity {
                     }
                 }));
 
+    }
+
+    @Test
+    public void testDate1() {
+        long timeMillis = System.currentTimeMillis() - (60 * 24 * 60 * 60 * 1000);
+        Formatter mFormatter = new Formatter(new StringBuilder(0));
+        System.out.println(DateUtils.formatDateRange(rxjavaActivity, mFormatter, timeMillis,
+                timeMillis, DateUtils.FORMAT_NUMERIC_DATE).toString());
     }
 
 }
