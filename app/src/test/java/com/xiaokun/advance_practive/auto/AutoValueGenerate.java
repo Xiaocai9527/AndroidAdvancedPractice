@@ -108,10 +108,8 @@ public class AutoValueGenerate {
             Pattern compile = Pattern.compile("com.*." + customStr + ";");
             Matcher matcher2 = compile.matcher(s);
             if (matcher2.find()) {
-                String group = matcher2.group();
-                group = projectRootPath + group;
-                group = group.replaceAll("\\.", "\\\\").replaceAll(";", ".java");
-                path = group;
+                path = (projectRootPath + matcher2.group()).replaceAll("\\.", "\\\\")
+                        .replaceAll(";", ".java");
                 generateAssociatedCode();
             } else {
                 path = (currentPackagePath + customStr).replaceAll("\\.", "\\\\") + ".java";
