@@ -92,7 +92,8 @@ git push -f origin enterprise_wechat
 git commit --amend
 ```
 
-> :x表示w 写+q 退出
+> 输入 :x 表示进入编辑状态
+> 先按 esc 退出编辑状态，然后输入 :wq 退出
 
 
 
