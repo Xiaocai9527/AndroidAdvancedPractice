@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.processors.FlowableProcessor;
 import io.reactivex.processors.PublishProcessor;
 import io.reactivex.subjects.Subject;
 
@@ -28,7 +27,7 @@ public class RxBus2 {
      * PublishProcessor 同时充当了Observer和Observable的角色
      */
     @SuppressWarnings("rawtypes")
-    private ConcurrentHashMap<Object, List<FlowableProcessor>> subjectMapper = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Object, List<PublishProcessor>> subjectMapper = new ConcurrentHashMap<>();
 
     private RxBus2() {
     }
@@ -50,14 +49,14 @@ public class RxBus2 {
      */
     @SuppressWarnings({"rawtypes"})
     public <T> Flowable<T> register(@NonNull Object tag) {
-        List<FlowableProcessor> subjectList = subjectMapper.get(tag);
+        List<PublishProcessor> subjectList = subjectMapper.get(tag);
         if (null == subjectList) {
             subjectList = new ArrayList<>();
             subjectMapper.put(tag, subjectList);
         }
 
         //考虑到多线程原因使用toSerialized方法
-        FlowableProcessor<T> processor = (FlowableProcessor<T>) PublishProcessor.create().toSerialized();
+        PublishProcessor<T> processor = (PublishProcessor<T>) PublishProcessor.create().toSerialized();
         subjectList.add(processor);
         return processor;
     }
@@ -69,7 +68,7 @@ public class RxBus2 {
      */
     @SuppressWarnings("rawtypes")
     public void unregister(@NonNull Object tag) {
-        List<FlowableProcessor> subjectList = subjectMapper.get(tag);
+        List<PublishProcessor> subjectList = subjectMapper.get(tag);
         if (null != subjectList) {
             subjectMapper.remove(tag);
         }
@@ -89,7 +88,7 @@ public class RxBus2 {
             return getInstance();
         }
 
-        List<FlowableProcessor> subjectList = subjectMapper.get(tag);
+        List<PublishProcessor> subjectList = subjectMapper.get(tag);
         if (null != subjectList) {
             // 从subjectList中删去observable
             subjectList.remove((Subject<?>) observable);
@@ -118,9 +117,9 @@ public class RxBus2 {
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void post(@NonNull Object tag, @NonNull Object content) {
-        List<FlowableProcessor> subjectList = subjectMapper.get(tag);
+        List<PublishProcessor> subjectList = subjectMapper.get(tag);
         if (!isEmpty(subjectList)) {
-            for (FlowableProcessor subject : subjectList) {
+            for (PublishProcessor subject : subjectList) {
                 subject.onNext(content);
             }
         }
@@ -133,7 +132,7 @@ public class RxBus2 {
      * @return
      */
     @SuppressWarnings("rawtypes")
-    public static boolean isEmpty(Collection<FlowableProcessor> collection) {
+    public static boolean isEmpty(Collection<PublishProcessor> collection) {
         return null == collection || collection.isEmpty();
     }
 }

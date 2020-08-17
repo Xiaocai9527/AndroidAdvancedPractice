@@ -64,4 +64,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.4.0'
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
+    implementation 'org.jsoup:jsoup:1.11.3'
 }

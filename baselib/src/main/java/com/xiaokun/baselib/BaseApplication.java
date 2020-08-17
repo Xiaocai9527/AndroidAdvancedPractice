@@ -19,7 +19,6 @@ import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor;
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin;
 import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin;
 import com.facebook.flipper.plugins.sharedpreferences.SharedPreferencesFlipperPlugin.SharedPreferencesDescriptor;
-import com.facebook.litho.config.ComponentsConfiguration;
 import com.facebook.soloader.SoLoader;
 import com.xiaokun.baselib.util.ACache;
 import com.xiaokun.baselib.util.ContextHolder;
@@ -73,7 +72,6 @@ public class BaseApplication extends Application {
 
         // Normally, you would want to make this dependent on a BuildConfig flag, but
         // for this demo application we can safely assume that you always want to debug.
-        ComponentsConfiguration.isDebugModeEnabled = true;
         LithoFlipperDescriptors.add(descriptorMapping);
         client.addPlugin(new InspectorFlipperPlugin(this, descriptorMapping));
         client.addPlugin(networkPlugin);
