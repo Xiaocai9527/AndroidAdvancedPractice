@@ -27,7 +27,7 @@ import io.reactivex.internal.observers.CallbackCompletableObserver;
  * @date 2018/12/28
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 23)
+
 public class RobolectricRxJavaActivity {
     private static final String TAG = "RobolectricRxJavaActivi";
 

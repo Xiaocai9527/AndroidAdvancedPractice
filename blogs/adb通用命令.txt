@@ -1,108 +1,126 @@
-Á¬½Óusb
+è¿æ¥usb
 adb tcpip 5555
-¶Ï¿ªusb
+æ–­å¼€usb
 adb connect 172.27.35.4
 
-²é¿´µ±Ç°activity
+
+
+äº§çœ‹å½“å‰åº”ç”¨çš„activityæ ˆ
+
+adb shell dumpsys activity | grep com.xxx.xxx.xx
+
+æŸ¥çœ‹å½“å‰activity
 adb shell dumpsys activity | findstr "mFocusedActivity"
 
 adb shell dumpsys "window windows | grep -E 'mCurrentFocus|mFocusedApp'"
 
 adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'
 
-'grep' ²»ÊÇÄÚ²¿»òÍâ²¿ÃüÁî£¬Ò²²»ÊÇ¿ÉÔËĞĞµÄ³ÌĞò
-½â¾ö·½·¨£º½«logcat | grep STARTÓÃË«ÒıºÅÒıÆğÀ´£¬¼´adb shell ¡°logcat | grep START¡±¡£
+'grep' ä¸æ˜¯å†…éƒ¨æˆ–å¤–éƒ¨å‘½ä»¤ï¼Œä¹Ÿä¸æ˜¯å¯è¿è¡Œçš„ç¨‹åº
+è§£å†³æ–¹æ³•ï¼šå°†logcat | grep STARTç”¨åŒå¼•å·å¼•èµ·æ¥ï¼Œå³adb shell â€œlogcat | grep STARTâ€ã€‚
 
-²é¿´ËùÓĞactivity
+æŸ¥çœ‹æ‰€æœ‰activity
 adb shell dumpsys activity activities
 
-²é¿´µ±Ç°ÍâÍøip
+æŸ¥çœ‹å½“å‰å¤–ç½‘ip
 curl -L tool.lu/ip
 
 adb forward tcp:8080 tcp:8080
 
-Ìø×ªsettingÒ³Ãæ£º
-adb -e shell am start com.android.settings/com.android.settings.Settings   -eÖ¸¶¨ÎŞÏßÁ¬½Ó
-adb shell am start com.android.settings/com.android.settings.Settings    ²»Ö¸¶¨-eÖ¸Êı¾İÏßÁ¬½Ó
+è·³è½¬settingé¡µé¢ï¼š
+adb -e shell am start com.android.settings/com.android.settings.Settings   -eæŒ‡å®šæ— çº¿è¿æ¥
+adb shell am start com.android.settings/com.android.settings.Settings    ä¸æŒ‡å®š-eæŒ‡æ•°æ®çº¿è¿æ¥
 
-Æô¶¯MainActivityÒ³Ãæ£º
+å¯åŠ¨MainActivityé¡µé¢ï¼š
 adb shell am start com.yuntongxun.hardware.youhui/com.yuntongxun.youhui.MainActivity
 
 adb shell am start -a android.intent.action.MAIN  -c android.intent.category.HOME -f 0x10200000
 
-·µ»Ø×ÀÃæ
+è¿”å›æ¡Œé¢
 adb shell am start -a android.intent.action.MAIN  -c android.intent.category.HOME
 
-Á¬½ÓÉè±¸ip£º
+è¿æ¥è®¾å¤‡ipï¼š
 adb connect 192.168.1.105
 
-Ìø×ªhome£º
+è·³è½¬homeï¼š
 adb shell am start -a android.intent.action.MAIN  -c android.intent.category.HOME
 
-·µ»Ø°´¼ü£º
+è¿”å›æŒ‰é”®ï¼š
 adb shell input keyevent 4 
 
-À­È¡ÈÕÖ¾£º
+æ‹‰å–æ—¥å¿—ï¼š
 adb pull  /sdcard/hardware/output/2019-05-28.log
 adb pull  /sdcard/hardware/output
 
-adb push£º
+adb pushï¼š
 adb push E:\android\ProjectSpaces\AndroidStudioProjects\google-access-helper /sdcard/ 
 
-²é¿´ÊÖ»úÄ¿Â¼£º
+æŸ¥çœ‹æ‰‹æœºç›®å½•ï¼š
 1.adb shell
-2.ls ²é¿´Ä¿Â¼
-3.cd /sdcard/   ½øÈëµ½sd¿¨Ä¿Â¼
-#cd system/sd/data //½øÈëÏµÍ³ÄÚÖ¸¶¨ÎÄ¼ş¼Ğ
-#ls //ÁĞ±íÏÔÊ¾µ±Ç°ÎÄ¼ş¼ĞÄÚÈİ
-#rm -r xxx //É¾³ıÃû×ÖÎªxxxµÄÎÄ¼ş¼Ğ¼°ÆäÀïÃæµÄËùÓĞÎÄ¼ş
-#rm xxx //É¾³ıÎÄ¼şxxx
-#rmdir xxx //É¾³ıxxxµÄÎÄ¼ş¼Ğ
-4.adb shell rename Ô­ÎÄ¼şÃû  ĞÂÎÄ¼şÃû
-5.adb shellÍË³ö  exit
+2.ls æŸ¥çœ‹ç›®å½•
+3.cd /sdcard/   è¿›å…¥åˆ°sdå¡ç›®å½•
+#cd system/sd/data //è¿›å…¥ç³»ç»Ÿå†…æŒ‡å®šæ–‡ä»¶å¤¹
+#ls //åˆ—è¡¨æ˜¾ç¤ºå½“å‰æ–‡ä»¶å¤¹å†…å®¹
+#rm -r xxx //åˆ é™¤åå­—ä¸ºxxxçš„æ–‡ä»¶å¤¹åŠå…¶é‡Œé¢çš„æ‰€æœ‰æ–‡ä»¶
+#rm xxx //åˆ é™¤æ–‡ä»¶xxx
+#rmdir xxx //åˆ é™¤xxxçš„æ–‡ä»¶å¤¹
+4.adb shell rename åŸæ–‡ä»¶å  æ–°æ–‡ä»¶å
+5.adb shellé€€å‡º  exit
 
-²é¿´Éè±¸ipµØÖ·£º
+æŸ¥çœ‹è®¾å¤‡ipåœ°å€ï¼š
 adb shell netcfg
 
-µ±Á¬½Ó¶à¸öÉè±¸Ê±£¬Ö¸¶¨Ä³Ò»Éè±¸£º
+å½“è¿æ¥å¤šä¸ªè®¾å¤‡æ—¶ï¼ŒæŒ‡å®šæŸä¸€è®¾å¤‡ï¼š
 adb -s deviceId shell netcfg
 
-·¢ËÍ¹ã²¥£º
+å‘é€å¹¿æ’­ï¼š
 adb shell am broadcast -a com.android.test --es test_string "this is test string" --ei test_int 100 --ez test_boolean true
 adb shell am broadcast -a voice_test --ei voice 0
 
-ÆÁÄ»½ØÍ¼
+adb shell am broadcast -a com.xylink.videostate_error
+
+adb shell am broadcast -a com.xylink.videostate_true
+
+
+
+//ray é…å¯¹å‘é€å¤–è®¾å‡çº§æµ‹è¯•å¹¿æ’­
+
+adb shell am broadcast -a test --ei type 3
+
+
+
+å±å¹•æˆªå›¾
 adb shell screencap -p /sdcard/sc.png
 adb pull /sdcard/sc.png
 
-Ìø×ªµ½×ÀÃæ£º
+è·³è½¬åˆ°æ¡Œé¢ï¼š
 adb shell am start -a android.intent.action.MAIN  -c android.intent.category.HOME
 
-Ğ¶ÔØÈİÊÓ£º
+å¸è½½å®¹è§†ï¼š
 adb uninstall com.yuntongxun.hardware.rongshi
 
-Æô¶¯ÈİÊÓ£º
+å¯åŠ¨å®¹è§†ï¼š
 adb shell am start -n com.yuntongxun.hardware.rongshi/com.yuntongxun.youhui.newui.LauncherUIT
 
-Ìø×ªµ½ÉèÖÃÒ³Ãæ£º
+è·³è½¬åˆ°è®¾ç½®é¡µé¢ï¼š
 adb shell am start -n com.yuntongxun.hardware.rongshi/com.yuntongxun.youhui.newui.InnerTestActicity
 
-³£ÓÃÄ£Äâ°´¼ü£º
-²Ëµ¥¼ü£º   adb shell input keyevent 82
-Home¼ü£ºadb shell input keyevent 3
-·µ»Ø¼ü£º   adb shell input keyevent 4
-Ôö¼ÓÒôÁ¿£ºadb shell input keyevent 24
-½µµÍÒôÁ¿£ºadb shell input keyevent 25
-¾²Òô£º       adb shell input keyevent 164
+å¸¸ç”¨æ¨¡æ‹ŸæŒ‰é”®ï¼š							
+èœå•é”®ï¼š   adb shell input keyevent 82
+Homeé”®ï¼šadb shell input keyevent 3
+è¿”å›é”®ï¼š   adb shell input keyevent 4
+å¢åŠ éŸ³é‡ï¼šadb shell input keyevent 24
+é™ä½éŸ³é‡ï¼šadb shell input keyevent 25
+é™éŸ³ï¼š       adb shell input keyevent 164
 
-½¹µã´¦ÓÚÄ³ÎÄ±¾¿òÊ±£¬
-ÊäÈëÎÄ±¾£ºadb shell input text  https://119.18.192.175
+ç„¦ç‚¹å¤„äºæŸæ–‡æœ¬æ¡†æ—¶ï¼Œ
+è¾“å…¥æ–‡æœ¬ï¼šadb shell input text  https://119.18.192.175
 adb shell input text  https://app.yomeeting.com
 
-½¹µã´¦ÓÚ°´Å¥
-Ä£Äâµã»÷£º adb shell input press
+ç„¦ç‚¹å¤„äºæŒ‰é’®
+æ¨¡æ‹Ÿç‚¹å‡»ï¼š adb shell input press
 
-°²×°appÁ÷³Ì£º
+å®‰è£…appæµç¨‹ï¼š
 08/11 15:20:29: Launching app
 $ adb push E:\android\ProjectSpaces\AndroidStudioProjects\hardware_device_demo\hardware_demo\app\build\outputs\apk\debug\app-debug.apk /data/local/tmp/com.yuntongxun.hardware.rongshi
 $ adb shell pm install -t -r "/data/local/tmp/com.yuntongxun.hardware.rongshi"
@@ -111,41 +129,41 @@ Success
 APK installed in 14 s 67 ms
 $ adb shell am start -n "com.yuntongxun.hardware.rongshi/com.yuntongxun.youhui.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
 
-¼à¿Øcpu ÄÚ´æ£º
+ç›‘æ§cpu å†…å­˜ï¼š
 adb shell top -m 5
 
-²é¿´Ó¦ÓÃĞÅÏ¢£º
+æŸ¥çœ‹åº”ç”¨ä¿¡æ¯ï¼š
 adb shell dumpsys package com.yuntongxun.hardware.rongshi
 
-²é¿´Ïà»úĞÅÏ¢£º
+æŸ¥çœ‹ç›¸æœºä¿¡æ¯ï¼š
 adb shell dumpsys media.camera
 
-ºÏ²¢jar°ü£º
+åˆå¹¶jaråŒ…ï¼š
 ant -buildfile build.xml
 
-Éú³ÉÍ·ÎÄ¼ş£º
+ç”Ÿæˆå¤´æ–‡ä»¶ï¼š
 E:\android\ProjectSpaces\StudioProjects\IMPlusAndroidSDK\yuntx_plugin_im\src\main\java>javah -encoding utf-8 -jni com.yuntongxun.ecsdk.core.jni.IGroupNative
 
-adbÊÚÈ¨Ê¾Àı£º
+adbæˆæƒç¤ºä¾‹ï¼š
 adb shell pm grant com.yuntongxun.kuailiaoa android.permission.READ_PHONE_STATE
 
-cygwin²éÕÒĞÅÁî²ã°æ±¾£º
-strings /cygdrive/e/¹È¸èÏÂÔØ/YTX_Android_Full_SDK_v5.4.13t3/YTX_Android_Full_SDK_v5.4.13t3/armeabi/libserphone.so | grep ytx_ccpsdk
+cygwinæŸ¥æ‰¾ä¿¡ä»¤å±‚ç‰ˆæœ¬ï¼š
+strings /cygdrive/e/è°·æ­Œä¸‹è½½/YTX_Android_Full_SDK_v5.4.13t3/YTX_Android_Full_SDK_v5.4.13t3/armeabi/libserphone.so | grep ytx_ccpsdk
 
-adb ´ò¿ª¹Ø±Õwifi
+adb æ‰“å¼€å…³é—­wifi
 adb shell su
 svc wifi enable/disable
 
-//dvm×î´ó¿ÉÓÃÄÚ´æ
+//dvmæœ€å¤§å¯ç”¨å†…å­˜
 adb shell getprop | grep dalvik.vm.heapsize
 adb shell "getprop | grep dalvik.vm.heapsize"
 
-//µ¥¸ö³ÌĞòÏŞÖÆ×î´ó¿ÉÓÃÄÚ´æ
+//å•ä¸ªç¨‹åºé™åˆ¶æœ€å¤§å¯ç”¨å†…å­˜
 adb shell getprop|grep heapgrowthlimit
 adb shell "getprop|grep heapgrowthlimit"
 
-//²é¿´appÄÚ´æÊ¹ÓÃÇé¿ö
-adb shell dumpsys meminfo °üÃû
+//æŸ¥çœ‹appå†…å­˜ä½¿ç”¨æƒ…å†µ
+adb shell dumpsys meminfo åŒ…å
 
 
 

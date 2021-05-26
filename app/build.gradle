@@ -50,7 +50,7 @@ dependencies {
     testImplementation "org.powermock:powermock-api-mockito2:1.7.3"
     testImplementation "org.powermock:powermock-classloading-xstream:1.7.3"
     //robolectric
-    testImplementation "org.robolectric:robolectric:3.8"
+    testImplementation "org.robolectric:robolectric:4.2"
     testImplementation 'org.robolectric:shadows-support-v4:3.4-rc2'
     testImplementation "com.android.support.test:monitor:1.0.2"
     //mockwebserver

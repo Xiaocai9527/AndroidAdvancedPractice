@@ -31,7 +31,6 @@ import org.robolectric.shadows.ShadowLog;
  * </pre>
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 23)
 public class RobolectricTest {
 
     private static final String TAG = "RobolectricTest";
@@ -92,7 +91,6 @@ public class RobolectricTest {
         //验证intent是否和预期的一致
         Assert.assertEquals(intent.getComponent().getClassName(), MainActivity.class.getName());
     }
-
 
 
 }

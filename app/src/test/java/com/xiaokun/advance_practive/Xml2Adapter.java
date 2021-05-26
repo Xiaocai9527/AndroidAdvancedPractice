@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -29,25 +30,26 @@ public class Xml2Adapter {
 
         //你的布局xml所在路径
 //        File file = new File(xmlPathDir + "item_list_pic.xml");
-        File file = new File("D:\\AndroidStudioProjects\\app\\PDYongMaAndroid\\library.yongma\\src\\main\\res\\layout\\item_loan_record_layout.xml");
+        File file = new File("/Users/frontend/AndroidStudioProjects/ne90/coral-about/coral/app/src/main/res/layout/item_setting_box_checked_layout.xml");
         System.out.println(file.getPath());
         //你的Adapter的java类放在哪个包里
-        File out = new File("D:\\AndroidStudioProjects\\app\\PDYongMaAndroid\\library.yongma\\src\\main\\java\\com\\peidou\\yongma\\ui\\repayment\\adapter\\");
+        File out = new File("/Users/frontend/AndroidStudioProjects/ne90/coral-about/coral/app/src/main/java/com/xylink/coral/app/settings/video/");
         //你的Adapter的名字--不要加.java
-        String name = "LoanRecordAdapter";
+        String name = "TestAdapter";
         initView(file, out, name);
     }
 
     @Test
     public void findView() {
         //你的布局xml所在路径
-        File file = new File("D:\\AndroidStudioProjects\\TemplateTest\\app\\src\\main\\res\\layout\\item_list_pic.xml");
+        File file = new File("/Users/frontend/AndroidStudioProjects/ne90/coral-about/coral/app/src/main/res/layout/item_setting_box_checked_layout.xml");
         findViewById(file);
     }
 
     private void findViewById(File in) {
         String res = readFile(in);
         HashMap<String, String> map = split(res);
+        System.out.println("map:" + map);
         StringBuilder sb = new StringBuilder();
         map.forEach((id, view) -> {
             sb.append("public ").append(view).append(" ").append(formatId2Field(id)).append(";").append("\r\n");
@@ -63,7 +65,7 @@ public class Xml2Adapter {
                         "        });\n");
             }
         });
-        System.out.println(sb.toString());
+        System.out.println("sb:" + sb.toString());
     }
 
     /**
@@ -179,43 +181,39 @@ public class Xml2Adapter {
     private static String contactAdapter(File file, File out, String name, HashMap<String, String> map) {
         StringBuilder sb = new StringBuilder();
         String path = out.getAbsolutePath();
+        System.out.println("path:" + path);
         path.split("java");
 
-        sb.append("package " + path.split("java\\\\")[1].replaceAll("\\\\", ".") + ";\n");
+        sb.append("package " + path.split("java/")[1].replaceAll("/", ".") + ";\n");
+        //for windows
+        //sb.append("package " + path.split("java\\\\")[1].replaceAll("\\\\", ".") + ";\n");
         System.out.println(sb);
         sb.append("import android.content.Context;\n" +
-                "import android.support.annotation.NonNull;\n" +
-                "import android.support.constraint.ConstraintLayout;\n" +
-                "import android.support.v7.widget.RecyclerView;\n" +
+                "import androidx.annotation.NonNull;\n" +
+                "import androidx.constraintlayout.widget.ConstraintLayout;\n" +
+                "import androidx.recyclerview.widget.RecyclerView;\n" +
                 "import android.view.LayoutInflater;\n" +
                 "import android.view.View;\n" +
                 "import android.view.ViewGroup;\n" +
                 "import android.widget.Button;\n" +
                 "import java.util.List;\n" +
-                "import java.util.ArrayList;\n" +
                 "import android.widget.ImageView;\n" +
                 "import android.widget.TextView;\n");
         sb.append("/**\n" +
-                " * <pre>\n" +
-                " *      作者  ：肖坤\n" +
-                " *      时间  ：" + getTimeStr() + "\n" +
-                " *      描述  ：\n" +
-                " *      版本  ：1.0\n" +
-                " * </pre>\n" +
+                " * Created by xiaokun on " + getTimeStr() + "\n" +
+                " * \n" +
+                " * @author xiaokun \n" +
+                " * @date " + getTimeStr()+"\n" +
                 " */\n");
         sb.append("public class " + name + " extends RecyclerView.Adapter<" + name + ".MyViewHolder> {\n");
-        sb.append("private Context mContext;\n");
-        sb.append("private LayoutInflater mInflater;\n");
-        sb.append("private List<String> mDatas;\n");
-        sb.append("public " + name + "(Context context) {\n" +
-                "    mContext = context;\n" +
-                "    mInflater = LayoutInflater.from(mContext);\n" +
+        sb.append("private final LayoutInflater mInflater;\n");
+        sb.append("private final List<String> mDatas;\n");
+        sb.append("public " + name + "(@NonNull Context context,@NonNull List<String> datas) {\n" +
+                "    mInflater = LayoutInflater.from(context);\n" +
+                "    mDatas = datas;\n" +
                 "}\n");
 
-        sb.append("public void setDatas(List<String> datas) {\n" +
-                "   if(mDatas==null){\n" +
-                "       mDatas = new ArrayList();\n" +
-                "   }\n" +
+        sb.append("public void setDatas(@NonNull List<String> datas) {\n" +
                 "   mDatas.clear();\n" +
                 "   mDatas.addAll(datas);\n" +
                 "   notifyDataSetChanged();\n" +
@@ -249,7 +247,7 @@ public class Xml2Adapter {
         sb.append("}\n" +
                 "@Override\n" +
                 "public int getItemCount() {\n" +
-                "return mDatas==null?0:mDatas.size();\n" +
+                "return mDatas.size();\n" +
                 "}");
 
         sb.append(contactViewHolder(map));
@@ -261,7 +259,7 @@ public class Xml2Adapter {
      */
     private static String contactViewHolder(HashMap<String, String> map) {
         StringBuilder sb = new StringBuilder();
-        sb.append("class MyViewHolder extends RecyclerView.ViewHolder {\r\n");
+        sb.append("static class MyViewHolder extends RecyclerView.ViewHolder {\r\n");
         map.forEach((id, view) -> {
             sb.append("public ").append(view).append(" ").append(formatId2Field(id)).append(";").append("\r\n");
         });
@@ -311,7 +309,10 @@ public class Xml2Adapter {
             if (s.contains("android:id=\"@+id") && !s.contains("Guideline")) {
                 String id = s.split("@")[1];
                 id = id.substring(id.indexOf("/") + 1, id.indexOf("\""));
-                String view = s.split("\r\n")[0];
+                // for windows \r\n 是换行符
+                //String view = s.split("\r\n")[0];
+                // for mac \n 是换行符
+                String view = s.split("\n")[0];
                 String[] viewNameArr = view.split("\\.");
                 if (viewNameArr.length > 0) {
                     view = viewNameArr[viewNameArr.length - 1];

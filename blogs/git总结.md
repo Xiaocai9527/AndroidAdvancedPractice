@@ -293,6 +293,6 @@ git checkout -b develop v1.1.2_develop
 
 ### git中--的作用
 
-In git, a ' -- ' before the file list tells git that all the next arguments should be interpreted as filenames, not as branch-names or anything else. It's a helpful disambiguator sometimes.
+In git, a ' -- ' before the file list tells git that all the next arguments should be interpreted as filenames, not as up-names or anything else. It's a helpful disambiguator sometimes.
 
-**在git中，文件列表前面的' - '告诉git所有下一个参数都应该被解释为文件名，而不是分支名称或其他任何东西。**
+**在git中，文件列表前面的' - '告诉git所有下一个参数都应该被解释为文件名，而不是分支名称或其他任何东西。**bg

@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  */
 public class AutoValueGenerate {
 
-    String path = "/Users/frontend/AndroidStudioProjects/AndroidAdvancedPractice/app/src/test/java/com/xiaokun/advance_practive/auto/People.java";
+    String path = "/Users/frontend/AndroidStudioProjects/ne90/coral-about/coral/app/src/main/java/com/xylink/coral/app/setup/model/NetworkDetailInfo.java";
 
     String regex1 = "public class";
     Pattern classPattern = Pattern.compile(regex1);

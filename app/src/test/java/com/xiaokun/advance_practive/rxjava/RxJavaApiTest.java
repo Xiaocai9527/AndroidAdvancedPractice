@@ -33,7 +33,7 @@ import io.reactivex.functions.Consumer;
  * </pre>
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 23)
+
 public class RxJavaApiTest {
 
     private static final String TAG = "RxJavaApiTest";
